@@ -1,0 +1,9 @@
+vendor-src/
+results/
+*.o
+*.so
+*.a
+core
+core.*
+build/
+build-*/
