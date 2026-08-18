@@ -7,3 +7,12 @@ core
 core.*
 build/
 build-*/
+
+# Locally built probe executables
+probes/binary_export
+probes/compare_local_limit
+probes/il_local_limit_probe
+probes/il_negative
+probes/il_smoke
+probes/local_limit_probe
+probes/source_smoke
