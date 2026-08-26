@@ -1,0 +1,1935 @@
+--- artifacts/eh3/H1_B1_Mesa_26.0.3_rootcause_extract.txt	2026-08-26 15:27:49.299036421 +0200
++++ artifacts/eh3/H1_B1_Mesa_26.2.0_rootcause_extract.txt	2026-08-26 15:27:49.313036348 +0200
+@@ -1,509 +1,505 @@
+-===== VERSION 26.0.3 =====
++===== VERSION 26.2.0 =====
+ 
+ ===== RUSTICL API kernel.rs =====
+-348-            }
+-349-        }
+-350-        num_kernels += 1;
+-351-    }
+-352-
+-353-    // SAFETY: Caller is responsible for providing a pointer valid for a write
+-354-    // of `size_of::<cl_uint>()`.
+-355-    unsafe { num_kernels_ret.write_checked(num_kernels) };
+-356-
+-357-    Ok(())
+-358-}
+-359-
+-360:#[cl_entrypoint(clSetKernelArg)]
+-361-fn set_kernel_arg(
+-362-    kernel: cl_kernel,
+-363-    arg_index: cl_uint,
+-364-    arg_size: usize,
+-365-    arg_value: *const ::std::os::raw::c_void,
+-366-) -> CLResult<()> {
+-367-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+-368:    // objects are not thread-safe: clSetKernelArg, ...", so no other threads
+-369-    // must hold a reference to this `cl_kernel`. Additionally, we may require
+-370-    // callers to pass either null or a valid CL object, satisfying validity
+-371-    // constraints.
+-372-    let k = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+-373-    let arg_index = arg_index as usize;
+-374-
+-375-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
+-376-    if let Some(arg) = k.kernel_info.args.get(arg_index) {
+-377-        // CL_INVALID_ARG_SIZE if arg_size does not match the size of the data type for an argument
+-378-        // that is not a memory object or if the argument is a memory object and
+-379-        // arg_size != sizeof(cl_mem) or if arg_size is zero and the argument is declared with the
+-380-        // local qualifier or if the argument is a sampler and arg_size != sizeof(cl_sampler).
+-381-        match arg.kind {
+-382:            KernelArgType::MemLocal => {
+-383-                if arg_size == 0 {
+-384-                    return Err(CL_INVALID_ARG_SIZE);
+-385-                }
+-386-            }
+-387-            KernelArgType::MemGlobal
+-388-            | KernelArgType::MemConstant
+-389-            | KernelArgType::Image
+-390-            | KernelArgType::RWImage
+-391-            | KernelArgType::Texture => {
+-392-                if arg_size != size_of::<cl_mem>() {
+-393-                    return Err(CL_INVALID_ARG_SIZE);
+-394-                }
+-395-            }
+-396-
+-397-            KernelArgType::Sampler => {
+-398-                if arg_size != size_of::<cl_sampler>() {
+-399-                    return Err(CL_INVALID_ARG_SIZE);
+-400-                }
+-401-            }
+-402-
+-403-            KernelArgType::Constant(size) => {
+-404-                if size as usize != arg_size {
+-405-                    return Err(CL_INVALID_ARG_SIZE);
+-406-                }
+-407-            }
+-408-        }
++359-            }
++360-        }
++361-        num_kernels += 1;
++362-    }
++363-
++364-    // SAFETY: Caller is responsible for providing a pointer valid for a write
++365-    // of `size_of::<cl_uint>()`.
++366-    unsafe { num_kernels_ret.write_checked(num_kernels) };
++367-
++368-    Ok(())
++369-}
++370-
++371:#[cl_entrypoint(clSetKernelArg)]
++372-fn set_kernel_arg(
++373-    kernel: cl_kernel,
++374-    arg_index: cl_uint,
++375-    arg_size: usize,
++376-    arg_value: *const ::std::os::raw::c_void,
++377-) -> CLResult<()> {
++378-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
++379:    // objects are not thread-safe: clSetKernelArg, ...", so no other threads
++380-    // must hold a reference to this `cl_kernel`. Additionally, we may require
++381-    // callers to pass either null or a valid CL object, satisfying validity
++382-    // constraints.
++383-    let k = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
++384-    let arg_index = arg_index as usize;
++385-
++386-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
++387-    if let Some(arg) = k.kernel_info.args.get(arg_index) {
++388-        // CL_INVALID_ARG_SIZE if arg_size does not match the size of the data type for an argument
++389-        // that is not a memory object or if the argument is a memory object and
++390-        // arg_size != sizeof(cl_mem) or if arg_size is zero and the argument is declared with the
++391-        // local qualifier or if the argument is a sampler and arg_size != sizeof(cl_sampler).
++392-        match arg.kind {
++393:            KernelArgType::MemLocal => {}
++394-            KernelArgType::MemGlobal
++395-            | KernelArgType::MemConstant
++396-            | KernelArgType::Image
++397-            | KernelArgType::RWImage
++398-            | KernelArgType::Texture => {
++399-                if arg_size != size_of::<cl_mem>() {
++400-                    return Err(CL_INVALID_ARG_SIZE);
++401-                }
++402-            }
++403-
++404-            KernelArgType::Sampler => {
++405-                if arg_size != size_of::<cl_sampler>() {
++406-                    return Err(CL_INVALID_ARG_SIZE);
++407-                }
++408-            }
+ 409-
+-410-        // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+-411-        match arg.kind {
+-412-            // If the argument is declared with the local qualifier, the arg_value entry must be
+-413-            // NULL.
+-414:            KernelArgType::MemLocal => {
+-415-                if !arg_value.is_null() {
+-416-                    return Err(CL_INVALID_ARG_VALUE);
+-417-                }
+-418-            }
+-419-            KernelArgType::Constant(_) => {
+-420-                if arg_value.is_null() {
+-421-                    return Err(CL_INVALID_ARG_VALUE);
+-422-                }
+-423-            }
+-424-            KernelArgType::Sampler => {
+-425-                // CL_INVALID_SAMPLER for an argument declared to be of type sampler_t when the
+-426-                // specified arg_value is not a valid sampler object.
++410-            KernelArgType::Constant(size) => {
++411-                if size as usize != arg_size {
++412-                    return Err(CL_INVALID_ARG_SIZE);
++413-                }
++414-            }
++415-        }
++416-
++417-        // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
++418-        match arg.kind {
++419-            // If the argument is declared with the local qualifier, the arg_value entry must be
++420-            // NULL.
++421:            KernelArgType::MemLocal => {
++422-                if !arg_value.is_null() {
++423-                    return Err(CL_INVALID_ARG_VALUE);
++424-                }
++425-            }
++426-            KernelArgType::Constant(_) => {
+ 427-                if arg_value.is_null() {
+-428-                    return Err(CL_INVALID_SAMPLER);
++428-                    return Err(CL_INVALID_ARG_VALUE);
+ 429-                }
+ 430-            }
+-431-            _ => {}
+-432-        };
+-433-
+-434-        // let's create the arg now
+-435-        let arg = match arg.kind {
+-436-            KernelArgType::Constant(_) if !arg.dead => KernelArgValue::Constant(
+-437-                // SAFETY: for constant args arg_value points to raw data.
+-438-                unsafe { slice::from_raw_parts(arg_value.cast(), arg_size) }.to_vec(),
+-439-            ),
+-440-            KernelArgType::MemConstant | KernelArgType::MemGlobal => {
+-441-                let ptr: *const cl_mem = arg_value.cast();
+-442-                // SAFETY: for buffer args arg_value points to a cl_mem object or NULL.
+---
+-447-                    let buffer = Buffer::arc_from_raw(unsafe { *ptr })?;
+-448-                    // We are required to prevent mutable access to immutable memory objects,
+-449-                    // however no explicit error code has been specified yet.
+-450-                    if arg.kind == KernelArgType::MemGlobal
+-451-                        && bit_check(buffer.flags, CL_MEM_IMMUTABLE_EXT)
+-452-                    {
+-453-                        return Err(CL_INVALID_ARG_VALUE);
+-454-                    }
+-455-
+-456-                    KernelArgValue::Buffer(Arc::downgrade(&buffer))
+-457-                }
+-458-            }
+-459:            KernelArgType::MemLocal if !arg.dead => KernelArgValue::LocalMem(arg_size),
+-460-            KernelArgType::Image | KernelArgType::RWImage | KernelArgType::Texture if !arg.dead => {
+-461-                let img: *const cl_mem = arg_value.cast();
+-462-                // SAFETY: for image args arg_value pointers to a cl_mem object.
+-463-                let img = Image::arc_from_raw(unsafe { *img })?;
+-464-
+-465-                // CL_INVALID_ARG_VALUE if the argument is an image declared with the read_only
+-466-                // qualifier and arg_value refers to an image object created with cl_mem_flags
+-467-                // of CL_MEM_WRITE_ONLY or if the image argument is declared with the write_only
+-468-                // qualifier and arg_value refers to an image object created with cl_mem_flags
+-469-                // of CL_MEM_READ_ONLY.
+-470-                // We are required to prevent mutable access to immutable memory objects, however no
+-471-                // explicit error code has been specified yet.
+-472-                if arg.kind == KernelArgType::Texture && bit_check(img.flags, CL_MEM_WRITE_ONLY)
+-473-                    || arg.kind == KernelArgType::Image
+-474-                        && bit_check(img.flags, CL_MEM_READ_ONLY | CL_MEM_IMMUTABLE_EXT)
+-475-                    || arg.kind == KernelArgType::RWImage
+-476-                        && bit_check(img.flags, CL_MEM_IMMUTABLE_EXT)
+-477-                {
+-478-                    return Err(CL_INVALID_ARG_VALUE);
+-479-                }
+-480-
+-481-                KernelArgValue::Image(Arc::downgrade(&img))
+-482-            }
+-483-            KernelArgType::Sampler if !arg.dead => {
+-484-                let ptr: *const cl_sampler = arg_value.cast();
+-485-                // SAFETY: for a sampler arg arg_value points to a cl_sampler object.
+-486-                KernelArgValue::Sampler(Sampler::arc_from_raw(unsafe { *ptr })?)
+-487-            }
++431-            KernelArgType::Sampler => {
++432-                // CL_INVALID_SAMPLER for an argument declared to be of type sampler_t when the
++433-                // specified arg_value is not a valid sampler object.
++434-                if arg_value.is_null() {
++435-                    return Err(CL_INVALID_SAMPLER);
++436-                }
++437-            }
++438-            _ => {}
++439-        };
++440-
++441-        // let's create the arg now
++442-        let arg = match arg.kind {
++443-            KernelArgType::Constant(_) if !arg.dead => KernelArgValue::Constant(
++444-                // SAFETY: for constant args arg_value points to raw data.
++445-                unsafe { slice::from_raw_parts(arg_value.cast(), arg_size) }.to_vec(),
++446-            ),
++447-            KernelArgType::MemConstant | KernelArgType::MemGlobal => {
++448-                let ptr: *const cl_mem = arg_value.cast();
++449-                // SAFETY: for buffer args arg_value points to a cl_mem object or NULL.
+ --
+-496-                KernelArgValue::None
++457-                    if arg.kind == KernelArgType::MemGlobal
++458-                        && bit_check(buffer.flags, CL_MEM_IMMUTABLE_EXT)
++459-                    {
++460-                        return Err(CL_INVALID_ARG_VALUE);
++461-                    }
++462-
++463-                    KernelArgValue::Buffer {
++464-                        buffer: Arc::downgrade(&buffer),
++465-                        offset: 0,
++466-                    }
++467-                }
++468-            }
++469:            KernelArgType::MemLocal if !arg.dead => KernelArgValue::LocalMem(arg_size),
++470-            KernelArgType::Image | KernelArgType::RWImage | KernelArgType::Texture if !arg.dead => {
++471-                let img: *const cl_mem = arg_value.cast();
++472-                // SAFETY: for image args arg_value pointers to a cl_mem object.
++473-                let img = Image::arc_from_raw(unsafe { *img })?;
++474-
++475-                // CL_INVALID_ARG_VALUE if the argument is an image declared with the read_only
++476-                // qualifier and arg_value refers to an image object created with cl_mem_flags
++477-                // of CL_MEM_WRITE_ONLY or if the image argument is declared with the write_only
++478-                // qualifier and arg_value refers to an image object created with cl_mem_flags
++479-                // of CL_MEM_READ_ONLY.
++480-                // We are required to prevent mutable access to immutable memory objects, however no
++481-                // explicit error code has been specified yet.
++482-                if arg.kind == KernelArgType::Texture && bit_check(img.flags, CL_MEM_WRITE_ONLY)
++483-                    || arg.kind == KernelArgType::Image
++484-                        && bit_check(img.flags, CL_MEM_READ_ONLY | CL_MEM_IMMUTABLE_EXT)
++485-                    || arg.kind == KernelArgType::RWImage
++486-                        && bit_check(img.flags, CL_MEM_IMMUTABLE_EXT)
++487-                {
++488-                    return Err(CL_INVALID_ARG_VALUE);
++489-                }
++490-
++491-                KernelArgValue::Image(Arc::downgrade(&img))
++492-            }
++493-            KernelArgType::Sampler if !arg.dead => {
++494-                let ptr: *const cl_sampler = arg_value.cast();
++495-                // SAFETY: for a sampler arg arg_value points to a cl_sampler object.
++496-                KernelArgValue::Sampler(Sampler::arc_from_raw(unsafe { *ptr })?)
+ 497-            }
+-498-        };
+-499-        k.set_kernel_arg(arg_index, arg)
+-500-    } else {
+-501-        Err(CL_INVALID_ARG_INDEX)
+-502-    }
+-503-
+-504-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
+-505-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
+-506-}
+-507-
+-508:#[cl_entrypoint(clSetKernelArgSVMPointer)]
+-509-fn set_kernel_arg_svm_pointer(
+-510-    kernel: cl_kernel,
+-511-    arg_index: cl_uint,
+-512-    arg_value: *const ::std::os::raw::c_void,
+-513-) -> CLResult<()> {
+-514-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+-515:    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
+-516-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
+-517-    // may require callers to pass either null or a valid CL object, satisfying
+-518-    // validity constraints.
+-519-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+-520-    let arg_index = arg_index as usize;
+-521-    let arg_value = arg_value as usize;
+-522-
+-523-    if !kernel.has_svm_devs() {
+-524-        return Err(CL_INVALID_OPERATION);
+-525-    }
+-526-
+-527-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
+-528-        if !matches!(
+-529-            arg.kind,
+-530-            KernelArgType::MemConstant | KernelArgType::MemGlobal
+-531-        ) {
+-532-            return Err(CL_INVALID_ARG_INDEX);
+-533-        }
+-534-
+-535-        let arg_value = KernelArgValue::SVM(arg_value);
+-536-        kernel.set_kernel_arg(arg_index, arg_value)
+-537-    } else {
+-538-        Err(CL_INVALID_ARG_INDEX)
+-539-    }
+-540-
+-541-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+-542-}
+-543-
+-544:#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
+-545-fn set_kernel_arg_device_pointer(
+-546-    kernel: cl_kernel,
+-547-    arg_index: cl_uint,
+-548-    arg_value: cl_mem_device_address_ext,
+-549-) -> CLResult<()> {
+-550-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+-551-    // objects are not thread-safe...", so no other threads must hold a
+-552-    // reference to this `cl_kernel`. Additionally, we may require callers to
+-553-    // pass either null or a valid CL object, satisfying validity constraints.
+-554-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+-555-    let arg_index = arg_index as usize;
+-556-    let devs = &kernel.prog.context.devs;
+-557-
+-558-    // CL_INVALID_OPERATION if no devices in the context associated with kernel support the device
+-559-    // pointer.
+-560-    if devs.iter().any(|dev| !dev.bda_supported()) {
+-561-        return Err(CL_INVALID_OPERATION);
+-562-    }
+-563-
+-564-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
+-565-    let Some(arg) = kernel.kernel_info.args.get(arg_index) else {
+-566-        return Err(CL_INVALID_ARG_INDEX);
+-567-    };
+-568-
+-569-    // The device pointer can only be used for arguments that are declared to be a pointer to global
+-570-    // memory allocated with clCreateBufferWithProperties with the CL_MEM_DEVICE_PRIVATE_ADDRESS_EXT
+-571-    // property.
+-572-    if arg.kind != KernelArgType::MemGlobal {
++--
++506-                KernelArgValue::None
++507-            }
++508-        };
++509-        k.set_kernel_arg(arg_index, arg)
++510-    } else {
++511-        Err(CL_INVALID_ARG_INDEX)
++512-    }
++513-
++514-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
++515-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
++516-}
++517-
++518:#[cl_entrypoint(clSetKernelArgSVMPointer)]
++519-fn set_kernel_arg_svm_pointer(
++520-    kernel: cl_kernel,
++521-    arg_index: cl_uint,
++522-    arg_value: *const ::std::os::raw::c_void,
++523-) -> CLResult<()> {
++524-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
++525:    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
++526-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
++527-    // may require callers to pass either null or a valid CL object, satisfying
++528-    // validity constraints.
++529-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
++530-    let arg_index = arg_index as usize;
++531-    let arg_value = arg_value as usize;
++532-
++533-    if !kernel.has_svm_devs() {
++534-        return Err(CL_INVALID_OPERATION);
++535-    }
++536-
++537-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
++538-        if !matches!(
++539-            arg.kind,
++540-            KernelArgType::MemConstant | KernelArgType::MemGlobal
++541-        ) {
++542-            return Err(CL_INVALID_ARG_INDEX);
++543-        }
++544-
++545-        let arg_value = KernelArgValue::SVM(arg_value);
++546-        kernel.set_kernel_arg(arg_index, arg_value)
++547-    } else {
++548-        Err(CL_INVALID_ARG_INDEX)
++549-    }
++550-
++551-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
++552-}
++553-
++554:#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
++555-fn set_kernel_arg_device_pointer(
++556-    kernel: cl_kernel,
++557-    arg_index: cl_uint,
++558-    arg_value: cl_mem_device_address_ext,
++559-) -> CLResult<()> {
++560-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
++561-    // objects are not thread-safe...", so no other threads must hold a
++562-    // reference to this `cl_kernel`. Additionally, we may require callers to
++563-    // pass either null or a valid CL object, satisfying validity constraints.
++564-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
++565-    let arg_index = arg_index as usize;
++566-    let devs = &kernel.prog.context.devs;
++567-
++568-    // CL_INVALID_OPERATION if no devices in the context associated with kernel support the device
++569-    // pointer.
++570-    if devs.iter().any(|dev| !dev.bda_supported()) {
++571-        return Err(CL_INVALID_OPERATION);
++572-    }
++573-
++574-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
++575-    let Some(arg) = kernel.kernel_info.args.get(arg_index) else {
++576-        return Err(CL_INVALID_ARG_INDEX);
++577-    };
++578-
++579-    // The device pointer can only be used for arguments that are declared to be a pointer to global
++580-    // memory allocated with clCreateBufferWithProperties with the CL_MEM_DEVICE_PRIVATE_ADDRESS_EXT
++581-    // property.
++582-    if arg.kind != KernelArgType::MemGlobal {
+ 
+ ===== RUSTICL CORE kernel.rs =====
+-1569-                && (work_group_size_hint == [0; 3] || block == work_group_size_hint)
+-1570-            {
+-1571-                NirKernelVariant::Optimized
+-1572-            } else {
+-1573-                NirKernelVariant::Default
+-1574-            };
+-1575-
+-1576-            let nir_kernel_build = &nir_kernel_builds[variant];
+-1577-            let mut exec_builder =
+-1578-                KernelExecBuilder::new(ctx.dev, nir_kernel_build.input_size, buffer_arcs.len() + 2);
+-1579-            // Set it once so we get the alignment padding right
+-1580-            let static_local_size: u64 = nir_kernel_build.shared_size;
+-1581:            let mut variable_local_size: u64 = static_local_size;
+-1582-            let printf_size = ctx.dev.printf_buffer_size() as u32;
+-1583-            let mut samplers = Vec::new();
+-1584-            let mut iviews = Vec::new();
+-1585-            let mut sviews = Vec::new();
+-1586-            let mut tex_formats: Vec<u16> = Vec::new();
+-1587-            let mut tex_orders: Vec<u16> = Vec::new();
+-1588-            let mut img_formats: Vec<u16> = Vec::new();
+-1589-            let mut img_orders: Vec<u16> = Vec::new();
+-1590-
+-1591-            let null_ptr;
+-1592-            let null_ptr_v3;
+-1593-            if ctx.dev.address_bits() == 64 {
+-1594-                null_ptr = [0u8; 8].as_slice();
+-1595-                null_ptr_v3 = [0u8; 24].as_slice();
+-1596-            } else {
+-1597-                null_ptr = [0u8; 4].as_slice();
+-1598-                null_ptr_v3 = [0u8; 12].as_slice();
+-1599-            };
+-1600-
+-1601-            let mut printf_buf = None;
+-1602-            if nir_kernel_build.printf_info.is_some() {
+-1603-                let buf = ctx
+-1604-                    .dev
+-1605-                    .screen
+-1606-                    .resource_create_buffer(printf_size, ResourceType::Staging, PIPE_BIND_GLOBAL, 0)
+-1607-                    .unwrap();
+-1608-
+-1609-                let init_data: [u8; 1] = [4];
+-1610-                ctx.buffer_subdata(&buf, 0, init_data.as_ptr().cast(), init_data.len() as u32);
+-1611-
+-1612-                printf_buf = Some(buf);
+-1613-            }
+-1614-
+-1615-            // translate SVM pointers to their base first
+-1616-            let mut svms: HashSet<_> = svms
+---
+-1692-                                    sviews.push(image.sampler_view(ctx.ctx)?);
+-1693-                                    (&mut tex_formats, &mut tex_orders)
+-1694-                                };
+-1695-
+-1696-                                assert!(arg.offset >= formats.len());
+-1697-
+-1698-                                formats.resize(arg.offset, 0);
+-1699-                                orders.resize(arg.offset, 0);
+-1700-
+-1701-                                formats.push(image.image_format.image_channel_data_type as u16);
+-1702-                                orders.push(image.image_format.image_channel_order as u16);
+-1703-                            }
+-1704:                            KernelArgValue::LocalMem(size) => {
+-1705-                                // TODO 32 bit
+-1706-                                let pot = cmp::min(*size, 0x80);
+-1707:                                variable_local_size = variable_local_size
+-1708-                                    .next_multiple_of(pot.next_power_of_two() as u64);
+-1709-                                if ctx.dev.address_bits() == 64 {
+-1710:                                    let variable_local_size: [u8; 8] =
+-1711:                                        variable_local_size.to_ne_bytes();
+-1712:                                    exec_builder.add_values(&variable_local_size);
+-1713-                                } else {
+-1714:                                    let variable_local_size: [u8; 4] =
+-1715:                                        (variable_local_size as u32).to_ne_bytes();
+-1716:                                    exec_builder.add_values(&variable_local_size);
+-1717-                                }
+-1718:                                variable_local_size += *size as u64;
+-1719-                            }
+-1720-                            KernelArgValue::Sampler(sampler) => {
+-1721-                                samplers.push(sampler.pipe());
+-1722-                            }
+-1723-                            KernelArgValue::None => {
+-1724-                                if !arg.dead
+-1725-                                    && matches!(
+-1726-                                        api_arg.kind,
+-1727-                                        KernelArgType::MemGlobal | KernelArgType::MemConstant
+-1728-                                    )
+-1729-                                {
+-1730-                                    exec_builder.add_values(null_ptr);
+-1731-                                }
+-1732-                            }
+-1733-                        }
+-1734-                    }
+-1735-                    CompiledKernelArgType::ConstantBuffer => {
+-1736-                        assert!(nir_kernel_build.constant_buffer.is_some());
+-1737-                        let res = nir_kernel_build.constant_buffer.as_ref().unwrap();
+-1738-                        exec_builder.add_global(res, 0);
+-1739-                    }
+-1740-                    CompiledKernelArgType::GlobalWorkOffsets => {
+-1741-                        exec_builder.add_sysval(&offsets);
+-1742-                    }
+-1743-                    CompiledKernelArgType::WorkGroupOffsets => {
+-1744-                        exec_builder.mark_workgroup_id_offset();
+-1745-                        exec_builder.add_values(null_ptr_v3);
+-1746-                    }
+-1747-                    CompiledKernelArgType::GlobalWorkSize => {
+-1748-                        exec_builder.add_sysval(&api_grid);
+-1749-                    }
+-1750-                    CompiledKernelArgType::PrintfBuffer => {
+-1751-                        let res = printf_buf.as_ref().unwrap();
+-1752-                        exec_builder.add_global(res, 0);
+-1753-                    }
++1741-                && (work_group_size_hint == [0; 3] || block == work_group_size_hint)
++1742-            {
++1743-                NirKernelVariant::Optimized
++1744-            } else {
++1745-                NirKernelVariant::Default
++1746-            };
++1747-
++1748-            let nir_kernel_build = &nir_kernel_builds[variant];
++1749-            let mut exec_builder =
++1750-                KernelExecBuilder::new(ctx.dev, nir_kernel_build.input_size, buffer_arcs.len() + 2);
++1751-            // Set it once so we get the alignment padding right
++1752-            let static_local_size: u64 = nir_kernel_build.shared_size;
++1753:            let mut variable_local_size: u64 = static_local_size;
++1754-            let printf_size = ctx.dev.printf_buffer_size() as u32;
++1755-            let mut samplers = Vec::new();
++1756-            let mut iviews = Vec::new();
++1757-            let mut sviews = Vec::new();
++1758-            let mut tex_formats: Vec<u16> = Vec::new();
++1759-            let mut tex_orders: Vec<u16> = Vec::new();
++1760-            let mut img_formats: Vec<u16> = Vec::new();
++1761-            let mut img_orders: Vec<u16> = Vec::new();
++1762-
++1763-            let null_ptr;
++1764-            let null_ptr_v3;
++1765-            if ctx.dev.address_bits() == 64 {
++1766-                null_ptr = [0u8; 8].as_slice();
++1767-                null_ptr_v3 = [0u8; 24].as_slice();
++1768-            } else {
++1769-                null_ptr = [0u8; 4].as_slice();
++1770-                null_ptr_v3 = [0u8; 12].as_slice();
++1771-            };
++1772-
++1773-            let mut printf_buf = None;
++1774-            if nir_kernel_build.printf_info.is_some() {
++1775-                let buf = ctx
++1776-                    .dev
++1777-                    .screen
++1778-                    .resource_create_buffer(printf_size, ResourceType::Staging, PIPE_BIND_GLOBAL, 0)
++1779-                    .unwrap();
++1780-
++1781-                let init_data: [u8; 1] = [4];
++1782-                ctx.buffer_subdata(&buf, 0, init_data.as_ptr().cast(), init_data.len() as u32);
++1783-
++1784-                printf_buf = Some(buf);
++1785-            }
++1786-
++1787-            // translate SVM pointers to their base first
++1788-            let mut svms: HashSet<_> = svms
+ --
+-1788-
+-1789-            let svms_new = svms
+-1790-                .into_iter()
+-1791-                .filter_map(|svm| cl_ctx.copy_svm_to_dev(ctx, svm).transpose())
+-1792-                .collect::<CLResult<Vec<_>>>()?;
+-1793-
+-1794-            // uhhh
+-1795-            for svm in &svms_new {
+-1796-                bdas.push(svm);
+-1797-            }
+-1798-
+-1799-            // subtract the shader local_size as we only request something on top of that.
+-1800:            variable_local_size -= static_local_size;
+-1801-
+-1802-            let (resources, mut globals) = exec_builder.get_resources_and_globals();
+-1803-
+-1804-            ctx.bind_kernel(&nir_kernel_builds, variant)?;
+-1805-            ctx.bind_sampler_states(samplers);
+-1806-            ctx.bind_sampler_views(sviews);
+-1807-            ctx.bind_shader_images(iviews);
+-1808-            ctx.set_global_binding(resources, &mut globals);
+-1809-
+-1810-            for z in 0..grid[2].div_ceil(hw_max_grid[2]) {
+-1811-                for y in 0..grid[1].div_ceil(hw_max_grid[1]) {
+-1812-                    for x in 0..grid[0].div_ceil(hw_max_grid[0]) {
+-1813-                        let this_offsets =
+-1814-                            [x * hw_max_grid[0], y * hw_max_grid[1], z * hw_max_grid[2]];
+-1815-
+-1816-                        // Each iteration we need to update the kernel side workgroup id offsets.
+-1817-                        exec_builder.set_workgroup_id_offset(this_offsets);
+-1818-
+-1819-                        let this_grid = [
+-1820-                            cmp::min(hw_max_grid[0], grid[0] - hw_max_grid[0] * x) as u32,
+-1821-                            cmp::min(hw_max_grid[1], grid[1] - hw_max_grid[1] * y) as u32,
+-1822-                            cmp::min(hw_max_grid[2], grid[2] - hw_max_grid[2] * z) as u32,
+-1823-                        ];
+-1824-
+-1825-                        ctx.update_cb0(exec_builder.input())?;
+-1826:                        ctx.launch_grid(
+-1827-                            work_dim,
+-1828-                            block,
+-1829-                            this_grid,
+-1830:                            variable_local_size as u32,
+-1831-                            &bdas,
+-1832-                        );
+-1833-
+-1834-                        if Platform::dbg().sync_every_event {
+-1835-                            ctx.flush().wait();
+-1836-                        }
+-1837-                    }
+-1838-                }
+-1839-            }
+-1840-
+-1841-            ctx.clear_global_binding(globals.len() as u32);
+-1842-
+-1843-            ctx.memory_barrier(PIPE_BARRIER_GLOBAL_BUFFER);
+-1844-
+-1845-            if let Some(printf_buf) = &printf_buf {
+-1846-                let tx = ctx
+-1847-                    .buffer_map(printf_buf, 0, printf_size as i32, RWFlags::RD)
+-1848-                    .ok_or(CL_OUT_OF_RESOURCES)?;
+-1849-                let mut buf: &[u8] =
+-1850-                    unsafe { slice::from_raw_parts(tx.ptr().cast(), printf_size as usize) };
+-1851-                let length = u32::from_ne_bytes(*extract(&mut buf));
+-1852-
+-1853-                // update our slice to make sure we don't go out of bounds
+-1854-                buf = &buf[0..(length - 4) as usize];
+-1855-                if let Some(pf) = &nir_kernel_build.printf_info {
+-1856-                    pf.u_printf(buf)
+-1857-                }
+-1858-            }
+-1859-
+-1860-            Ok(())
+-1861-        }))
+-1862-    }
+-1863-
+-1864-    pub fn arg_values(&self) -> &[Option<KernelArgValue>] {
+-1865-        &self.values
+-1866-    }
++1864-                                    sviews.push(image.sampler_view(ctx.ctx)?);
++1865-                                    (&mut tex_formats, &mut tex_orders)
++1866-                                };
+ 1867-
+-1868:    pub fn set_kernel_arg(&mut self, idx: usize, arg: KernelArgValue) -> CLResult<()> {
+-1869-        self.values
+-1870-            .get_mut(idx)
+-1871-            .ok_or(CL_INVALID_ARG_INDEX)?
+-1872-            .replace(arg);
+-1873-
+-1874-        Ok(())
+-1875-    }
+-1876-
+-1877-    pub fn access_qualifier(&self, idx: usize) -> cl_kernel_arg_access_qualifier {
+-1878-        let aq = self.kernel_info.args[idx].spirv.access_qualifier;
+-1879-
+-1880-        if aq
+-1881-            == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_READ
+-1882-                | clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_WRITE
+-1883-        {
+-1884-            CL_KERNEL_ARG_ACCESS_READ_WRITE
+-1885-        } else if aq == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_READ {
+-1886-            CL_KERNEL_ARG_ACCESS_READ_ONLY
+-1887-        } else if aq == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_WRITE {
+-1888-            CL_KERNEL_ARG_ACCESS_WRITE_ONLY
+-1889-        } else {
+-1890-            CL_KERNEL_ARG_ACCESS_NONE
+-1891-        }
+-1892-    }
+-1893-
+-1894-    pub fn address_qualifier(&self, idx: usize) -> cl_kernel_arg_address_qualifier {
+-1895-        match self.kernel_info.args[idx].spirv.address_qualifier {
+-1896-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_PRIVATE => {
+-1897-                CL_KERNEL_ARG_ADDRESS_PRIVATE
+-1898-            }
+-1899-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_CONSTANT => {
+-1900-                CL_KERNEL_ARG_ADDRESS_CONSTANT
+-1901-            }
+-1902-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_LOCAL => {
+-1903-                CL_KERNEL_ARG_ADDRESS_LOCAL
++1868-                                assert!(arg.offset >= formats.len());
++1869-
++1870-                                formats.resize(arg.offset, 0);
++1871-                                orders.resize(arg.offset, 0);
++1872-
++1873-                                formats.push(image.image_format.image_channel_data_type as u16);
++1874-                                orders.push(image.image_format.image_channel_order as u16);
++1875-                            }
++1876:                            KernelArgValue::LocalMem(size) => {
++1877-                                // TODO 32 bit
++1878-                                let pot = cmp::min(*size, 0x80);
++1879:                                variable_local_size = variable_local_size
++1880-                                    .next_multiple_of(pot.next_power_of_two() as u64);
++1881-                                if ctx.dev.address_bits() == 64 {
++1882:                                    let variable_local_size: [u8; 8] =
++1883:                                        variable_local_size.to_ne_bytes();
++1884:                                    exec_builder.add_values(&variable_local_size);
++1885-                                } else {
++1886:                                    let variable_local_size: [u8; 4] =
++1887:                                        (variable_local_size as u32).to_ne_bytes();
++1888:                                    exec_builder.add_values(&variable_local_size);
++1889-                                }
++1890:                                variable_local_size += *size as u64;
++1891-                            }
++1892-                            KernelArgValue::Sampler(sampler) => {
++1893-                                samplers.push(sampler.pipe());
++1894-                            }
++1895-                            KernelArgValue::None => {
++1896-                                if !arg.dead
++1897-                                    && matches!(
++1898-                                        api_arg.kind,
++1899-                                        KernelArgType::MemGlobal | KernelArgType::MemConstant
++1900-                                    )
++1901-                                {
++1902-                                    exec_builder.add_values(null_ptr);
++1903-                                }
++1904-                            }
++1905-                        }
++1906-                    }
++1907-                    CompiledKernelArgType::ConstantBuffer => {
++1908-                        assert!(nir_kernel_build.constant_buffer.is_some());
++1909-                        let res = nir_kernel_build.constant_buffer.as_ref().unwrap();
++1910-                        exec_builder.add_global(res, 0);
++1911-                    }
++1912-                    CompiledKernelArgType::GlobalWorkOffsets => {
++1913-                        exec_builder.add_sysval(&offsets);
++1914-                    }
++1915-                    CompiledKernelArgType::WorkGroupOffsets => {
++1916-                        exec_builder.mark_workgroup_id_offset();
++1917-                        exec_builder.add_values(null_ptr_v3);
++1918-                    }
++1919-                    CompiledKernelArgType::GlobalWorkSize => {
++1920-                        exec_builder.add_sysval(&api_grid);
++1921-                    }
++1922-                    CompiledKernelArgType::PrintfBuffer => {
++1923-                        let res = printf_buf.as_ref().unwrap();
++1924-                        exec_builder.add_global(res, 0);
++1925-                    }
+ --
+-1957-    pub fn priv_mem_size(&self, dev: &Device) -> cl_ulong {
+-1958-        self.compute_state_object_info(dev).private_memory as cl_ulong
+-1959-    }
+ 1960-
+-1961-    pub fn max_threads_per_block(&self, dev: &Device) -> usize {
+-1962-        self.compute_state_object_info(dev).max_threads as usize
+-1963-    }
+-1964-
+-1965-    pub fn preferred_simd_size(&self, dev: &Device) -> usize {
+-1966-        self.compute_state_object_info(dev).preferred_simd_size as usize
+-1967-    }
+-1968-
+-1969:    pub fn local_mem_size(&self, dev: &Device) -> cl_ulong {
+-1970-        // TODO: take alignment into account?
+-1971-        // this is purely informational so it shouldn't even matter
+-1972-        let local =
+-1973-            self.builds.get(dev).unwrap()[NirKernelVariant::Default].shared_size as cl_ulong;
+-1974-        let args: cl_ulong = self
+-1975-            .values
+-1976-            .iter()
+-1977-            .map(|arg| match arg {
+-1978:                Some(KernelArgValue::LocalMem(val)) => *val as cl_ulong,
+-1979-                // If the local memory size, for any pointer argument to the kernel declared with
+-1980-                // the __local address qualifier, is not specified, its size is assumed to be 0.
+-1981-                _ => 0,
+-1982-            })
+-1983-            .sum();
+-1984-
+-1985-        local + args
+-1986-    }
++1961-            let svms_new = svms
++1962-                .into_iter()
++1963-                .filter_map(|svm| cl_ctx.copy_svm_to_dev(ctx, svm).transpose())
++1964-                .collect::<CLResult<Vec<_>>>()?;
++1965-
++1966-            // uhhh
++1967-            for svm in &svms_new {
++1968-                bdas.push(svm);
++1969-            }
++1970-
++1971-            // subtract the shader local_size as we only request something on top of that.
++1972:            variable_local_size -= static_local_size;
++1973-
++1974-            let (resources, mut globals) = exec_builder.get_resources_and_globals();
++1975-
++1976-            ctx.bind_kernel(&nir_kernel_builds, variant)?;
++1977-            ctx.bind_sampler_states(samplers);
++1978-            ctx.bind_sampler_views(sviews);
++1979-            ctx.bind_shader_images(iviews);
++1980-            ctx.set_global_binding(resources, &mut globals);
++1981-
++1982-            for z in 0..grid[2].div_ceil(hw_max_grid[2]) {
++1983-                for y in 0..grid[1].div_ceil(hw_max_grid[1]) {
++1984-                    for x in 0..grid[0].div_ceil(hw_max_grid[0]) {
++1985-                        let this_offsets =
++1986-                            [x * hw_max_grid[0], y * hw_max_grid[1], z * hw_max_grid[2]];
+ 1987-
+-1988-    pub fn has_svm_devs(&self) -> bool {
+-1989-        self.prog.devs.iter().any(|dev| dev.api_svm_supported())
+-1990-    }
+-1991-
+-1992-    pub fn subgroup_sizes(&self, dev: &Device) -> impl ExactSizeIterator<Item = usize> + use<> {
+-1993-        SetBitIndices::from_msb(self.compute_state_object_info(dev).simd_sizes).map(|bit| 1 << bit)
+-1994-    }
+-1995-
+-1996-    pub fn subgroups_for_block(&self, dev: &Device, block: &[usize]) -> usize {
+-1997-        let subgroup_size = self.subgroup_size_for_block(dev, block);
+-1998-        if subgroup_size == 0 {
+-1999-            return 0;
+-2000-        }
+-2001-
+-2002-        let threads: usize = block.iter().product();
+-2003-        threads.div_ceil(subgroup_size)
+-2004-    }
++1988-                        // Each iteration we need to update the kernel side workgroup id offsets.
++1989-                        exec_builder.set_workgroup_id_offset(this_offsets);
++1990-
++1991-                        let this_grid = [
++1992-                            cmp::min(hw_max_grid[0], grid[0] - hw_max_grid[0] * x) as u32,
++1993-                            cmp::min(hw_max_grid[1], grid[1] - hw_max_grid[1] * y) as u32,
++1994-                            cmp::min(hw_max_grid[2], grid[2] - hw_max_grid[2] * z) as u32,
++1995-                        ];
++1996-
++1997-                        ctx.update_cb0(exec_builder.input())?;
++1998:                        ctx.launch_grid(
++1999-                            work_dim,
++2000-                            block,
++2001-                            this_grid,
++2002:                            variable_local_size as u32,
++2003-                            &bdas,
++2004-                        );
+ 2005-
+-2006-    pub fn subgroup_size_for_block(&self, dev: &Device, block: &[usize]) -> usize {
+-2007-        let mut subgroup_sizes = self.subgroup_sizes(dev);
+-2008-
+-2009-        // Replace with `ExactSizeIterator::is_empty()` when stable.
+-2010-        // See https://github.com/rust-lang/rust/issues/35428
+-2011-        if subgroup_sizes.len() == 0 {
+-2012-            return 0;
+-2013-        }
++2006-                        if Platform::dbg().sync_every_event {
++2007-                            ctx.flush().wait();
++2008-                        }
++2009-                    }
++2010-                }
++2011-            }
++2012-
++2013-            ctx.clear_global_binding(globals.len() as u32);
++2014-
++2015-            ctx.memory_barrier(PIPE_BARRIER_SHADER_BUFFER);
++2016-
++2017-            if let Some(printf_buf) = &printf_buf {
++2018-                let tx = ctx
++2019-                    .buffer_map(printf_buf, 0, printf_size as i32, RWFlags::RD)
++2020-                    .ok_or(CL_OUT_OF_RESOURCES)?;
++2021-                let mut buf: &[u8] =
++2022-                    unsafe { slice::from_raw_parts(tx.ptr().cast(), printf_size as usize) };
++2023-                let length = u32::from_ne_bytes(*extract(&mut buf));
++2024-
++2025-                // update our slice to make sure we don't go out of bounds
++2026-                buf = &buf[0..(length - 4) as usize];
++2027-                if let Some(pf) = &nir_kernel_build.printf_info {
++2028-                    pf.u_printf(buf)
++2029-                }
++2030-            }
++2031-
++2032-            Ok(())
++2033-        }))
++2034-    }
++2035-
++2036-    pub fn arg_values(&self) -> &[Option<KernelArgValue>] {
++2037-        &self.values
++2038-    }
++2039-
++2040:    pub fn set_kernel_arg(&mut self, idx: usize, arg: KernelArgValue) -> CLResult<()> {
++2041-        self.values
++2042-            .get_mut(idx)
++2043-            .ok_or(CL_INVALID_ARG_INDEX)?
++2044-            .replace(arg);
++2045-
++2046-        Ok(())
++2047-    }
++2048-
++2049-    pub fn access_qualifier(&self, idx: usize) -> cl_kernel_arg_access_qualifier {
++2050-        let aq = self.kernel_info.args[idx].spirv.access_qualifier;
++2051-
++2052-        if aq
++2053-            == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_READ
++2054-                | clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_WRITE
++2055-        {
++2056-            CL_KERNEL_ARG_ACCESS_READ_WRITE
++2057-        } else if aq == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_READ {
++2058-            CL_KERNEL_ARG_ACCESS_READ_ONLY
++2059-        } else if aq == clc_kernel_arg_access_qualifier::CLC_KERNEL_ARG_ACCESS_WRITE {
++2060-            CL_KERNEL_ARG_ACCESS_WRITE_ONLY
++2061-        } else {
++2062-            CL_KERNEL_ARG_ACCESS_NONE
++2063-        }
++2064-    }
++2065-
++2066-    pub fn address_qualifier(&self, idx: usize) -> cl_kernel_arg_address_qualifier {
++2067-        match self.kernel_info.args[idx].spirv.address_qualifier {
++2068-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_PRIVATE => {
++2069-                CL_KERNEL_ARG_ADDRESS_PRIVATE
++2070-            }
++2071-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_CONSTANT => {
++2072-                CL_KERNEL_ARG_ADDRESS_CONSTANT
++2073-            }
++2074-            clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_LOCAL => {
++2075-                CL_KERNEL_ARG_ADDRESS_LOCAL
++--
++2129-    pub fn priv_mem_size(&self, dev: &Device) -> cl_ulong {
++2130-        self.compute_state_object_info(dev).private_memory as cl_ulong
++2131-    }
++2132-
++2133-    pub fn max_threads_per_block(&self, dev: &Device) -> usize {
++2134-        self.compute_state_object_info(dev).max_threads as usize
++2135-    }
++2136-
++2137-    pub fn preferred_simd_size(&self, dev: &Device) -> usize {
++2138-        self.compute_state_object_info(dev).preferred_simd_size as usize
++2139-    }
++2140-
++2141:    pub fn local_mem_size(&self, dev: &Device) -> cl_ulong {
++2142-        // TODO: take alignment into account?
++2143-        // this is purely informational so it shouldn't even matter
++2144-        let local =
++2145-            self.builds.get(dev).unwrap()[NirKernelVariant::Default].shared_size as cl_ulong;
++2146-        let args: cl_ulong = self
++2147-            .values
++2148-            .iter()
++2149-            .map(|arg| match arg {
++2150:                Some(KernelArgValue::LocalMem(val)) => *val as cl_ulong,
++2151-                // If the local memory size, for any pointer argument to the kernel declared with
++2152-                // the __local address qualifier, is not specified, its size is assumed to be 0.
++2153-                _ => 0,
++2154-            })
++2155-            .sum();
++2156-
++2157-        local + args
++2158-    }
++2159-
++2160-    pub fn has_svm_devs(&self) -> bool {
++2161-        self.prog.devs.iter().any(|dev| dev.api_svm_supported())
++2162-    }
++2163-
++2164-    pub fn subgroup_sizes(&self, dev: &Device) -> impl ExactSizeIterator<Item = usize> + use<> {
++2165-        SetBitIndices::from_msb(self.compute_state_object_info(dev).simd_sizes).map(|bit| 1 << bit)
++2166-    }
++2167-
++2168-    pub fn subgroups_for_block(&self, dev: &Device, block: &[usize]) -> usize {
++2169-        let subgroup_size = self.subgroup_size_for_block(dev, block);
++2170-        if subgroup_size == 0 {
++2171-            return 0;
++2172-        }
++2173-
++2174-        let threads: usize = block.iter().product();
++2175-        threads.div_ceil(subgroup_size)
++2176-    }
++2177-
++2178-    pub fn subgroup_size_for_block(&self, dev: &Device, block: &[usize]) -> usize {
++2179-        let mut subgroup_sizes = self.subgroup_sizes(dev);
++2180-
++2181-        // Replace with `ExactSizeIterator::is_empty()` when stable.
++2182-        // See https://github.com/rust-lang/rust/issues/35428
++2183-        if subgroup_sizes.len() == 0 {
++2184-            return 0;
++2185-        }
+ 
+ ===== RUSTICL PIPE context.rs =====
+ 492-                self.pipe.as_ptr(),
+@@ -622,7 +618,7 @@
+ 96-         shader->config.rsrc3 |= S_00B8A0_INST_PREF_SIZE_GFX11(si_get_shader_prefetch_size(shader));
+ 97-
+ 98-      simple_mtx_lock(&sscreen->shader_cache_mutex);
+-99-      si_shader_cache_insert_shader(sscreen, ir_sha1_cache_key, shader, true);
++99-      si_shader_cache_insert_shader(sscreen, ir_blake3_cache_key, shader, true);
+ 100-      simple_mtx_unlock(&sscreen->shader_cache_mutex);
+ 101-   }
+ 102-
+@@ -658,475 +654,475 @@
+ 132-}
+ 133-
+ --
+-268-   /* Set the scratch address in the shader binary. */
+-269-   if (!screen->info.has_scratch_base_registers) {
+-270-      uint64_t scratch_va = (*scratch_buffer)->gpu_address;
+-271-
+-272-      if (shader->scratch_va != scratch_va) {
+-273-         if (!si_shader_binary_upload(screen, shader, scratch_va))
+-274-            return false;
+-275-
+-276-         shader->scratch_va = scratch_va;
+-277-      }
+-278-   }
+-279-
+-280-   return true;
+-281-}
+-282-
+-283:static bool si_switch_compute_shader(struct si_context *sctx, struct si_compute *program,
+-284-                                     struct si_shader *shader, bool *prefetch,
+-285:                                     unsigned variable_shared_size)
+-286-{
+-287-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
+-288-   const struct ac_shader_config *config = &shader->config;
+-289-   unsigned rsrc2;
+-290-
+-291-   *prefetch = false;
++270-   /* Set the scratch address in the shader binary. */
++271-   if (!screen->info.has_scratch_base_registers) {
++272-      uint64_t scratch_va = (*scratch_buffer)->gpu_address;
++273-
++274-      if (shader->scratch_va != scratch_va) {
++275-         if (!si_shader_binary_upload(screen, shader, scratch_va))
++276-            return false;
++277-
++278-         shader->scratch_va = scratch_va;
++279-      }
++280-   }
++281-
++282-   return true;
++283-}
++284-
++285:static bool si_switch_compute_shader(struct si_context *sctx, struct si_compute *program,
++286-                                     struct si_shader *shader, bool *prefetch,
++287:                                     unsigned variable_shared_size)
++288-{
++289-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
++290-   const struct ac_shader_config *config = &shader->config;
++291-   unsigned rsrc2;
+ 292-
+-293-   if (sctx->cs_shader_state.emitted_program == program &&
+-294:       sctx->cs_shader_state.variable_shared_size == variable_shared_size)
+-295-      return true;
+-296-
+-297-   /* copy rsrc2 so we don't have to change it inside the si_shader object */
+-298-   rsrc2 = config->rsrc2;
+-299-
+-300-   /* only do this for OpenCL */
+-301:   if (variable_shared_size) {
+-302:      unsigned shared_size = shader->info.shared_size + variable_shared_size;
+-303:      unsigned lds_blocks = 0;
+-304-
+-305-      if (sctx->gfx_level <= GFX6) {
+-306:         lds_blocks += align(shared_size, 256) >> 8;
+-307-      } else {
+-308:         lds_blocks += align(shared_size, 512) >> 9;
+-309-      }
+-310-
+-311-      /* TODO: use si_multiwave_lds_size_workaround */
+-312:      assert(lds_blocks <= 0xFF);
+-313-
+-314-      rsrc2 &= C_00B84C_LDS_SIZE;
+-315:      rsrc2 |= S_00B84C_LDS_SIZE(lds_blocks);
+-316-   }
+-317-
+-318-   if (config->scratch_bytes_per_wave) {
+-319-      /* Prevent race conditions for accesses to shader->scratch_va and shader->bo, which
+-320-       * can change when scratch_va is updated. Any accesses to shader->bo must also be inside
+-321-       * the lock.
+-322-       *
+-323-       * TODO: This lock could be removed if the scratch address was passed via user SGPRs instead
+-324-       *       of the shader binary.
+-325-       */
+-326-      if (!sctx->screen->info.has_scratch_base_registers)
+-327-         simple_mtx_lock(&shader->selector->mutex);
+-328-
+-329-      /* Update max_seen_compute_scratch_bytes_per_wave and compute_tmpring_size. */
+-330-      si_get_scratch_tmpring_size(sctx, config->scratch_bytes_per_wave, true,
+-331-                                  &sctx->compute_tmpring_size);
+-332-
+-333-      if (!si_setup_compute_scratch_buffer(sctx->screen, shader,
+-334-                                           &sctx->compute_scratch_buffer,
+-335-                                           sctx->max_seen_compute_scratch_bytes_per_wave))
+-336-         return false;
+-337-
+-338-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, sctx->compute_scratch_buffer,
+-339-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SCRATCH_BUFFER);
+-340-   }
+-341-
+-342-   uint64_t shader_va = shader->bo->gpu_address;
++293-   *prefetch = false;
++294-
++295-   if (sctx->cs_shader_state.emitted_program == program &&
++296:       sctx->cs_shader_state.variable_shared_size == variable_shared_size)
++297-      return true;
++298-
++299-   /* copy rsrc2 so we don't have to change it inside the si_shader object */
++300-   rsrc2 = config->rsrc2;
++301-
++302-   /* only do this for OpenCL */
++303:   if (variable_shared_size) {
++304:      unsigned shared_size = shader->info.shared_size + variable_shared_size;
++305:      unsigned lds_blocks = 0;
++306-
++307-      if (sctx->gfx_level <= GFX6) {
++308:         lds_blocks += align(shared_size, 256) >> 8;
++309-      } else {
++310:         lds_blocks += align(shared_size, 512) >> 9;
++311-      }
++312-
++313-      /* TODO: use si_multiwave_lds_size_workaround */
++314:      assert(lds_blocks <= 0xFF);
++315-
++316-      rsrc2 &= C_00B84C_LDS_SIZE;
++317:      rsrc2 |= S_00B84C_LDS_SIZE(lds_blocks);
++318-   }
++319-
++320-   if (config->scratch_bytes_per_wave) {
++321-      /* Prevent race conditions for accesses to shader->scratch_va and shader->bo, which
++322-       * can change when scratch_va is updated. Any accesses to shader->bo must also be inside
++323-       * the lock.
++324-       *
++325-       * TODO: This lock could be removed if the scratch address was passed via user SGPRs instead
++326-       *       of the shader binary.
++327-       */
++328-      if (!sctx->screen->info.has_scratch_base_registers)
++329-         simple_mtx_lock(&shader->selector->mutex);
++330-
++331-      /* Update max_seen_compute_scratch_bytes_per_wave and compute_tmpring_size. */
++332-      si_get_scratch_tmpring_size(sctx, config->scratch_bytes_per_wave, true,
++333-                                  &sctx->compute_tmpring_size);
++334-
++335-      if (!si_setup_compute_scratch_buffer(sctx->screen, shader,
++336-                                           &sctx->compute_scratch_buffer,
++337-                                           sctx->max_seen_compute_scratch_bytes_per_wave))
++338-         return false;
++339-
++340-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, sctx->compute_scratch_buffer,
++341-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SCRATCH_BUFFER);
++342-   }
+ 343-
+-344-   radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, shader->bo,
+-345-                             RADEON_USAGE_READ | RADEON_PRIO_SHADER_BINARY);
+-346-
+-347-   /* shader->bo can't be used after this if the scratch address is inserted into the shader
+-348-    * binary.
+-349-    */
+-350-   if (config->scratch_bytes_per_wave && !sctx->screen->info.has_scratch_base_registers)
+-351-      simple_mtx_unlock(&shader->selector->mutex);
+-352-
+-353-   if (sctx->gfx_level >= GFX12) {
+-354-      gfx12_push_compute_sh_reg(R_00B830_COMPUTE_PGM_LO, shader_va >> 8);
+-355-      gfx12_opt_push_compute_sh_reg(R_00B848_COMPUTE_PGM_RSRC1,
+-356-                                    AC_TRACKED_COMPUTE_PGM_RSRC1, config->rsrc1);
+-357-      gfx12_opt_push_compute_sh_reg(R_00B84C_COMPUTE_PGM_RSRC2,
+-358-                                    AC_TRACKED_COMPUTE_PGM_RSRC2, rsrc2);
+-359-      gfx12_opt_push_compute_sh_reg(R_00B8A0_COMPUTE_PGM_RSRC3,
+-360-                                    AC_TRACKED_COMPUTE_PGM_RSRC3, config->rsrc3);
++344-   uint64_t shader_va = shader->bo->gpu_address;
++345-
++346-   radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, shader->bo,
++347-                             RADEON_USAGE_READ | RADEON_PRIO_SHADER_BINARY);
++348-
++349-   /* shader->bo can't be used after this if the scratch address is inserted into the shader
++350-    * binary.
++351-    */
++352-   if (config->scratch_bytes_per_wave && !sctx->screen->info.has_scratch_base_registers)
++353-      simple_mtx_unlock(&shader->selector->mutex);
++354-
++355-   if (sctx->gfx_level >= GFX12) {
++356-      gfx12_push_compute_sh_reg(R_00B830_COMPUTE_PGM_LO, shader_va >> 8);
++357-      gfx12_opt_push_compute_sh_reg(R_00B848_COMPUTE_PGM_RSRC1,
++358-                                    AC_TRACKED_COMPUTE_PGM_RSRC1, config->rsrc1);
++359-      gfx12_opt_push_compute_sh_reg(R_00B84C_COMPUTE_PGM_RSRC2,
++360-                                    AC_TRACKED_COMPUTE_PGM_RSRC2, rsrc2);
++361-      gfx12_opt_push_compute_sh_reg(R_00B8A0_COMPUTE_PGM_RSRC3,
++362-                                    AC_TRACKED_COMPUTE_PGM_RSRC3, config->rsrc3);
+ --
+-403-      }
+-404-
+-405-      if (sctx->gfx_level >= GFX10) {
+-406-         radeon_opt_set_sh_reg(R_00B8A0_COMPUTE_PGM_RSRC3,
+-407-                               AC_TRACKED_COMPUTE_PGM_RSRC3, config->rsrc3);
+-408-      }
+-409-      radeon_end();
+-410-   }
+-411-
+-412-   COMPUTE_DBG(sctx->screen,
+-413-               "COMPUTE_PGM_RSRC1: 0x%08x "
+-414-               "COMPUTE_PGM_RSRC2: 0x%08x\n",
+-415-               config->rsrc1, config->rsrc2);
+-416-
+-417-   sctx->cs_shader_state.emitted_program = program;
+-418:   sctx->cs_shader_state.variable_shared_size = variable_shared_size;
+-419-
+-420-   *prefetch = true;
+-421-   return true;
+-422-}
+-423-
+-424-static void si_setup_nir_user_data(struct si_context *sctx, const struct pipe_grid_info *info)
+-425-{
+-426-   struct si_compute *program = sctx->cs_shader_state.program;
+-427-   struct si_shader_selector *sel = &program->sel;
+-428-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
+-429-   unsigned grid_size_reg = R_00B900_COMPUTE_USER_DATA_0 + 4 * SI_NUM_RESOURCE_SGPRS;
+-430-   unsigned block_size_reg = grid_size_reg +
+-431-                             /* 12 bytes = 3 dwords. */
+-432-                             12 * program->shader.info.uses_sysval_num_workgroups;
+-433-   unsigned cs_user_data_reg = block_size_reg + 4 * program->shader.info.uses_sysval_workgroup_size;
+-434-
+-435-   if (program->shader.info.uses_sysval_num_workgroups && info->indirect) {
+-436-      for (unsigned i = 0; i < 3; ++i) {
+-437-         si_cp_copy_data(sctx, &sctx->gfx_cs, COPY_DATA_REG, NULL, (grid_size_reg >> 2) + i,
+-438-                         COPY_DATA_SRC_MEM, si_resource(info->indirect),
+-439-                         info->indirect_offset + 4 * i);
+-440-      }
+-441-   }
+-442-
+-443-   if (sctx->gfx_level >= GFX12) {
+-444-      if (program->shader.info.uses_sysval_num_workgroups && !info->indirect) {
+-445-         gfx12_push_compute_sh_reg(grid_size_reg, info->grid[0]);
+-446-         gfx12_push_compute_sh_reg(grid_size_reg + 4, info->grid[1]);
+-447-         gfx12_push_compute_sh_reg(grid_size_reg + 8, info->grid[2]);
+-448-      }
+-449-
+-450-      if (program->shader.info.uses_sysval_workgroup_size) {
+-451-         uint32_t value = info->block[0] | (info->block[1] << 10) | (info->block[2] << 20);
+-452-         gfx12_push_compute_sh_reg(block_size_reg, value);
+-453-      }
+-454-
+-455-      if (sel->info.base.cs.user_data_components_amd) {
+-456-         unsigned num = sel->info.base.cs.user_data_components_amd;
+-457-         for (unsigned i = 0; i < num; i++)
+-458-            gfx12_push_compute_sh_reg(cs_user_data_reg + i * 4, sctx->cs_user_data[i]);
+-459-      }
+-460-   } else if (sctx->screen->info.has_set_sh_pairs_packed) {
+-461-      if (program->shader.info.uses_sysval_num_workgroups && !info->indirect) {
+-462-         gfx11_push_compute_sh_reg(grid_size_reg, info->grid[0]);
+-463-         gfx11_push_compute_sh_reg(grid_size_reg + 4, info->grid[1]);
++405-      }
++406-
++407-      if (sctx->gfx_level >= GFX10) {
++408-         radeon_opt_set_sh_reg(R_00B8A0_COMPUTE_PGM_RSRC3,
++409-                               AC_TRACKED_COMPUTE_PGM_RSRC3, config->rsrc3);
++410-      }
++411-      radeon_end();
++412-   }
++413-
++414-   COMPUTE_DBG(sctx->screen,
++415-               "COMPUTE_PGM_RSRC1: 0x%08x "
++416-               "COMPUTE_PGM_RSRC2: 0x%08x\n",
++417-               config->rsrc1, config->rsrc2);
++418-
++419-   sctx->cs_shader_state.emitted_program = program;
++420:   sctx->cs_shader_state.variable_shared_size = variable_shared_size;
++421-
++422-   *prefetch = true;
++423-   return true;
++424-}
++425-
++426-static void si_setup_nir_user_data(struct si_context *sctx, const struct pipe_grid_info *info)
++427-{
++428-   struct si_compute *program = sctx->cs_shader_state.program;
++429-   struct si_shader_selector *sel = &program->sel;
++430-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
++431-   unsigned grid_size_reg = R_00B900_COMPUTE_USER_DATA_0 + 4 * SI_NUM_RESOURCE_SGPRS;
++432-   unsigned block_size_reg = grid_size_reg +
++433-                             /* 12 bytes = 3 dwords. */
++434-                             12 * program->shader.info.uses_sysval_num_workgroups;
++435-   unsigned cs_user_data_reg = block_size_reg + 4 * program->shader.info.uses_sysval_workgroup_size;
++436-
++437-   if (program->shader.info.uses_sysval_num_workgroups && info->indirect) {
++438-      for (unsigned i = 0; i < 3; ++i) {
++439-         si_cp_copy_data(sctx, &sctx->gfx_cs, COPY_DATA_REG, NULL, (grid_size_reg >> 2) + i,
++440-                         COPY_DATA_SRC_MEM, si_resource(info->indirect),
++441-                         info->indirect_offset + 4 * i);
++442-      }
++443-   }
++444-
++445-   if (sctx->gfx_level >= GFX12) {
++446-      if (program->shader.info.uses_sysval_num_workgroups && !info->indirect) {
++447-         gfx12_push_compute_sh_reg(grid_size_reg, info->grid[0]);
++448-         gfx12_push_compute_sh_reg(grid_size_reg + 4, info->grid[1]);
++449-         gfx12_push_compute_sh_reg(grid_size_reg + 8, info->grid[2]);
++450-      }
++451-
++452-      if (program->shader.info.uses_sysval_workgroup_size) {
++453-         uint32_t value = info->block[0] | (info->block[1] << 10) | (info->block[2] << 20);
++454-         gfx12_push_compute_sh_reg(block_size_reg, value);
++455-      }
++456-
++457-      if (sel->info.base.cs.user_data_components_amd) {
++458-         unsigned num = sel->info.base.cs.user_data_components_amd;
++459-         for (unsigned i = 0; i < num; i++)
++460-            gfx12_push_compute_sh_reg(cs_user_data_reg + i * 4, sctx->cs_user_data[i]);
++461-      }
++462-   } else if (sctx->screen->info.has_set_sh_pairs_packed) {
++463-      if (program->shader.info.uses_sysval_num_workgroups && !info->indirect) {
++464-         gfx11_push_compute_sh_reg(grid_size_reg, info->grid[0]);
++465-         gfx11_push_compute_sh_reg(grid_size_reg + 4, info->grid[1]);
+ --
+-815-
+-816-   struct si_images *images = &sctx->images[MESA_SHADER_COMPUTE];
+-817-   mask = BITFIELD_MASK(info->base.num_images) & images->enabled_mask;
+-818-
+-819-   while (mask) {
+-820-      int i = u_bit_scan(&mask);
+-821-      struct pipe_image_view *sview = &images->views[i];
+ 822-
+-823-      struct si_resource *res = si_resource(sview->resource);
+-824-      if (sctx->ws->cs_is_buffer_referenced(&sctx->gfx_cs, res->buf, usage))
+-825-         return true;
+-826-   }
+-827-   return false;
+-828-}
++823-   struct si_images *images = &sctx->images[MESA_SHADER_COMPUTE];
++824-   mask = BITFIELD_MASK(info->base.num_images) & images->enabled_mask;
++825-
++826-   while (mask) {
++827-      int i = u_bit_scan(&mask);
++828-      struct pipe_image_view *sview = &images->views[i];
+ 829-
+-830:static void si_launch_grid(struct pipe_context *ctx, const struct pipe_grid_info *info)
+-831-{
+-832-   struct si_context *sctx = (struct si_context *)ctx;
+-833-   struct si_screen *sscreen = sctx->screen;
+-834-   struct si_compute *program = sctx->cs_shader_state.program;
+-835-
+-836-   if (program->shader.compilation_failed)
+-837-      return;
+-838-
+-839-   si_check_dirty_buffers_textures(sctx);
+-840-
+-841-   if (sctx->is_gfx_queue) {
+-842-      if (sctx->num_draw_calls_sh_coherent.with_cb != sctx->num_draw_calls ||
+-843-          sctx->num_draw_calls_sh_coherent.with_db != sctx->num_draw_calls) {
+-844-         bool sync_cb = sctx->force_shader_coherency.with_cb ||
+-845-                        si_check_needs_implicit_sync(sctx, RADEON_USAGE_CB_NEEDS_IMPLICIT_SYNC);
+-846-         bool sync_db = sctx->gfx_level >= GFX12 &&
+-847-                        (sctx->force_shader_coherency.with_db ||
+-848-                         si_check_needs_implicit_sync(sctx, RADEON_USAGE_DB_NEEDS_IMPLICIT_SYNC));
+-849-
+-850-         si_fb_barrier_after_rendering(sctx,
+-851-                                       (sync_cb ? SI_FB_BARRIER_SYNC_CB : 0) |
+-852-                                       (sync_db ? SI_FB_BARRIER_SYNC_DB : 0));
+-853-
+-854-         if (sync_cb)
+-855-            sctx->num_draw_calls_sh_coherent.with_cb = sctx->num_draw_calls;
++830-      struct si_resource *res = si_resource(sview->resource);
++831-      if (sctx->ws->cs_is_buffer_referenced(&sctx->gfx_cs, res->buf, usage))
++832-         return true;
++833-   }
++834-   return false;
++835-}
++836-
++837:static void si_launch_grid(struct pipe_context *ctx, const struct pipe_grid_info *info)
++838-{
++839-   struct si_context *sctx = (struct si_context *)ctx;
++840-   struct si_screen *sscreen = sctx->screen;
++841-   struct si_compute *program = sctx->cs_shader_state.program;
++842-
++843-   if (program->shader.compilation_failed)
++844-      return;
++845-
++846-   si_check_dirty_buffers_textures(sctx);
++847-
++848-   if (sctx->is_gfx_queue) {
++849-      if (sctx->num_draw_calls_sh_coherent.with_cb != sctx->num_draw_calls ||
++850-          sctx->num_draw_calls_sh_coherent.with_db != sctx->num_draw_calls) {
++851-         bool sync_cb = sctx->force_shader_coherency.with_cb ||
++852-                        si_check_needs_implicit_sync(sctx, RADEON_USAGE_CB_NEEDS_IMPLICIT_SYNC);
++853-         bool sync_db = sctx->gfx_level >= GFX12 &&
++854-                        (sctx->force_shader_coherency.with_db ||
++855-                         si_check_needs_implicit_sync(sctx, RADEON_USAGE_DB_NEEDS_IMPLICIT_SYNC));
+ 856-
+-857-         if (sync_db)
+-858-            sctx->num_draw_calls_sh_coherent.with_db = sctx->num_draw_calls;
+-859-      }
++857-         si_fb_barrier_after_rendering(sctx,
++858-                                       (sync_cb ? SI_FB_BARRIER_SYNC_CB : 0) |
++859-                                       (sync_db ? SI_FB_BARRIER_SYNC_DB : 0));
+ 860-
+-861-      if (sctx->gfx_level < GFX11)
+-862-         gfx6_decompress_textures(sctx, 1 << MESA_SHADER_COMPUTE);
+-863-      else if (sctx->gfx_level < GFX12)
+-864-         gfx11_decompress_textures(sctx, 1 << MESA_SHADER_COMPUTE);
+-865-   }
+-866-
+-867-   if (info->indirect) {
+-868-      /* Indirect buffers are read through L2 on GFX9-GFX11, but not other hw. */
+-869-      if ((sctx->gfx_level <= GFX8 || sscreen->info.cp_sdma_ge_use_system_memory_scope) &&
+-870-          si_resource(info->indirect)->L2_cache_dirty) {
+-871-         si_set_barrier_flags(sctx, SI_BARRIER_WB_L2 | SI_BARRIER_PFP_SYNC_ME);
+-872-         si_resource(info->indirect)->L2_cache_dirty = false;
+-873-      }
+-874-   }
+-875-
++861-         if (sync_cb)
++862-            sctx->num_draw_calls_sh_coherent.with_cb = sctx->num_draw_calls;
++863-
++864-         if (sync_db)
++865-            sctx->num_draw_calls_sh_coherent.with_db = sctx->num_draw_calls;
++866-      }
++867-
++868-      if (sctx->gfx_level < GFX11)
++869-         gfx6_decompress_textures(sctx, 1 << MESA_SHADER_COMPUTE);
++870-      else if (sctx->gfx_level < GFX12)
++871-         gfx11_decompress_textures(sctx, 1 << MESA_SHADER_COMPUTE);
++872-   }
++873-
++874-   if (info->indirect) {
++875-      /* Indirect buffers are read through L2 on GFX9-GFX11, but not other hw. */
++876-      if ((sctx->gfx_level <= GFX8 || sscreen->info.cp_sdma_ge_use_system_memory_scope) &&
++877-          si_resource(info->indirect)->L2_cache_dirty) {
++878-         si_set_barrier_flags(sctx, SI_BARRIER_WB_L2 | SI_BARRIER_PFP_SYNC_ME);
++879-         si_resource(info->indirect)->L2_cache_dirty = false;
++880-      }
++881-   }
++882-
+ --
+-887-
+-888-   if (unlikely(sctx->perfetto_enabled))
+-889-      trace_si_begin_compute(&sctx->trace);
+-890-
+-891-   if (sctx->bo_list_add_all_compute_resources)
+-892-      si_compute_resources_add_all_to_bo_list(sctx);
+-893-
+-894-   /* Skipping setting redundant registers on compute queues breaks compute. */
+-895-   if (!sctx->is_gfx_queue) {
+-896-      BITSET_CLEAR_RANGE(sctx->tracked_regs.reg_saved_mask,
+-897-                         AC_FIRST_TRACKED_OTHER_REG, AC_NUM_ALL_TRACKED_REGS - 1);
+-898-   }
+-899-
+-900-   /* First emit registers. */
+-901-   bool prefetch;
+-902:   if (!si_switch_compute_shader(sctx, program, &program->shader, &prefetch,
+-903-                                 info->variable_shared_mem))
+-904-      return;
+-905-
+-906-   si_emit_compute_shader_pointers(sctx);
+-907-
+-908-   /* Global buffers */
+-909-   for (unsigned i = 0; i < sctx->max_global_buffers; i++) {
+-910-      struct si_resource *buffer = si_resource(sctx->global_buffers[i]);
+-911-      if (!buffer) {
+-912-         continue;
+-913-      }
+-914-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, buffer,
+-915-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SHADER_RW_BUFFER);
+-916-   }
+-917-
+-918-   for (unsigned i = 0; i < info->num_globals; i++) {
+-919-      struct si_resource *buffer = si_resource(info->globals[i]);
+-920-      if (!buffer) {
+-921-         continue;
+-922-      }
+-923-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, buffer,
+-924-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SHADER_RW_BUFFER);
+-925-   }
+-926-
+-927-   /* Registers that are not read from memory should be set before this: */
+-928-   si_emit_barrier_direct(sctx, 0);
+-929-
+-930-   if (sctx->is_gfx_queue && si_is_atom_dirty(sctx, &sctx->atoms.s.render_cond)) {
+-931-      sctx->atoms.s.render_cond.emit(sctx, -1);
+-932-      si_set_atom_dirty(sctx, &sctx->atoms.s.render_cond, false);
++891-                         NULL);
++892-      }
++893-   }
++894-
++895-   if (sctx->bo_list_add_all_compute_resources)
++896-      si_compute_resources_add_all_to_bo_list(sctx);
++897-
++898-   /* Skipping setting redundant registers on compute queues breaks compute. */
++899-   if (!sctx->is_gfx_queue) {
++900-      BITSET_CLEAR_RANGE(sctx->tracked_regs.reg_saved_mask,
++901-                         AC_FIRST_TRACKED_OTHER_REG, AC_NUM_ALL_TRACKED_REGS - 1);
++902-   }
++903-
++904-   /* First emit registers. */
++905-   bool prefetch;
++906:   if (!si_switch_compute_shader(sctx, program, &program->shader, &prefetch,
++907-                                 info->variable_shared_mem))
++908-      return;
++909-
++910-   if (unlikely(sctx->perfetto_enabled))
++911-      trace_si_begin_compute(&sctx->trace);
++912-
++913-   si_emit_compute_shader_pointers(sctx);
++914-
++915-   /* Global buffers */
++916-   for (unsigned i = 0; i < sctx->max_global_buffers; i++) {
++917-      struct si_resource *buffer = si_resource(sctx->global_buffers[i]);
++918-      if (!buffer) {
++919-         continue;
++920-      }
++921-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, buffer,
++922-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SHADER_RW_BUFFER);
++923-   }
++924-
++925-   for (unsigned i = 0; i < info->num_globals; i++) {
++926-      struct si_resource *buffer = si_resource(info->globals[i]);
++927-      if (!buffer) {
++928-         continue;
++929-      }
++930-      util_range_add(&buffer->b.b, &buffer->valid_buffer_range, 0, buffer->b.b.width0);
++931-      radeon_add_to_buffer_list(sctx, &sctx->gfx_cs, buffer,
++932-                                RADEON_USAGE_READWRITE | RADEON_PRIO_SHADER_RW_BUFFER);
+ 933-   }
+ 934-
+-935-   /* Prefetch the compute shader to L2. */
+-936-   if (sctx->gfx_level >= GFX7 && sctx->screen->info.has_cp_dma && prefetch)
+-937-      si_cp_dma_prefetch(&sctx->gfx_cs, sctx->gfx_level, &program->shader.bo->b.b,
+-938-                         0, program->shader.bo->b.b.width0);
+-939-
+-940-   si_setup_nir_user_data(sctx, info);
+-941-
+-942-   si_emit_dispatch_packets(sctx, info);
+-943-
+-944-   if (unlikely(sctx->current_saved_cs)) {
+-945-      si_trace_emit(sctx);
+-946-      si_log_compute_state(sctx, sctx->log);
+-947-   }
++935-   /* Registers that are not read from memory should be set before this: */
++936-   si_emit_barrier_direct(sctx, 0);
++937-
++938-   if (sctx->is_gfx_queue && si_is_atom_dirty(sctx, &sctx->atoms.s.render_cond)) {
++939-      sctx->atoms.s.render_cond.emit(sctx, -1);
++940-      si_set_atom_dirty(sctx, &sctx->atoms.s.render_cond, false);
++941-   }
++942-
++943-   /* Prefetch the compute shader to L2. */
++944-   if (sctx->gfx_level >= GFX7 && sctx->screen->info.has_cp_dma && prefetch)
++945-      si_cp_dma_prefetch(&sctx->gfx_cs, sctx->gfx_level, &program->shader.bo->b.b,
++946-                         0, program->shader.bo->b.b.width0);
++947-
++948-   si_setup_nir_user_data(sctx, info);
++949-
++950-   si_emit_dispatch_packets(sctx, info);
++951-
+ --
+-992-      sctx->cs_shader_state.program = NULL;
+-993-
+-994-   if (program == sctx->cs_shader_state.emitted_program)
+-995-      sctx->cs_shader_state.emitted_program = NULL;
+-996-
+-997-   si_compute_reference(&program, NULL);
+-998-}
+-999-
+-1000-void si_init_compute_functions(struct si_context *sctx)
+-1001-{
+-1002-   sctx->b.create_compute_state = si_create_compute_state;
+-1003-   sctx->b.delete_compute_state = si_delete_compute_state;
+-1004-   sctx->b.bind_compute_state = si_bind_compute_state;
+-1005-   sctx->b.get_compute_state_info = si_get_compute_state_info;
+-1006-   sctx->b.set_global_binding = si_set_global_binding;
+-1007:   sctx->b.launch_grid = si_launch_grid;
+-1008-
+-1009-#if 0 /* test for si_get_2d_interleave_size */
+-1010-   static bool visited = false;
+-1011-   if (visited)
+-1012-      return;
+-1013-
+-1014-   visited = true;
+-1015-   struct pipe_grid_info info = {};
+-1016-   info.grid[0] = info.grid[1] = info.grid[2] = 1024;
+-1017-   info.block[2] = 1;
+-1018-
+-1019-   for (unsigned block_3d = 0; block_3d < 2; block_3d++) {
+-1020-      printf("    WG size     |   WG block/SE  | Thread block/SE\n");
++1000-      sctx->cs_shader_state.program = NULL;
++1001-
++1002-   if (program == sctx->cs_shader_state.emitted_program)
++1003-      sctx->cs_shader_state.emitted_program = NULL;
++1004-
++1005-   si_compute_reference(&program, NULL);
++1006-}
++1007-
++1008-void si_init_compute_functions(struct si_context *sctx)
++1009-{
++1010-   sctx->b.create_compute_state = si_create_compute_state;
++1011-   sctx->b.delete_compute_state = si_delete_compute_state;
++1012-   sctx->b.bind_compute_state = si_bind_compute_state;
++1013-   sctx->b.get_compute_state_info = si_get_compute_state_info;
++1014-   sctx->b.set_global_binding = si_set_global_binding;
++1015:   sctx->b.launch_grid = si_launch_grid;
++1016-
++1017-#if 0 /* test for si_get_2d_interleave_size */
++1018-   static bool visited = false;
++1019-   if (visited)
++1020-      return;
+ 1021-
+-1022-      for (unsigned x = 1; x <= 32; x *= 2) {
+-1023-         for (unsigned y = 1; y <= 32; y *= 2) {
+-1024-            info.block[0] = x;
+-1025-            info.block[1] = y;
+-1026-            info.block[2] = block_3d ? 8 : 1;
+-1027-
+-1028-            if ((x * y) % 32)
+-1029-               continue;
+-1030-
+-1031-            unsigned log_x, log_y;
+-1032-            if (!si_get_2d_interleave_size(&info, &log_x, &log_y))
+-1033-               continue;
+-1034-
+-1035-            printf(" (%2u, %2u) = %3u |  (%2u, %2u) = %2u | (%3u,%3u) = %u\n",
+-1036-                   info.block[0], info.block[1], info.block[0] * info.block[1],
+-1037-                   1 << log_x, 1 << log_y, (1 << log_x) * (1 << log_y),
+-1038-                   info.block[0] * (1 << log_x), info.block[1] * (1 << log_y),
+-1039-                   info.block[0] * (1 << log_x) * info.block[1] * (1 << log_y));
+-1040-         }
+-1041-      }
+-1042-   }
+-1043-#endif
+-1044-}
++1022-   visited = true;
++1023-   struct pipe_grid_info info = {};
++1024-   info.grid[0] = info.grid[1] = info.grid[2] = 1024;
++1025-   info.block[2] = 1;
++1026-
++1027-   for (unsigned block_3d = 0; block_3d < 2; block_3d++) {
++1028-      printf("    WG size     |   WG block/SE  | Thread block/SE\n");
++1029-
++1030-      for (unsigned x = 1; x <= 32; x *= 2) {
++1031-         for (unsigned y = 1; y <= 32; y *= 2) {
++1032-            info.block[0] = x;
++1033-            info.block[1] = y;
++1034-            info.block[2] = block_3d ? 8 : 1;
++1035-
++1036-            if ((x * y) % 32)
++1037-               continue;
++1038-
++1039-            unsigned log_x, log_y;
++1040-            if (!si_get_2d_interleave_size(&info, &log_x, &log_y))
++1041-               continue;
++1042-
++1043-            printf(" (%2u, %2u) = %3u |  (%2u, %2u) = %2u | (%3u,%3u) = %u\n",
++1044-                   info.block[0], info.block[1], info.block[0] * info.block[1],
++1045-                   1 << log_x, 1 << log_y, (1 << log_x) * (1 << log_y),
++1046-                   info.block[0] * (1 << log_x), info.block[1] * (1 << log_y),
++1047-                   info.block[0] * (1 << log_x) * info.block[1] * (1 << log_y));
++1048-         }
++1049-      }
++1050-   }
++1051-#endif
++1052-}
+ 
+ ===== AMD GPU INFO =====
+-953-      info->num_tile_pipes = ac_pipe_config_to_num_pipes(pipe_config);
+-954-      assert((256 << G_0098F8_PIPE_INTERLEAVE_SIZE_GFX6(info->gb_addr_config)) ==
+-955-             AMD_MEMCHANNEL_INTERLEAVE_BYTES);
+-956-   }
+-957-   info->r600_has_virtual_memory = true;
+-958-
+-959-   /* LDS is 64KB per CU (4 SIMDs on GFX6-9, which is 16KB per SIMD).
+-960-    *
+-961-    * GFX10+: LDS is 128KB in WGP mode, but a workgroup can only use up to 64KB.
+-962-    * GFX7+:  Workgroups can use up to 64KB.
+-963-    * GFX6:   There is 64KB LDS per CU, but a workgroup can only use up to 32KB.
+-964-    */
+-965:   info->lds_size_per_workgroup = info->gfx_level >= GFX7 ? 64 * 1024 : 32 * 1024;
+-966-
+-967-   /* The mere presence of CLEAR_STATE in the IB causes random GPU hangs on GFX6. CLEAR_STATE
+-968-    * causes GPU hangs with the radeon kernel driver, so only enable GFX7 CLEAR_STATE on amdgpu.
+-969-    * GFX11+ supports CLEAR_STATE, but we have decided not to use it.
+-970-    */
+-971-   info->has_clear_state = info->gfx_level >= GFX7 && info->gfx_level < GFX11;
+-972-
+-973-   info->has_distributed_tess =
+-974-      info->gfx_level >= GFX10 || (info->gfx_level >= GFX8 && info->max_se >= 2);
+-975-
+-976-   info->has_dcc_constant_encode =
+-977-      info->family == CHIP_RAVEN2 || info->family == CHIP_RENOIR || info->gfx_level >= GFX10;
+-978-
+-979-   /* TC-compat HTILE is only available on GFX8-GFX11.5.
+-980-    *
+-981-    * There are issues with TC-compatible HTILE on Tonga (and Iceland is the same design), and
+-982-    * documented bug workarounds don't help. For example, this fails:
+-983-    *   piglit/bin/tex-miplevel-selection 'texture()' 2DShadow -auto
+-984-    */
+-985-   info->has_tc_compatible_htile = info->gfx_level >= GFX8 && info->gfx_level < GFX12 &&
++307-   }
++308-   out->min_wave64_vgpr_alloc = out->wave64_vgpr_alloc_granularity;
++309-   out->max_vgpr_alloc = 256;
++310-
++311-   out->num_simd_per_compute_unit = info->gfx_level >= GFX10 ? 2 : 4;
++312-
++313-   /* LDS is 64KB per CU (4 SIMDs on GFX6-9, which is 16KB per SIMD).
++314-    *
++315-    * GFX10+: LDS is 128KB in WGP mode, but a workgroup can only use up to 64KB.
++316-    * GFX7+:  Workgroups can use up to 64KB.
++317-    * GFX6:   There is 64KB LDS per CU, but a workgroup can only use up to 32KB.
++318-    */
++319:   out->lds_size_per_workgroup = info->gfx_level >= GFX7 ? 64 * 1024 : 32 * 1024;
++320-
++321-   out->hs_offchip_workgroup_dw_size = info->hs_offchip_workgroup_dw_size;
++322-
++323-   /* Flags */
++324-   out->has_lds_bank_count_16 = info->family == CHIP_KABINI || info->family == CHIP_STONEY;
++325-   out->has_sram_ecc_enabled = info->family == CHIP_VEGA20 || info->family == CHIP_MI100 ||
++326-                               info->family == CHIP_MI200 || info->family == CHIP_GFX940;
++327-   out->has_point_sample_accel = info->family == CHIP_STRIX1 || info->family == CHIP_STRIX_HALO ||
++328-                                 info->family == CHIP_KRACKAN1 || info->gfx_level == GFX11_7;
++329-   out->has_fast_fma32 = info->gfx_level >= GFX9 || info->family == CHIP_TAHITI ||
++330-                         info->family == CHIP_HAWAII || info->family == CHIP_CARRIZO;
++331-   out->has_fma_mix = info->gfx_level >= GFX10 || info->family == CHIP_VEGA12 ||
++332-                      info->family == CHIP_VEGA20 || info->family == CHIP_MI100 ||
++333-                      info->family == CHIP_MI200 || info->family == CHIP_GFX940;
++334-   out->has_mad32 =
++335-      info->gfx_level == GFX9 ? info->family <= CHIP_MI200 : info->gfx_level < GFX10_3;
++336-   out->has_packed_math_16bit = info->gfx_level >= GFX9;
++337-   out->has_accelerated_dot_product =
++338-      info->family == CHIP_VEGA20 ||
++339-      (info->family >= CHIP_MI100 && info->family != CHIP_NAVI10 && info->family != CHIP_GFX1013);
+ --
+-1827-   fprintf(f, "    vram_type = %i\n", info->vram_type);
+-1828-   fprintf(f, "    max_heap_size_kb = %i MB\n", (int)DIV_ROUND_UP(info->max_heap_size_kb, 1024));
+-1829-   fprintf(f, "    min_alloc_size = %u\n", info->min_alloc_size);
+-1830-   fprintf(f, "    address32_hi = 0x%x\n", info->address32_hi);
+-1831-   fprintf(f, "    has_dedicated_vram = %u\n", info->has_dedicated_vram);
+-1832-   fprintf(f, "    all_vram_visible = %u\n", info->all_vram_visible);
+-1833-   fprintf(f, "    virtual_address_max = %" PRIx64 "\n", info->virtual_address_max);
+-1834-   fprintf(f, "    max_tcc_blocks = %i\n", info->max_tcc_blocks);
+-1835-   fprintf(f, "    tcc_cache_line_size = %u\n", info->tcc_cache_line_size);
+-1836-   fprintf(f, "    tcc_rb_non_coherent = %u\n", info->tcc_rb_non_coherent);
+-1837-   fprintf(f, "    cp_sdma_ge_use_system_memory_scope = %u\n", info->cp_sdma_ge_use_system_memory_scope);
+-1838-   fprintf(f, "    pc_lines = %u\n", info->pc_lines);
+-1839:   fprintf(f, "    lds_size_per_workgroup = %u\n", info->lds_size_per_workgroup);
+-1840-   fprintf(f, "    lds_alloc_granularity = %i\n", ac_shader_get_lds_alloc_granularity(info->gfx_level));
+-1841-   fprintf(f, "    max_memory_clock = %i MHz\n", info->memory_freq_mhz);
+-1842-
+-1843-   fprintf(f, "CP info:\n");
+-1844-   fprintf(f, "    gfx_ib_pad_with_type2 = %i\n", info->gfx_ib_pad_with_type2);
+-1845-   fprintf(f, "    can_chain_ib2 = %i\n", info->can_chain_ib2);
+-1846-   fprintf(f, "    has_cp_dma = %i\n", info->has_cp_dma);
+-1847-   fprintf(f, "    me_fw_version = %i\n", info->me_fw_version);
+-1848-   fprintf(f, "    me_fw_feature = %i\n", info->me_fw_feature);
+-1849-   fprintf(f, "    mec_fw_version = %i\n", info->mec_fw_version);
+-1850-   fprintf(f, "    mec_fw_feature = %i\n", info->mec_fw_feature);
+-1851-   fprintf(f, "    pfp_fw_version = %i\n", info->pfp_fw_version);
+-1852-   fprintf(f, "    pfp_fw_feature = %i\n", info->pfp_fw_feature);
+-1853-
+-1854-   if (info->gfx_level >= GFX11) {
+-1855-      fprintf(f, "Userqueue info:\n");
+-1856-      fprintf(f, "    userq_ip_mask = %x\n", info->userq_ip_mask);
+-1857-      if (info->userq_ip_mask & (1 << AMD_IP_GFX)) {
+-1858-         fprintf(f, "    gfx shadow_size = %u\n", info->fw_based_mcbp.shadow_size);
+-1859-         fprintf(f, "    gfx shadow_alignment = %u\n", info->fw_based_mcbp.shadow_alignment);
++2094-           info->compiler_info.num_physical_sgprs_per_simd);
++2095-   fprintf(f, "    num_physical_wave64_vgprs_per_simd = %i\n",
++2096-           info->compiler_info.num_physical_wave64_vgprs_per_simd);
++2097-   fprintf(f, "    num_simd_per_compute_unit = %i\n",
++2098-           info->compiler_info.num_simd_per_compute_unit);
++2099-   fprintf(f, "    min_sgpr_alloc = %i\n", info->compiler_info.min_sgpr_alloc);
++2100-   fprintf(f, "    max_sgpr_alloc = %i\n", info->compiler_info.max_sgpr_alloc);
++2101-   fprintf(f, "    sgpr_alloc_granularity = %i\n", info->compiler_info.sgpr_alloc_granularity);
++2102-   fprintf(f, "    min_wave64_vgpr_alloc = %i\n", info->compiler_info.min_wave64_vgpr_alloc);
++2103-   fprintf(f, "    max_vgpr_alloc = %i\n", info->compiler_info.max_vgpr_alloc);
++2104-   fprintf(f, "    wave64_vgpr_alloc_granularity = %i\n",
++2105-           info->compiler_info.wave64_vgpr_alloc_granularity);
++2106:   fprintf(f, "    lds_size_per_workgroup = %u\n", info->compiler_info.lds_size_per_workgroup);
++2107-   fprintf(f, "    has_lds_bank_count_16 = %i\n", info->compiler_info.has_lds_bank_count_16);
++2108-   fprintf(f, "    has_sram_ecc_enabled = %i\n", info->compiler_info.has_sram_ecc_enabled);
++2109-   fprintf(f, "    has_point_sample_accel = %i\n", info->compiler_info.has_point_sample_accel);
++2110-   fprintf(f, "    has_fast_fma32 = %i\n", info->compiler_info.has_fast_fma32);
++2111-   fprintf(f, "    has_fma_mix = %i\n", info->compiler_info.has_fma_mix);
++2112-   fprintf(f, "    has_mad32 = %i\n", info->compiler_info.has_mad32);
++2113-   fprintf(f, "    has_packed_math_16bit = %i\n", info->compiler_info.has_packed_math_16bit);
++2114-   fprintf(f, "    has_accelerated_dot_product = %i\n", info->compiler_info.has_accelerated_dot_product);
++2115-   fprintf(f, "    has_image_bvh_intersect_ray = %i\n", info->compiler_info.has_image_bvh_intersect_ray);
++2116-   fprintf(f, "    has_ngg_passthru_no_msg = %i\n", info->compiler_info.has_ngg_passthru_no_msg);
++2117-   fprintf(f, "    local_invocation_ids_packed = %i\n", info->compiler_info.local_invocation_ids_packed);
++2118-   fprintf(f, "    has_3d_cube_border_color_mipmap = %i\n", info->compiler_info.has_3d_cube_border_color_mipmap);
++2119-   fprintf(f, "    conformant_trunc_coord = %i\n", info->compiler_info.conformant_trunc_coord);
++2120-   fprintf(f, "    has_attr_ring = %i\n", info->compiler_info.has_attr_ring);
++2121-   fprintf(f, "    smaller_tcs_workgroups = %i\n", info->compiler_info.smaller_tcs_workgroups);
++2122-   fprintf(f, "    has_gfx6_mrt_export_bug = %i\n", info->compiler_info.has_gfx6_mrt_export_bug);
++2123-   fprintf(f, "    has_vtx_format_alpha_adjust_bug = %i\n", info->compiler_info.has_vtx_format_alpha_adjust_bug);
++2124-   fprintf(f, "    has_smem_oob_access_bug = %i\n", info->compiler_info.has_smem_oob_access_bug);
++2125-   fprintf(f, "    has_image_load_dcc_bug = %i\n", info->compiler_info.has_image_load_dcc_bug);
++2126-   fprintf(f, "    has_ls_vgpr_init_bug = %i\n", info->compiler_info.has_ls_vgpr_init_bug);
+ 
+ ===== RADEONSI SHADER =====
+-202-      if (stage == MESA_SHADER_GEOMETRY && shader->key.ge.as_ngg)
+-203-         size_in_dw += shader->ngg.info.ngg_out_lds_size;
+-204-
+-205-      lds_size = size_in_dw * 4;
+-206-   }
+-207-
+-208-   if (stage == MESA_SHADER_COMPUTE ||
+-209-       stage == MESA_SHADER_TASK ||
+-210-       stage == MESA_SHADER_MESH) {
+-211-      lds_size = shader->info.shared_size;
+-212-   }
+-213-
+-214:   /* Check that the LDS size is within hw limits. */
+-215:   assert(lds_size <= shader->selector->screen->info.lds_size_per_workgroup);
+-216-   return lds_size;
+-217-}
+-218-
+-219-unsigned si_shader_encode_vgprs(struct si_shader *shader)
+-220-{
+-221-   struct radeon_info *info = &shader->selector->screen->info;
+-222-   unsigned encode_granularity = !info->has_graphics && info->family >= CHIP_MI200 ? 8 : 4;
+-223-
+-224-   assert(info->gfx_level >= GFX10 || shader->wave_size == 64);
+-225-   if (shader->wave_size == 32)
+-226-      encode_granularity *= 2;
+-227-
+-228-   return shader->config.num_vgprs / encode_granularity - 1;
+-229-}
+-230-
+-231-unsigned si_shader_encode_sgprs(struct si_shader *shader)
+-232-{
+-233-   if (shader->selector->screen->info.gfx_level >= GFX10)
+-234-      return 0; /* Gfx10+ don't have the SGPRS field and always allocate 128 SGPRs. */
+-235-
++200-      if (stage == MESA_SHADER_GEOMETRY && shader->key.ge.as_ngg)
++201-         size_in_dw += shader->ngg.info.ngg_out_lds_size;
++202-
++203-      lds_size = size_in_dw * 4;
++204-   }
++205-
++206-   if (stage == MESA_SHADER_COMPUTE ||
++207-       stage == MESA_SHADER_TASK ||
++208-       stage == MESA_SHADER_MESH) {
++209-      lds_size = shader->info.shared_size;
++210-   }
++211-
++212:   /* Check that the LDS size is within hw limits. */
++213:   assert(lds_size <= shader->selector->screen->info.compiler_info.lds_size_per_workgroup);
++214-   return lds_size;
++215-}
++216-
++217-unsigned si_shader_encode_vgprs(struct si_shader *shader)
++218-{
++219-   struct radeon_info *info = &shader->selector->screen->info;
++220-   assert(info->gfx_level >= GFX10 || shader->wave_size == 64);
++221-
++222-   return DIV_ROUND_UP(shader->config.num_vgprs,
++223-                       (info->compiler_info.wave64_vgpr_encode_granularity *
++224-                        (shader->wave_size == 32 ? 2 : 1))) - 1;
++225-}
++226-
++227-unsigned si_shader_encode_sgprs(struct si_shader *shader)
++228-{
++229-   if (shader->selector->screen->info.gfx_level >= GFX10)
++230-      return 0; /* Gfx10+ don't have the SGPRS field and always allocate 128 SGPRs. */
++231-
++232-   return shader->config.num_sgprs / 8 - 1;
++233-}
+ --
+-290-         unsigned real_vgpr_gran = sscreen->info.cu_info.num_physical_wave64_vgprs_per_simd / 64;
+-291-         num_vgprs = util_align_npot(num_vgprs, real_vgpr_gran * (shader->wave_size == 32 ? 2 : 1));
+-292-      } else {
+-293-         num_vgprs = align(num_vgprs, shader->wave_size == 32 ? 8 : 4);
+-294-      }
+-295-
+-296-      /* Always print wave limits as Wave64, so that we can compare
+-297-       * Wave32 and Wave64 with shader-db fairly. */
+-298-      unsigned max_vgprs = sscreen->info.cu_info.num_physical_wave64_vgprs_per_simd;
+-299-      max_simd_waves = MIN2(max_simd_waves, max_vgprs / num_vgprs);
+-300-   }
++286-         unsigned real_vgpr_gran = sscreen->info.compiler_info.num_physical_wave64_vgprs_per_simd / 64;
++287-         num_vgprs = util_align_npot(num_vgprs, real_vgpr_gran * (shader->wave_size == 32 ? 2 : 1));
++288-      } else {
++289-         num_vgprs = align(num_vgprs, shader->wave_size == 32 ? 8 : 4);
++290-      }
++291-
++292-      /* Always print wave limits as Wave64, so that we can compare
++293-       * Wave32 and Wave64 with shader-db fairly. */
++294-      unsigned max_vgprs = sscreen->info.compiler_info.num_physical_wave64_vgprs_per_simd;
++295-      max_simd_waves = MIN2(max_simd_waves, max_vgprs / num_vgprs);
++296-   }
++297-
++298:   unsigned max_lds_per_simd = sscreen->info.compiler_info.lds_size_per_workgroup / sscreen->info.compiler_info.num_simd_per_compute_unit;
++299-   if (lds_per_wave)
++300-      max_simd_waves = MIN2(max_simd_waves, max_lds_per_simd / lds_per_wave);
+ 301-
+-302:   unsigned max_lds_per_simd = sscreen->info.lds_size_per_workgroup / sscreen->info.cu_info.num_simd_per_compute_unit;
+-303-   if (lds_per_wave)
+-304-      max_simd_waves = MIN2(max_simd_waves, max_lds_per_simd / lds_per_wave);
+-305-
+-306-   shader->info.max_simd_waves = max_simd_waves;
+-307-}
+-308-
+-309-unsigned si_map_io_driver_location(unsigned semantic)
+-310-{
+-311-   if ((semantic >= VARYING_SLOT_PATCH0 && semantic < VARYING_SLOT_TESS_MAX) ||
+-312-       semantic == VARYING_SLOT_TESS_LEVEL_INNER ||
+-313-       semantic == VARYING_SLOT_TESS_LEVEL_OUTER)
+-314-      return ac_shader_io_get_unique_index_patch(semantic);
+-315-
+-316-   return si_shader_io_get_unique_index(semantic);
+-317-}
+-318-
+-319-static bool si_lower_io_to_mem(struct si_shader *shader, nir_shader *nir)
+-320-{
+-321-   struct si_shader_selector *sel = shader->selector;
+-322-   struct si_shader_selector *next_sel = shader->next_shader ? shader->next_shader->selector : sel;
++302-   shader->info.max_simd_waves = max_simd_waves;
++303-}
++304-
++305-unsigned si_map_io_driver_location(unsigned semantic)
++306-{
++307-   if ((semantic >= VARYING_SLOT_PATCH0 && semantic < VARYING_SLOT_TESS_MAX) ||
++308-       semantic == VARYING_SLOT_TESS_LEVEL_INNER ||
++309-       semantic == VARYING_SLOT_TESS_LEVEL_OUTER)
++310-      return ac_shader_io_get_unique_index_patch(semantic);
++311-
++312-   return si_shader_io_get_unique_index(semantic);
++313-}
++314-
++315-static bool si_lower_io_to_mem(struct si_shader *shader, nir_shader *nir)
++316-{
++317-   struct si_shader_selector *sel = shader->selector;
++318-   struct si_shader_selector *next_sel = shader->next_shader ? shader->next_shader->selector : sel;
