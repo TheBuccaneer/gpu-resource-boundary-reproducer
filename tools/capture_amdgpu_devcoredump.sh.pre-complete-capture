@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -u
+
+OUT="${1:-results/b1/H1_B1_DYN_65540_amdgpu_devcoredump_2026-08-26.bin}"
+PATH_DATA="/sys/class/drm/card1/device/devcoredump/data"
+
+echo "watching=$PATH_DATA"
+echo "output=$OUT"
+
+while true; do
+    if [[ -e "$PATH_DATA" ]]; then
+        echo "devcoredump_detected=$(date --iso-8601=seconds)"
+
+        if cat "$PATH_DATA" > "$OUT"; then
+            echo "capture=SUCCESS"
+            ls -lh "$OUT"
+            sha256sum "$OUT"
+            exit 0
+        else
+            echo "capture=FAILED"
+            exit 1
+        fi
+    fi
+
+    sleep 0.05
+done

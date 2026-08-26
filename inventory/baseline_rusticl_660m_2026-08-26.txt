@@ -1,0 +1,20 @@
+=== DATE ===
+2026-08-26T10:07:42+02:00
+
+=== SYSTEM ===
+Linux rock-21m5002age 7.0.0-30-generic #30-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 31 18:22:54 UTC 2026 x86_64 GNU/Linux
+
+=== OPENCL ICDs ===
+total 4
+-rw-r--r-- 1 root root 22 Mar 27 08:43 rusticl.icd
+libRusticlOpenCL.so.1
+
+=== OPENCL PLATFORMS ===
+Platform #0: rusticl
+ `-- Device #0: AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic)
+
+=== RELEVANT PACKAGES ===
+libdrm-amdgpu1:amd64	2.4.131-1
+libdrm2:amd64	2.4.131-1
+mesa-opencl-icd:amd64	26.0.3-1ubuntu1
+ocl-icd-libopencl1:amd64	2.3.4-1

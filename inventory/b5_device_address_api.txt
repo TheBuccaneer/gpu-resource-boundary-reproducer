@@ -1,0 +1,8 @@
+/usr/include/CL/cl_ext.h:4302:* cl_ext_buffer_device_address
+/usr/include/CL/cl_ext.h:4304:#define cl_ext_buffer_device_address 1
+/usr/include/CL/cl_ext.h:4306:    "cl_ext_buffer_device_address"
+/usr/include/CL/cl_ext.h:4315:clSetKernelArgDevicePointerEXT_t(
+/usr/include/CL/cl_ext.h:4320:typedef clSetKernelArgDevicePointerEXT_t *
+/usr/include/CL/cl_ext.h:4321:clSetKernelArgDevicePointerEXT_fn CL_API_SUFFIX__VERSION_3_0;
+/usr/include/CL/cl_ext.h:4326:clSetKernelArgDevicePointerEXT(
+/usr/include/CL/cl_ext.h:4337:#define CL_MEM_DEVICE_ADDRESS_EXT                           0x5001

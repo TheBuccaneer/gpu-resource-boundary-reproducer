@@ -16,3 +16,6 @@ probes/il_negative
 probes/il_smoke
 probes/local_limit_probe
 probes/source_smoke
+/probes/dynamic_local_probe
+/probes/dynamic_local_boundary_probe
+/probes/dynamic_local_byte_boundary_probe
