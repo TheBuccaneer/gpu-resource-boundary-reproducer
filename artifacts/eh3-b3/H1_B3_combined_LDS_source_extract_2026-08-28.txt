@@ -1,0 +1,685 @@
+=== Rusticl LocalMem aggregation / dispatch ===
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-496-            );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-497-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-498-            pipe_resource_release(self.pipe.as_ptr(), releasebuf);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-499-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-500-            true
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-501-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-502-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-503-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs:504:    pub fn launch_grid(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-505-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-506-        work_dim: u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-507-        block: [u32; 3],
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-508-        grid: [u32; 3],
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-509-        variable_local_mem: u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-510-        globals: &[&PipeResourceOwned],
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-511-    ) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-512-        let mut globals: Vec<*mut pipe_resource> = globals.iter().map(|res| res.pipe()).collect();
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-514-            variable_shared_mem: variable_local_mem,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-515-            work_dim: work_dim,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-516-            block: block,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-517-            grid: grid,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-518-            globals: globals.as_mut_ptr(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-519-            num_globals: globals.len() as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-520-            ..Default::default()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-521-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs:522:        unsafe { self.pipe.as_ref().launch_grid.unwrap()(self.pipe.as_ptr(), &info) }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-523-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-524-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-525-    pub fn set_global_binding(&self, res: &mut [&PipeResource], out: &mut [*mut u32]) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-526-        let len = res.len();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-527-        let res = PipeResource::slice_as_mut_ptr_slice(res);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-528-        // SAFETY: We can safely cast the *mut *const pointer to *mut *mut as drivers aren't going
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-529-        //         to change any of the pipe_resource fields, but merely allows them to change
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-530-        //         fields of their own subclass.
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-726-        & has_required_feature!(context, create_compute_state)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-727-        & has_required_feature!(context, create_query)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-728-        & has_required_feature!(context, delete_compute_state)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-729-        & has_required_feature!(context, delete_sampler_state)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-730-        & has_required_feature!(context, destroy_query)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-731-        & has_required_feature!(context, end_query)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-732-        & has_required_feature!(context, flush)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-733-        & has_required_feature!(context, get_compute_state_info)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs:734:        & has_required_feature!(context, launch_grid)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-735-        & has_required_feature!(context, memory_barrier)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-736-        & has_required_feature!(context, resource_copy_region)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-737-        // implicitly used through pipe_sampler_view_release
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-738-        & has_required_feature!(context, sampler_view_destroy)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-739-        & has_required_feature!(context, set_constant_buffer)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-740-        & has_required_feature!(context, set_global_binding)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-741-        & has_required_feature!(context, set_sampler_views)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/mesa/pipe/context.rs-742-        & has_required_feature!(context, sampler_view_release)
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-451-                        && bit_check(buffer.flags, CL_MEM_IMMUTABLE_EXT)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-452-                    {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-453-                        return Err(CL_INVALID_ARG_VALUE);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-454-                    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-455-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-456-                    KernelArgValue::Buffer(Arc::downgrade(&buffer))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-457-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-458-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs:459:            KernelArgType::MemLocal if !arg.dead => KernelArgValue::LocalMem(arg_size),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-460-            KernelArgType::Image | KernelArgType::RWImage | KernelArgType::Texture if !arg.dead => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-461-                let img: *const cl_mem = arg_value.cast();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-462-                // SAFETY: for image args arg_value pointers to a cl_mem object.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-463-                let img = Image::arc_from_raw(unsafe { *img })?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-464-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-465-                // CL_INVALID_ARG_VALUE if the argument is an image declared with the read_only
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-466-                // qualifier and arg_value refers to an image object created with cl_mem_flags
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-467-                // of CL_MEM_WRITE_ONLY or if the image argument is declared with the write_only
+
+=== radeonsi variable shared/LDS path ===
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-288-   bool all_vram_visible;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-289-   uint64_t virtual_address_max;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-290-   bool has_l2_uncached;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-291-   bool r600_has_virtual_memory;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-292-   uint32_t max_tcc_blocks;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-293-   uint32_t tcc_cache_line_size;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-294-   bool tcc_rb_non_coherent; /* whether L2 inv is needed for render->texture transitions */
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-295-   bool cp_sdma_ge_use_system_memory_scope;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-296-   bool cp_dma_use_L2;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-297-   unsigned pc_lines;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h:298:   uint32_t lds_size_per_workgroup;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-299-
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-300-   /* CP info. */
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-301-   bool gfx_ib_pad_with_type2;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-302-   bool can_chain_ib2;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-303-   bool has_cp_dma;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-304-   uint32_t me_fw_version;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-305-   uint32_t me_fw_feature;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-306-   uint32_t mec_fw_version;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-307-   uint32_t mec_fw_feature;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.h-308-   uint32_t pfp_fw_version;
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-201-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-202-      if (stage == MESA_SHADER_GEOMETRY && shader->key.ge.as_ngg)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-203-         size_in_dw += shader->ngg.info.ngg_out_lds_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-204-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-205-      lds_size = size_in_dw * 4;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-206-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-207-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-208-   if (stage == MESA_SHADER_COMPUTE ||
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-209-       stage == MESA_SHADER_TASK ||
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-210-       stage == MESA_SHADER_MESH) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:211:      lds_size = shader->info.shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-212-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-213-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-214-   /* Check that the LDS size is within hw limits. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:215:   assert(lds_size <= shader->selector->screen->info.lds_size_per_workgroup);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-216-   return lds_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-217-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-218-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-219-unsigned si_shader_encode_vgprs(struct si_shader *shader)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-220-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-221-   struct radeon_info *info = &shader->selector->screen->info;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-222-   unsigned encode_granularity = !info->has_graphics && info->family >= CHIP_MI200 ? 8 : 4;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-223-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-224-   assert(info->gfx_level >= GFX10 || shader->wave_size == 64);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-225-   if (shader->wave_size == 32)
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-292-      } else {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-293-         num_vgprs = align(num_vgprs, shader->wave_size == 32 ? 8 : 4);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-294-      }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-295-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-296-      /* Always print wave limits as Wave64, so that we can compare
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-297-       * Wave32 and Wave64 with shader-db fairly. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-298-      unsigned max_vgprs = sscreen->info.cu_info.num_physical_wave64_vgprs_per_simd;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-299-      max_simd_waves = MIN2(max_simd_waves, max_vgprs / num_vgprs);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-300-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-301-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:302:   unsigned max_lds_per_simd = sscreen->info.lds_size_per_workgroup / sscreen->info.cu_info.num_simd_per_compute_unit;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-303-   if (lds_per_wave)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-304-      max_simd_waves = MIN2(max_simd_waves, max_lds_per_simd / lds_per_wave);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-305-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-306-   shader->info.max_simd_waves = max_simd_waves;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-307-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-308-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-309-unsigned si_map_io_driver_location(unsigned semantic)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-310-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-311-   if ((semantic >= VARYING_SLOT_PATCH0 && semantic < VARYING_SLOT_TESS_MAX) ||
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-312-       semantic == VARYING_SLOT_TESS_LEVEL_INNER ||
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-615-   /* Any unwritten output will default to (0,0,0,0). */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-616-   for (unsigned i = 0; i < NUM_TOTAL_VARYING_SLOTS; i++) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-617-      if (temp_info->vs_output_param_offset[i] == AC_EXP_PARAM_UNDEFINED)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-618-         temp_info->vs_output_param_offset[i] = AC_EXP_PARAM_DEFAULT_VAL_0000;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-619-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-620-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-621-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-622-bool si_should_clear_lds(struct si_screen *sscreen, const struct nir_shader *shader)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-623-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-624-   return mesa_shader_stage_is_compute(shader->info.stage) &&
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:625:      shader->info.shared_size > 0 && sscreen->options.clear_lds;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-626-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-627-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-628-/* Run passes that eliminate code and affect si_shader_variant_info. These should be run before
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-629- * linking and shader variant info gathering. Lowering passes can be run here too, but only if
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-630- * they lead to better code or lower undesirable representations (like derefs). Lowering passes
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-631- * that prevent linking optimizations or destroy shader info shouldn't be run here.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-632- *
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-633- * Changes done here aren't reflected in si_shader_info because that's only gathered when we
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-634- * first receive the shader.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-635- */
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1056-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1057-   NIR_PASS(progress, nir, nir_lower_pack);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1058-   NIR_PASS(progress, nir, nir_opt_idiv_const, 8);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1059-   NIR_PASS(progress, nir, nir_lower_idiv,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1060-            &(nir_lower_idiv_options){
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1061-               .allow_fp16 = sel->screen->info.gfx_level >= GFX9,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1062-            });
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1063-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1064-   if (si_should_clear_lds(sel->screen, nir)) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1065-      const unsigned chunk_size = 16; /* max single store size */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:1066:      const unsigned shared_size = align(nir->info.shared_size, chunk_size);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c:1067:      NIR_PASS(_, nir, nir_clear_shared_memory, shared_size, chunk_size);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1068-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1069-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1070-   /* This is required by ac_nir_scalarize_overfetching_loads_callback. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1071-   NIR_PASS(progress, nir, ac_nir_flag_smem_for_loads, sel->screen->info.gfx_level,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1072-            !sel->info.base.use_aco_amd);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1073-   /* Scalarize overfetching loads, so that we don't load more components than necessary.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1074-    * Adjacent loads will be re-vectorized with a conservative overfetching limit.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1075-    */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1076-   NIR_PASS(progress, nir, nir_lower_io_to_scalar,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader.c-1077-            nir_var_mem_ubo | nir_var_mem_ssbo | nir_var_mem_shared | nir_var_mem_global,
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-78-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-79-      shader->config.rsrc2 = S_00B84C_USER_SGPR(shader->info.cs_num_user_sgprs) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-80-                             S_00B84C_SCRATCH_EN(shader->config.scratch_bytes_per_wave > 0) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-81-                             S_00B84C_TGID_X_EN(shader->info.uses_sysval_workgroup_id_x) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-82-                             S_00B84C_TGID_Y_EN(shader->info.uses_sysval_workgroup_id_y) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-83-                             S_00B84C_TGID_Z_EN(shader->info.uses_sysval_workgroup_id_z) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-84-                             S_00B84C_TG_SIZE_EN(shader->info.uses_sgpr_tg_size) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-85-                             S_00B84C_TIDIG_COMP_CNT(shader->info.uses_sysval_local_invocation_id_z
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-86-                                                        ? 2
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-87-                                                        : shader->info.uses_sysval_local_invocation_id_y ? 1 : 0) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:88:                             S_00B84C_LDS_SIZE(ac_shader_encode_lds_size(shader->config.lds_size, sscreen->info.gfx_level, sel->stage));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-89-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-90-      /* COMPUTE_PGM_RSRC3 is only present on GFX10+ and GFX940+. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-91-      shader->config.rsrc3 = S_00B8A0_SHARED_VGPR_CNT(shader->config.num_shared_vgprs / 8);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-92-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-93-      if (sscreen->info.gfx_level >= GFX12)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-94-         shader->config.rsrc3 |= S_00B8A0_INST_PREF_SIZE_GFX12(si_get_shader_prefetch_size(shader));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-95-      else if (sscreen->info.gfx_level >= GFX11)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-96-         shader->config.rsrc3 |= S_00B8A0_INST_PREF_SIZE_GFX11(si_get_shader_prefetch_size(shader));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-97-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-98-      simple_mtx_lock(&sscreen->shader_cache_mutex);
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-135-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-136-   nir_shader *nir;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-137-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-138-   if (cso->ir_type == PIPE_SHADER_IR_TGSI) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-139-      nir = tgsi_to_nir(cso->prog, ctx->screen, true);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-140-   } else {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-141-      assert(cso->ir_type == PIPE_SHADER_IR_NIR);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-142-      nir = (nir_shader *)cso->prog;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-143-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-144-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:145:   nir->info.shared_size = cso->static_shared_mem;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-146-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-147-   return si_create_compute_state_for_nir(ctx, nir, MESA_SHADER_COMPUTE);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-148-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-149-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-150-static void si_get_compute_state_info(struct pipe_context *ctx, void *state,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-151-                                      struct pipe_compute_state_object_info *info)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-152-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-153-   struct si_compute *program = (struct si_compute *)state;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-154-   struct si_shader_selector *sel = &program->sel;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-155-
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-275-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-276-         shader->scratch_va = scratch_va;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-277-      }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-278-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-279-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-280-   return true;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-281-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-282-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-283-static bool si_switch_compute_shader(struct si_context *sctx, struct si_compute *program,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-284-                                     struct si_shader *shader, bool *prefetch,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:285:                                     unsigned variable_shared_size)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-286-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-287-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-288-   const struct ac_shader_config *config = &shader->config;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-289-   unsigned rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-290-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-291-   *prefetch = false;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-292-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-293-   if (sctx->cs_shader_state.emitted_program == program &&
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:294:       sctx->cs_shader_state.variable_shared_size == variable_shared_size)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-295-      return true;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-296-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-297-   /* copy rsrc2 so we don't have to change it inside the si_shader object */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-298-   rsrc2 = config->rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-299-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-300-   /* only do this for OpenCL */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:301:   if (variable_shared_size) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:302:      unsigned shared_size = shader->info.shared_size + variable_shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:303:      unsigned lds_blocks = 0;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-304-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-305-      if (sctx->gfx_level <= GFX6) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:306:         lds_blocks += align(shared_size, 256) >> 8;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-307-      } else {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:308:         lds_blocks += align(shared_size, 512) >> 9;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-309-      }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-310-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-311-      /* TODO: use si_multiwave_lds_size_workaround */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:312:      assert(lds_blocks <= 0xFF);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-313-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:314:      rsrc2 &= C_00B84C_LDS_SIZE;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:315:      rsrc2 |= S_00B84C_LDS_SIZE(lds_blocks);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-316-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-317-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-318-   if (config->scratch_bytes_per_wave) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-319-      /* Prevent race conditions for accesses to shader->scratch_va and shader->bo, which
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-320-       * can change when scratch_va is updated. Any accesses to shader->bo must also be inside
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-321-       * the lock.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-322-       *
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-323-       * TODO: This lock could be removed if the scratch address was passed via user SGPRs instead
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-324-       *       of the shader binary.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-325-       */
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-408-      }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-409-      radeon_end();
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-410-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-411-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-412-   COMPUTE_DBG(sctx->screen,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-413-               "COMPUTE_PGM_RSRC1: 0x%08x "
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-414-               "COMPUTE_PGM_RSRC2: 0x%08x\n",
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-415-               config->rsrc1, config->rsrc2);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-416-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-417-   sctx->cs_shader_state.emitted_program = program;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c:418:   sctx->cs_shader_state.variable_shared_size = variable_shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-419-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-420-   *prefetch = true;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-421-   return true;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-422-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-423-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-424-static void si_setup_nir_user_data(struct si_context *sctx, const struct pipe_grid_info *info)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-425-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-426-   struct si_compute *program = sctx->cs_shader_state.program;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-427-   struct si_shader_selector *sel = &program->sel;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_compute.c-428-   struct radeon_cmdbuf *cs = &sctx->gfx_cs;
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-715-#ifndef NDEBUG
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-716-   unsigned magic;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-717-#endif
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-718-   uint32_t val[4];
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-719-   uint32_t upgraded_depth_val[4];
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-720-};
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-721-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-722-struct si_cs_shader_state {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-723-   struct si_compute *program;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-724-   struct si_compute *emitted_program;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h:725:   uint32_t variable_shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-726-};
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-727-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-728-struct si_samplers {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-729-   struct pipe_sampler_view *views[SI_NUM_SAMPLERS];
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-730-   struct si_sampler_state *sampler_states[SI_NUM_SAMPLERS];
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-731-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-732-   /* The i-th bit is set if that element is enabled (non-NULL resource). */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-733-   unsigned enabled_mask;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-734-   uint32_t has_depth_tex_mask;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_pipe.h-735-   uint32_t needs_depth_decompress_mask;
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-403-      assert(num_user_sgprs <= 16);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-404-      shader->info.cs_num_user_sgprs = num_user_sgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-405-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-406-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-407-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-408-/* Late shader variant info for AMD-specific intrinsics. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-409-void si_get_late_shader_variant_info(struct si_shader *shader, struct si_shader_args *args,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-410-                                     nir_shader *nir)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-411-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-412-   /* mesh shader know this after ac_nir_lower_ngg_mesh() */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c:413:   shader->info.shared_size = nir->info.shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-414-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-415-   nir_foreach_block(block, nir_shader_get_entrypoint(nir)) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-416-      nir_foreach_instr(instr, block) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-417-         if (instr->type != nir_instr_type_intrinsic)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-418-            continue;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-419-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-420-         nir_intrinsic_instr *intr = nir_instr_as_intrinsic(instr);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-421-         switch (intr->intrinsic) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-422-         case nir_intrinsic_load_scalar_arg_amd:
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_variant_info.c-423-            if (!args->vs_state_bits.used ||
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1016-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1017-      uint32_t rsrc1 = S_00B228_VGPRS(si_shader_encode_vgprs(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1018-                       S_00B228_SGPRS(si_shader_encode_sgprs(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1019-                       S_00B228_DX10_CLAMP(1) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1020-                       S_00B228_MEM_ORDERED(si_shader_mem_ordered(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1021-                       S_00B228_FLOAT_MODE(shader->config.float_mode) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1022-                       S_00B228_GS_VGPR_COMP_CNT(gs_vgpr_comp_cnt);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1023-      uint32_t rsrc2 = S_00B22C_USER_SGPR(num_user_sgprs) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1024-                       S_00B22C_ES_VGPR_COMP_CNT(es_vgpr_comp_cnt) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1025-                       S_00B22C_OC_LDS_EN(es_stage == MESA_SHADER_TESS_EVAL) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:1026:                       S_00B22C_LDS_SIZE(lds_alloc) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1027-                       S_00B22C_SCRATCH_EN(shader->config.scratch_bytes_per_wave > 0);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1028-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1029-      if (sscreen->info.gfx_level >= GFX10) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1030-         rsrc2 |= S_00B22C_USER_SGPR_MSB_GFX10(num_user_sgprs >> 5) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1031-                  S_00B22C_SHARED_VGPR_CNT(shader->config.num_shared_vgprs / 8);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1032-      } else {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1033-         rsrc2 |= S_00B22C_USER_SGPR_MSB_GFX9(num_user_sgprs >> 5);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1034-      }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1035-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1036-      ac_pm4_set_reg(&pm4->base, R_00B228_SPI_SHADER_PGM_RSRC1_GS, rsrc1);
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1538-                  S_00B228_VGPRS(si_shader_encode_vgprs(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1539-                  S_00B228_FLOAT_MODE(shader->config.float_mode) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1540-                  S_00B228_DX10_CLAMP(sscreen->info.gfx_level < GFX12) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1541-                  S_00B228_MEM_ORDERED(si_shader_mem_ordered(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1542-                  S_00B228_GS_VGPR_COMP_CNT(gs_vgpr_comp_cnt));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1543-   ac_pm4_set_reg(&pm4->base, R_00B22C_SPI_SHADER_PGM_RSRC2_GS,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1544-                  S_00B22C_SCRATCH_EN(shader->config.scratch_bytes_per_wave > 0) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1545-                  S_00B22C_USER_SGPR(num_user_sgprs) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1546-                  S_00B22C_ES_VGPR_COMP_CNT(es_vgpr_comp_cnt) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1547-                  S_00B22C_OC_LDS_EN(es_stage == MESA_SHADER_TESS_EVAL) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:1548:                  S_00B22C_LDS_SIZE(lds_alloc) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1549-                  S_00B22C_USER_SGPR_MSB_GFX10(num_user_sgprs >> 5) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1550-                  S_00B22C_SHARED_VGPR_CNT(shader->config.num_shared_vgprs / 8));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1551-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1552-   /* Set register values emitted conditionally in gfx10_emit_shader_ngg_*. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1553-   shader->ngg.spi_shader_pos_format =
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1554-      S_02870C_POS0_EXPORT_FORMAT(V_02870C_SPI_SHADER_4COMP) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1555-      S_02870C_POS1_EXPORT_FORMAT(shader->info.nr_pos_exports > 1 ? V_02870C_SPI_SHADER_4COMP
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1556-                                                                  : V_02870C_SPI_SHADER_NONE) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1557-      S_02870C_POS2_EXPORT_FORMAT(shader->info.nr_pos_exports > 2 ? V_02870C_SPI_SHADER_4COMP
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-1558-                                                                  : V_02870C_SPI_SHADER_NONE) |
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2282-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2283-   ac_pm4_set_reg(&pm4->base, R_00B028_SPI_SHADER_PGM_RSRC1_PS,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2284-                  S_00B028_VGPRS(si_shader_encode_vgprs(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2285-                  S_00B028_SGPRS(si_shader_encode_sgprs(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2286-                  S_00B028_DX10_CLAMP(sscreen->info.gfx_level < GFX12) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2287-                  S_00B028_MEM_ORDERED(si_shader_mem_ordered(shader)) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2288-                  S_00B028_FLOAT_MODE(shader->config.float_mode));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2289-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2290-   unsigned lds_alloc = ac_shader_encode_lds_size(shader->config.lds_size, sscreen->info.gfx_level, MESA_SHADER_FRAGMENT);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2291-   ac_pm4_set_reg(&pm4->base, R_00B02C_SPI_SHADER_PGM_RSRC2_PS,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:2292:                  S_00B02C_EXTRA_LDS_SIZE(lds_alloc) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2293-                  S_00B02C_USER_SGPR(SI_PS_NUM_USER_SGPR) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2294-                  S_00B02C_SCRATCH_EN(shader->config.scratch_bytes_per_wave > 0) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2295-                  S_00B02C_SHARED_VGPR_CNT(shader->config.num_shared_vgprs / 8));
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2296-   ac_pm4_finalize(&pm4->base);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2297-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2298-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2299-static void si_shader_init_pm4_state(struct si_screen *sscreen, struct si_shader *shader)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2300-{
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2301-   assert(shader->wave_size);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-2302-
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4673-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4674-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4675-   /* Add 1 dword to reduce LDS bank conflicts, so that each vertex starts on a different LDS
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4676-    * bank.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4677-    */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4678-   return num_slots ? num_slots * 16 + 4 : 0;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4679-}
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4680-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4681-/**
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4682- * This calculates the LDS size for tessellation shaders (VS, TCS, TES).
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:4683: * LS.LDS_SIZE is shared by all 3 shader stages.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4684- *
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4685- * The information about LDS and other non-compile-time parameters is then
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4686- * written to userdata SGPRs.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4687- *
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4688- * This depends on:
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4689- * - patch_vertices
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4690- * - VS and the currently selected shader variant (called by si_update_shaders)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4691- * - TCS and the currently selected shader variant (called by si_update_shaders)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4692- * - tess_uses_prim_id (called by si_update_shaders)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4693- * - sh_base[TESS_EVAL] depending on GS on/off (called by si_update_shaders)
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4729-   /* This calculates how shader inputs and outputs among VS, TCS, and TES
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4730-    * are laid out in LDS and memory.
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4731-    */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4732-   unsigned num_tcs_output_cp = tcs->info.base.tess.tcs_vertices_out;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4733-   unsigned lds_input_vertex_size = si_shader_lshs_vertex_stride(ls_current);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4734-   unsigned num_remapped_tess_level_outputs =
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4735-      !ls_current->is_monolithic || ls_current->key.ge.opt.tes_reads_tess_factors ?
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4736-            tcs->info.num_tess_level_vram_outputs : 0;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4737-   unsigned num_patches, lds_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4738-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:4739:   /* Compute NUM_PATCHES and LDS_SIZE. */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4740-   ac_nir_compute_tess_wg_info(&sctx->screen->info, &tcs->info.tess_io_info,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4741-                               tcs->info.base.tess.tcs_vertices_out, ls_current->wave_size,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4742-                               tess_uses_primid, num_tcs_input_cp, lds_input_vertex_size,
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4743-                               num_remapped_tess_level_outputs, &num_patches, &lds_size);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4744-   unsigned lds_alloc = ac_shader_encode_lds_size(lds_size, sctx->gfx_level, MESA_SHADER_TESS_CTRL);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4745-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4746-   if (sctx->num_patches_per_workgroup != num_patches) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4747-      sctx->num_patches_per_workgroup = num_patches;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4748-      si_mark_atom_dirty(sctx, &sctx->atoms.s.vgt_pipeline_state);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4749-   }
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4774-   sctx->tcs_offchip_layout = (sctx->tcs_offchip_layout & 0xe0000000) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4775-                              shared_fields | ((num_tcs_input_cp - 1) << 7);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4776-   sctx->tes_offchip_layout = shared_fields | ((num_tcs_output_cp - 1) << 7);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4777-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4778-   unsigned ls_hs_rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4779-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4780-   if (sctx->gfx_level >= GFX9) {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4781-      ls_hs_rsrc2 = sctx->shader.tcs.current->config.rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4782-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4783-      if (sctx->gfx_level >= GFX10)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:4784:         ls_hs_rsrc2 |= S_00B42C_LDS_SIZE_GFX10(lds_alloc);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4785-      else
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:4786:         ls_hs_rsrc2 |= S_00B42C_LDS_SIZE_GFX9(lds_alloc);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4787-   } else {
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4788-      ls_hs_rsrc2 = sctx->shader.vs.current->config.rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4789-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4790-      si_multiwave_lds_size_workaround(sctx->screen, &lds_size);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4791-      lds_alloc = ac_shader_encode_lds_size(lds_size, sctx->gfx_level, MESA_SHADER_TESS_CTRL);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp:4792:      ls_hs_rsrc2 |= S_00B52C_LDS_SIZE(lds_alloc);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4793-   }
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4794-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4795-   sctx->ls_hs_rsrc2 = ls_hs_rsrc2;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4796-   sctx->ls_hs_config =
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4797-         S_028B58_NUM_PATCHES(sctx->num_patches_per_workgroup) |
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4798-         S_028B58_HS_NUM_OUTPUT_CP(num_tcs_output_cp);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4799-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4800-   if (sctx->gfx_level < GFX12)
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4801-      sctx->ls_hs_config |= S_028B58_HS_NUM_INPUT_CP(num_tcs_input_cp);
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_state_shaders.cpp-4802-
+--
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-243-   uint8_t ngg_lds_scratch_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-244-   uint8_t cs_num_user_sgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-245-   uint8_t cs_shaderbufs_sgpr_index;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-246-   uint8_t cs_num_shaderbufs_in_user_sgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-247-   uint8_t cs_images_sgpr_index;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-248-   uint8_t cs_images_num_sgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-249-   uint8_t cs_num_images_in_user_sgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-250-   uint8_t cs_image_buffer_mask; /* which image bindings are buffers, only the first few bits matter */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-251-   uint16_t private_mem_vgprs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-252-   uint32_t ngg_lds_vertex_size; /* VS,TES: Cull+XFB, GS: GSVS size */
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h:253:   uint32_t shared_size;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-254-   ac_nir_legacy_gs_info legacy_gs;
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-255-};
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-256-
+vendor-src/mesa-26.0.3/src/gallium/drivers/radeonsi/si_shader_info.h-257-#endif
+--
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-460-
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-461-   chunk->max_number_of_dedicated_cus = 0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-462-   chunk->ce_ram_size = 0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-463-   chunk->ce_ram_size_graphics = 0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-464-   chunk->ce_ram_size_compute = 0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-465-
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-466-   chunk->vram_bus_width = rad_info->memory_bus_width;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-467-   chunk->vram_size = (uint64_t)rad_info->vram_size_kb * 1024;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-468-   chunk->l2_cache_size = rad_info->l2_cache_size;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-469-   chunk->l1_cache_size = rad_info->tcp_cache_size;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c:470:   chunk->lds_size = rad_info->lds_size_per_workgroup;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-471-
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-472-   strncpy(chunk->gpu_name, ac_get_family_name(rad_info->family), SQTT_GPU_NAME_MAX_SIZE - 1);
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-473-
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-474-   chunk->alu_per_clock = 0.0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-475-   chunk->texture_per_clock = 0.0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-476-   chunk->prims_per_clock = rad_info->max_se;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-477-   if (rad_info->gfx_level == GFX10)
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-478-      chunk->prims_per_clock *= 2;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-479-   chunk->pixels_per_clock = 0.0;
+vendor-src/mesa-26.0.3/src/amd/common/ac_rgp.c-480-
+--
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1229-   l->lds.prm_attr.addr = align(l->lds.vtx_attr.addr + lds_vtx_attr_size, 16);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1230-   l->lds.total_size = l->lds.prm_attr.addr + lds_prm_attr_size;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1231-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1232-   uint32_t scratch_ring_vtx_attr_size =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1233-      util_bitcount64(l->scratch_ring.vtx_attr.mask) * max_vertices * 16;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1234-   l->scratch_ring.prm_attr.addr =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1235-      align(l->scratch_ring.vtx_attr.addr + scratch_ring_vtx_attr_size, 16);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1236-}
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1237-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1238-static ms_out_mem_layout
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c:1239:ms_calculate_output_layout(const struct radeon_info *hw_info, unsigned api_shared_size,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1240-                           uint64_t per_vertex_output_mask, uint64_t per_primitive_output_mask,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1241-                           uint64_t cross_invocation_output_access, unsigned max_vertices,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1242-                           unsigned max_primitives, unsigned vertices_per_prim)
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1243-{
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1244-   /* These outputs always need export instructions and can't use the attributes ring. */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1245-   const uint64_t always_export_mask =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1246-      VARYING_BIT_POS | VARYING_BIT_CULL_DIST0 | VARYING_BIT_CULL_DIST1 | VARYING_BIT_CLIP_DIST0 |
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1247-      VARYING_BIT_CLIP_DIST1 | VARYING_BIT_PSIZ | VARYING_BIT_VIEWPORT |
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1248-      VARYING_BIT_PRIMITIVE_SHADING_RATE | VARYING_BIT_LAYER |
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1249-      VARYING_BIT_PRIMITIVE_COUNT |
+--
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1261-   const uint64_t lds_per_primitive_output_mask =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1262-      per_primitive_output_mask & ~attr_ring_per_primitive_output_mask &
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1263-      cross_invocation_output_access & ~SPECIAL_MS_OUT_MASK;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1264-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1265-   const bool cross_invocation_indices =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1266-      cross_invocation_output_access & VARYING_BIT_PRIMITIVE_INDICES;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1267-   const bool cross_invocation_cull_primitive =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1268-      cross_invocation_output_access & VARYING_BIT_CULL_PRIMITIVE;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1269-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1270-   /* Shared memory used by the API shader. */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c:1271:   ms_out_mem_layout l = { .lds = { .total_size = api_shared_size } };
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1272-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1273-   /* Use attribute ring for all generic attributes (on GPUs with an attribute ring). */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1274-   l.attr_ring.vtx_attr.mask = attr_ring_per_vertex_output_mask;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1275-   l.attr_ring.prm_attr.mask = attr_ring_per_primitive_output_mask;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1276-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1277-   /* Outputs without cross-invocation access can be stored in variables. */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1278-   l.var.vtx_attr.mask =
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1279-      per_vertex_output_mask & ~attr_ring_per_vertex_output_mask & ~cross_invocation_output_access;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1280-   l.var.prm_attr.mask = per_primitive_output_mask & ~attr_ring_per_primitive_output_mask &
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1281-                         ~cross_invocation_output_access;
+--
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1356-   bool uses_cull = shader->info.outputs_written & VARYING_BIT_CULL_PRIMITIVE;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1357-   /* Can't handle indirect register addressing, pretend as if they were cross-invocation. */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1358-   uint64_t cross_invocation_access = shader->info.mesh.ms_cross_invocation_output_access |
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1359-                                      (shader->info.outputs_read_indirectly |
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1360-                                       shader->info.outputs_written_indirectly);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1361-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1362-   unsigned max_vertices = shader->info.mesh.max_vertices_out;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1363-   unsigned max_primitives = shader->info.mesh.max_primitives_out;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1364-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1365-   ms_out_mem_layout layout = ms_calculate_output_layout(
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c:1366:      hw_info, shader->info.shared_size, per_vertex_outputs, per_primitive_outputs,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1367-      cross_invocation_access, max_vertices, max_primitives, vertices_per_prim);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1368-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c:1369:   shader->info.shared_size = layout.lds.total_size;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1370-   *out_needs_scratch_ring = layout.scratch_ring.vtx_attr.mask || layout.scratch_ring.prm_attr.mask;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1371-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1372-   /* The workgroup size that is specified by the API shader may be different
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1373-    * from the size of the workgroup that actually runs on the HW, due to the
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1374-    * limitations of NGG: max 0/1 vertex and 0/1 primitive per lane is allowed.
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1375-    *
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1376-    * Therefore, we must make sure that when the API workgroup size is smaller,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1377-    * we don't run the API shader on more HW invocations than is necessary.
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1378-    */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_ngg_mesh.c-1379-   unsigned api_workgroup_size = shader->info.workgroup_size[0] *
+--
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-49-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-50-   gpu_info->has_timeline_syncobj = true;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-51-   gpu_info->has_vm_always_valid = true;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-52-   gpu_info->has_3d_cube_border_color_mipmap = true;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-53-   gpu_info->has_image_opcodes = true;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-54-   gpu_info->has_attr_ring = gpu_info->gfx_level >= GFX11;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-55-   gpu_info->has_attr_ring_wait_bug = gpu_info->gfx_level == GFX11 || gpu_info->gfx_level == GFX11_5;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-56-   gpu_info->has_ngg_fully_culled_bug = gpu_info->gfx_level == GFX10;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-57-   gpu_info->has_ngg_passthru_no_msg = gpu_info->family >= CHIP_NAVI23;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-58-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c:59:   gpu_info->lds_size_per_workgroup = gpu_info->gfx_level >= GFX7 ? 64 * 1024 : 32 * 1024;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-60-   gpu_info->max_render_backends = pci_ids[gpu_info->family].num_render_backends;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-61-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-62-   gpu_info->has_dedicated_vram = pci_ids[gpu_info->family].has_dedicated_vram;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-63-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-64-   gpu_info->has_cb_lt16bit_int_clamp_bug = gpu_info->gfx_level <= GFX7 &&
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-65-                                            gpu_info->family != CHIP_HAWAII;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-66-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-67-   gpu_info->has_image_load_dcc_bug = gpu_info->family == CHIP_NAVI23 || gpu_info->family == CHIP_VANGOGH;
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-68-
+vendor-src/mesa-26.0.3/src/amd/common/ac_null_device.c-69-   gpu_info->has_distributed_tess =
+--
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1659-{
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1660-   unsigned lds_per_patch = num_tcs_input_cp * lds_input_vertex_size +
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1661-                            get_lds_output_patch_stride(io_info, tcs_vertices_out);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1662-   unsigned num_patches = ac_compute_num_tess_patches(info, num_tcs_input_cp, tcs_vertices_out,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1663-                                                      io_info->highest_remapped_vram_output,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1664-                                                      MAX2(io_info->highest_remapped_vram_patch_output,
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1665-                                                           num_remapped_tess_level_outputs),
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1666-                                                      lds_per_patch, wave_size, tess_uses_primid);
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1667-   *lds_size = lds_per_patch * num_patches + AC_TESS_LEVEL_VOTE_LDS_BYTES;
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1668-
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c:1669:   /* SPI_SHADER_PGM_RSRC2_HS.LDS_SIZE specifies the allocation size only for LDS. The HS offchip
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1670-    * ring buffer always uses a fixed allocation size per workgroup determined by
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1671-    * info->hs_offchip_workgroup_dw_size.
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1672-    *
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1673-    * LDS is only used for TCS inputs (with cross-invocation or indirect access only or if TCS in/out
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1674-    * vertex counts are different) and for TCS outputs that are read (including tess level outputs
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1675-    * if they need to be re-read in invocation 0), while the HS ring buffer is only used for TCS
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1676-    * outputs consumed by TES.
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1677-    */
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1678-   assert(*lds_size <= (info->gfx_level >= GFX9 ? 65536 : 32768));
+vendor-src/mesa-26.0.3/src/amd/common/nir/ac_nir_lower_tess_io_to_mem.c-1679-
+--
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-955-             AMD_MEMCHANNEL_INTERLEAVE_BYTES);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-956-   }
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-957-   info->r600_has_virtual_memory = true;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-958-
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-959-   /* LDS is 64KB per CU (4 SIMDs on GFX6-9, which is 16KB per SIMD).
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-960-    *
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-961-    * GFX10+: LDS is 128KB in WGP mode, but a workgroup can only use up to 64KB.
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-962-    * GFX7+:  Workgroups can use up to 64KB.
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-963-    * GFX6:   There is 64KB LDS per CU, but a workgroup can only use up to 32KB.
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-964-    */
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c:965:   info->lds_size_per_workgroup = info->gfx_level >= GFX7 ? 64 * 1024 : 32 * 1024;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-966-
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-967-   /* The mere presence of CLEAR_STATE in the IB causes random GPU hangs on GFX6. CLEAR_STATE
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-968-    * causes GPU hangs with the radeon kernel driver, so only enable GFX7 CLEAR_STATE on amdgpu.
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-969-    * GFX11+ supports CLEAR_STATE, but we have decided not to use it.
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-970-    */
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-971-   info->has_clear_state = info->gfx_level >= GFX7 && info->gfx_level < GFX11;
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-972-
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-973-   info->has_distributed_tess =
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-974-      info->gfx_level >= GFX10 || (info->gfx_level >= GFX8 && info->max_se >= 2);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-975-
+--
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1829-   fprintf(f, "    min_alloc_size = %u\n", info->min_alloc_size);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1830-   fprintf(f, "    address32_hi = 0x%x\n", info->address32_hi);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1831-   fprintf(f, "    has_dedicated_vram = %u\n", info->has_dedicated_vram);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1832-   fprintf(f, "    all_vram_visible = %u\n", info->all_vram_visible);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1833-   fprintf(f, "    virtual_address_max = %" PRIx64 "\n", info->virtual_address_max);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1834-   fprintf(f, "    max_tcc_blocks = %i\n", info->max_tcc_blocks);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1835-   fprintf(f, "    tcc_cache_line_size = %u\n", info->tcc_cache_line_size);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1836-   fprintf(f, "    tcc_rb_non_coherent = %u\n", info->tcc_rb_non_coherent);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1837-   fprintf(f, "    cp_sdma_ge_use_system_memory_scope = %u\n", info->cp_sdma_ge_use_system_memory_scope);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1838-   fprintf(f, "    pc_lines = %u\n", info->pc_lines);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c:1839:   fprintf(f, "    lds_size_per_workgroup = %u\n", info->lds_size_per_workgroup);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1840-   fprintf(f, "    lds_alloc_granularity = %i\n", ac_shader_get_lds_alloc_granularity(info->gfx_level));
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1841-   fprintf(f, "    max_memory_clock = %i MHz\n", info->memory_freq_mhz);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1842-
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1843-   fprintf(f, "CP info:\n");
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1844-   fprintf(f, "    gfx_ib_pad_with_type2 = %i\n", info->gfx_ib_pad_with_type2);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1845-   fprintf(f, "    can_chain_ib2 = %i\n", info->can_chain_ib2);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1846-   fprintf(f, "    has_cp_dma = %i\n", info->has_cp_dma);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1847-   fprintf(f, "    me_fw_version = %i\n", info->me_fw_version);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1848-   fprintf(f, "    me_fw_feature = %i\n", info->me_fw_feature);
+vendor-src/mesa-26.0.3/src/amd/common/ac_gpu_info.c-1849-   fprintf(f, "    mec_fw_version = %i\n", info->mec_fw_version);

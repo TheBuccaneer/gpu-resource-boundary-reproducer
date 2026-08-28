@@ -1,0 +1,246 @@
+=== CL_KERNEL_LOCAL_MEM_SIZE accounting ===
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-106-            let dev = Device::ref_from_raw(dev)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-107-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-108-            // CL_INVALID_DEVICE if device is not in the list of devices associated with kernel
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-109-            if !kernel.prog.devs.contains(&dev) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-110-                return Err(CL_INVALID_DEVICE);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-111-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-112-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-113-            dev
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-114-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-115-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-116-        match *q {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-117-            CL_KERNEL_COMPILE_WORK_GROUP_SIZE => v.write::<[usize; 3]>(kernel.work_group_size()),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs:118:            CL_KERNEL_LOCAL_MEM_SIZE => v.write::<cl_ulong>(kernel.local_mem_size(dev)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-119-            CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-120-                v.write::<usize>(kernel.preferred_simd_size(dev))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-121-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-122-            CL_KERNEL_PRIVATE_MEM_SIZE => v.write::<cl_ulong>(kernel.priv_mem_size(dev)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-123-            CL_KERNEL_SPILL_MEM_SIZE_INTEL => v.write::<cl_ulong>(kernel.priv_mem_size(dev)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-124-            CL_KERNEL_WORK_GROUP_SIZE => v.write::<usize>(kernel.max_threads_per_block(dev)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-125-            // CL_INVALID_VALUE if param_name is not one of the supported values
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-126-            _ => Err(CL_INVALID_VALUE),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-127-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-128-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-129-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-130-
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-447-                    let buffer = Buffer::arc_from_raw(unsafe { *ptr })?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-448-                    // We are required to prevent mutable access to immutable memory objects,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-449-                    // however no explicit error code has been specified yet.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-450-                    if arg.kind == KernelArgType::MemGlobal
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-451-                        && bit_check(buffer.flags, CL_MEM_IMMUTABLE_EXT)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-452-                    {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-453-                        return Err(CL_INVALID_ARG_VALUE);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-454-                    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-455-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-456-                    KernelArgValue::Buffer(Arc::downgrade(&buffer))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-457-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-458-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs:459:            KernelArgType::MemLocal if !arg.dead => KernelArgValue::LocalMem(arg_size),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-460-            KernelArgType::Image | KernelArgType::RWImage | KernelArgType::Texture if !arg.dead => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-461-                let img: *const cl_mem = arg_value.cast();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-462-                // SAFETY: for image args arg_value pointers to a cl_mem object.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-463-                let img = Image::arc_from_raw(unsafe { *img })?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-464-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-465-                // CL_INVALID_ARG_VALUE if the argument is an image declared with the read_only
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-466-                // qualifier and arg_value refers to an image object created with cl_mem_flags
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-467-                // of CL_MEM_WRITE_ONLY or if the image argument is declared with the write_only
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-468-                // qualifier and arg_value refers to an image object created with cl_mem_flags
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-469-                // of CL_MEM_READ_ONLY.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-470-                // We are required to prevent mutable access to immutable memory objects, however no
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-471-                // explicit error code has been specified yet.
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1692-                                    sviews.push(image.sampler_view(ctx.ctx)?);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1693-                                    (&mut tex_formats, &mut tex_orders)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1694-                                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1695-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1696-                                assert!(arg.offset >= formats.len());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1697-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1698-                                formats.resize(arg.offset, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1699-                                orders.resize(arg.offset, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1700-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1701-                                formats.push(image.image_format.image_channel_data_type as u16);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1702-                                orders.push(image.image_format.image_channel_order as u16);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1703-                            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs:1704:                            KernelArgValue::LocalMem(size) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1705-                                // TODO 32 bit
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1706-                                let pot = cmp::min(*size, 0x80);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1707-                                variable_local_size = variable_local_size
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1708-                                    .next_multiple_of(pot.next_power_of_two() as u64);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1709-                                if ctx.dev.address_bits() == 64 {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1710-                                    let variable_local_size: [u8; 8] =
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1711-                                        variable_local_size.to_ne_bytes();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1712-                                    exec_builder.add_values(&variable_local_size);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1713-                                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1714-                                    let variable_local_size: [u8; 4] =
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1715-                                        (variable_local_size as u32).to_ne_bytes();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1716-                                    exec_builder.add_values(&variable_local_size);
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1957-    pub fn priv_mem_size(&self, dev: &Device) -> cl_ulong {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1958-        self.compute_state_object_info(dev).private_memory as cl_ulong
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1959-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1960-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1961-    pub fn max_threads_per_block(&self, dev: &Device) -> usize {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1962-        self.compute_state_object_info(dev).max_threads as usize
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1963-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1964-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1965-    pub fn preferred_simd_size(&self, dev: &Device) -> usize {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1966-        self.compute_state_object_info(dev).preferred_simd_size as usize
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1967-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1968-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs:1969:    pub fn local_mem_size(&self, dev: &Device) -> cl_ulong {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1970-        // TODO: take alignment into account?
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1971-        // this is purely informational so it shouldn't even matter
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1972-        let local =
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1973-            self.builds.get(dev).unwrap()[NirKernelVariant::Default].shared_size as cl_ulong;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1974-        let args: cl_ulong = self
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1975-            .values
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1976-            .iter()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1977-            .map(|arg| match arg {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs:1978:                Some(KernelArgValue::LocalMem(val)) => *val as cl_ulong,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1979-                // If the local memory size, for any pointer argument to the kernel declared with
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1980-                // the __local address qualifier, is not specified, its size is assumed to be 0.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1981-                _ => 0,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1982-            })
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1983-            .sum();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1984-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1985-        local + args
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1986-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1987-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1988-    pub fn has_svm_devs(&self) -> bool {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1989-        self.prog.devs.iter().any(|dev| dev.api_svm_supported())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1990-    }
+
+=== Dispatch LocalMem alignment accounting ===
+1569-                && (work_group_size_hint == [0; 3] || block == work_group_size_hint)
+1570-            {
+1571-                NirKernelVariant::Optimized
+1572-            } else {
+1573-                NirKernelVariant::Default
+1574-            };
+1575-
+1576-            let nir_kernel_build = &nir_kernel_builds[variant];
+1577-            let mut exec_builder =
+1578-                KernelExecBuilder::new(ctx.dev, nir_kernel_build.input_size, buffer_arcs.len() + 2);
+1579-            // Set it once so we get the alignment padding right
+1580-            let static_local_size: u64 = nir_kernel_build.shared_size;
+1581:            let mut variable_local_size: u64 = static_local_size;
+1582-            let printf_size = ctx.dev.printf_buffer_size() as u32;
+1583-            let mut samplers = Vec::new();
+1584-            let mut iviews = Vec::new();
+1585-            let mut sviews = Vec::new();
+1586-            let mut tex_formats: Vec<u16> = Vec::new();
+1587-            let mut tex_orders: Vec<u16> = Vec::new();
+1588-            let mut img_formats: Vec<u16> = Vec::new();
+1589-            let mut img_orders: Vec<u16> = Vec::new();
+1590-
+1591-            let null_ptr;
+1592-            let null_ptr_v3;
+1593-            if ctx.dev.address_bits() == 64 {
+--
+1692-                                    sviews.push(image.sampler_view(ctx.ctx)?);
+1693-                                    (&mut tex_formats, &mut tex_orders)
+1694-                                };
+1695-
+1696-                                assert!(arg.offset >= formats.len());
+1697-
+1698-                                formats.resize(arg.offset, 0);
+1699-                                orders.resize(arg.offset, 0);
+1700-
+1701-                                formats.push(image.image_format.image_channel_data_type as u16);
+1702-                                orders.push(image.image_format.image_channel_order as u16);
+1703-                            }
+1704:                            KernelArgValue::LocalMem(size) => {
+1705-                                // TODO 32 bit
+1706-                                let pot = cmp::min(*size, 0x80);
+1707:                                variable_local_size = variable_local_size
+1708:                                    .next_multiple_of(pot.next_power_of_two() as u64);
+1709-                                if ctx.dev.address_bits() == 64 {
+1710:                                    let variable_local_size: [u8; 8] =
+1711:                                        variable_local_size.to_ne_bytes();
+1712:                                    exec_builder.add_values(&variable_local_size);
+1713-                                } else {
+1714:                                    let variable_local_size: [u8; 4] =
+1715:                                        (variable_local_size as u32).to_ne_bytes();
+1716:                                    exec_builder.add_values(&variable_local_size);
+1717-                                }
+1718:                                variable_local_size += *size as u64;
+1719-                            }
+1720-                            KernelArgValue::Sampler(sampler) => {
+1721-                                samplers.push(sampler.pipe());
+1722-                            }
+1723-                            KernelArgValue::None => {
+1724-                                if !arg.dead
+1725-                                    && matches!(
+1726-                                        api_arg.kind,
+1727-                                        KernelArgType::MemGlobal | KernelArgType::MemConstant
+1728-                                    )
+1729-                                {
+1730-                                    exec_builder.add_values(null_ptr);
+--
+1788-
+1789-            let svms_new = svms
+1790-                .into_iter()
+1791-                .filter_map(|svm| cl_ctx.copy_svm_to_dev(ctx, svm).transpose())
+1792-                .collect::<CLResult<Vec<_>>>()?;
+1793-
+1794-            // uhhh
+1795-            for svm in &svms_new {
+1796-                bdas.push(svm);
+1797-            }
+1798-
+1799-            // subtract the shader local_size as we only request something on top of that.
+1800:            variable_local_size -= static_local_size;
+1801-
+1802-            let (resources, mut globals) = exec_builder.get_resources_and_globals();
+1803-
+1804-            ctx.bind_kernel(&nir_kernel_builds, variant)?;
+1805-            ctx.bind_sampler_states(samplers);
+1806-            ctx.bind_sampler_views(sviews);
+1807-            ctx.bind_shader_images(iviews);
+1808-            ctx.set_global_binding(resources, &mut globals);
+1809-
+1810-            for z in 0..grid[2].div_ceil(hw_max_grid[2]) {
+1811-                for y in 0..grid[1].div_ceil(hw_max_grid[1]) {
+1812-                    for x in 0..grid[0].div_ceil(hw_max_grid[0]) {
+--
+1814-                            [x * hw_max_grid[0], y * hw_max_grid[1], z * hw_max_grid[2]];
+1815-
+1816-                        // Each iteration we need to update the kernel side workgroup id offsets.
+1817-                        exec_builder.set_workgroup_id_offset(this_offsets);
+1818-
+1819-                        let this_grid = [
+1820-                            cmp::min(hw_max_grid[0], grid[0] - hw_max_grid[0] * x) as u32,
+1821-                            cmp::min(hw_max_grid[1], grid[1] - hw_max_grid[1] * y) as u32,
+1822-                            cmp::min(hw_max_grid[2], grid[2] - hw_max_grid[2] * z) as u32,
+1823-                        ];
+1824-
+1825-                        ctx.update_cb0(exec_builder.input())?;
+1826:                        ctx.launch_grid(
+1827-                            work_dim,
+1828-                            block,
+1829-                            this_grid,
+1830:                            variable_local_size as u32,
+1831-                            &bdas,
+1832-                        );
+1833-
+1834-                        if Platform::dbg().sync_every_event {
+1835-                            ctx.flush().wait();
+1836-                        }
+1837-                    }
+1838-                }
+1839-            }
+1840-
+1841-            ctx.clear_global_binding(globals.len() as u32);
+1842-
+
+=== Derived adversarial case ===
+A=32767
+B=32769
+raw_sum=65536
+A_offset=0
+B_offset=32768
+dispatch_variable_local_size=65537
+device_limit=65536
+dispatch_excess=1

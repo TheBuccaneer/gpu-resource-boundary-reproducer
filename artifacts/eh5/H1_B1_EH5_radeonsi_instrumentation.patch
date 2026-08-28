@@ -1,0 +1,26 @@
+--- vendor-src/mesa-26.2.0/src/gallium/drivers/radeonsi/gfx/si_compute.c.pre-EH5	2026-08-28 14:05:56.319247570 +0200
++++ vendor-src/mesa-26.2.0/src/gallium/drivers/radeonsi/gfx/si_compute.c	2026-08-28 14:05:56.348847364 +0200
+@@ -313,8 +313,23 @@
+       /* TODO: use si_multiwave_lds_size_workaround */
+       assert(lds_blocks <= 0xFF);
+ 
++      unsigned eh5_rsrc2_before = rsrc2;
++
+       rsrc2 &= C_00B84C_LDS_SIZE;
+       rsrc2 |= S_00B84C_LDS_SIZE(lds_blocks);
++
++      fprintf(stderr,
++              "B1_EH5 variable=%u static=%u total=%u "
++              "lds_blocks=%u limit=%u "
++              "rsrc2_before=0x%08x rsrc2_after=0x%08x\n",
++              variable_shared_size,
++              shader->info.shared_size,
++              shared_size,
++              lds_blocks,
++              sctx->screen->info.compiler_info.lds_size_per_workgroup,
++              eh5_rsrc2_before,
++              rsrc2);
++      fflush(stderr);
+    }
+ 
+    if (config->scratch_bytes_per_wave) {

@@ -1,0 +1,2090 @@
+
+============================================================
+MESA 26.0.3
+============================================================
+
+=== KernelArgValue SVM definition ===
+
+=== SVM use during kernel dispatch ===
+
+=== Context SVM allocation lookup/removal ===
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-71-            unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-72-                let ret = munmap(address, self.size());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-73-                debug_assert_eq!(0, ret);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-74-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-75-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-76-            for (dev, res) in &self.alloc.get_real_resource().res {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-77-                if !dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-78-                    dev.screen().resource_assign_vma(res, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-79-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-80-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-81-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-82-            Platform::get()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-83-                .vm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-84-                .as_ref()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-85-                .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-86-                .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-87-                .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-88-                .free(vma, NonZeroU64::new(self.size() as u64).unwrap());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-89-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-90-            // SAFETY: we make sure that svm_pointer is a valid allocation and reuse the same layout
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-91-            // from the allocation
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-92-            unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-93-                alloc::dealloc(self.alloc.host_ptr().cast(), self.layout);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-94-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-95-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-96-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-97-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-98-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-99-impl AllocSize<usize> for SVMAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-100-    fn size(&self) -> usize {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-101-        SVMAlloc::size(self)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-102-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-103-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-104-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-105-struct SVMContext {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:106:    svm_ptrs: TrackedPointers<usize, SVMAlloc>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-107-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-108-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-109-pub struct Context {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-110-    pub base: CLObjectBase<CL_INVALID_CONTEXT>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-111-    pub devs: Vec<&'static Device>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-112-    pub properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-113-    pub dtors: Mutex<Vec<DeleteContextCB>>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-114-    // we track the pointers per device for quick access in hot paths.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-115-    bda_ptrs: Mutex<
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-116-        HashMap<&'static Device, TrackedPointers<cl_mem_device_address_ext, TrackedBDAAlloc>>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-117-    >,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-118-    svm: Mutex<SVMContext>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-119-    pub gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-120-    pub worker_queue: util::queue::Queue,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-121-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-122-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-123-impl_cl_type_trait!(cl_context, Context, CL_INVALID_CONTEXT);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-124-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-125-impl Context {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-126-    pub fn new(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-127-        devs: Vec<&'static Device>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-128-        properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-129-        gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-130-    ) -> Arc<Context> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-131-        let worker_count = u32::max(util::cpu_count() / 2, 1);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-132-        let max_job_count = worker_count * 8;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-133-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-134-        Arc::new(Self {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-135-            base: CLObjectBase::new(RusticlTypes::Context),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-136-            devs: devs,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-137-            properties: properties,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-138-            dtors: Mutex::new(Vec::new()),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-139-            bda_ptrs: Mutex::new(HashMap::new()),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-140-            svm: Mutex::new(SVMContext {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:141:                svm_ptrs: TrackedPointers::new(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-142-            }),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-143-            gl_ctx_manager: gl_ctx_manager,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-144-            worker_queue: util::queue::Queue::new(c"clctxworker", max_job_count, worker_count),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-145-        })
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-146-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-147-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-148-    pub fn create_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-149-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-150-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-151-        user_ptr: *mut c_void,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-152-        copy: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-153-        bda: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-154-        res_type: ResourceType,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-155-    ) -> CLResult<HashMap<&'static Device, PipeResourceOwned>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-156-        let adj_size: u32 = size.try_into_with_err(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-157-        let mut res = HashMap::new();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-158-        let mut pipe_flags = 0;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-159-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-160-        if bda {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-161-            pipe_flags |= PIPE_RESOURCE_FLAG_FIXED_ADDRESS;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-162-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-163-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-164-        for &dev in &self.devs {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-165-            let mut resource = None;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-166-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-167-            if !user_ptr.is_null() && !copy {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-168-                resource = dev.screen().resource_create_buffer_from_user(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-169-                    adj_size,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-170-                    user_ptr,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-171-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-172-                    pipe_flags,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-173-                )
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-174-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-175-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-176-            if resource.is_none() {
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-372-            return Err(CL_OUT_OF_HOST_MEMORY);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-373-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-374-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-375-        let address = ptr as u64;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-376-        let mut buffers = HashMap::new();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-377-        for &dev in &self.devs {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-378-            let size: u32 = size.get().try_into().map_err(|_| CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-379-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-380-            // For system SVM devices we simply create a userptr resource.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-381-            let res = if dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-382-                dev.screen()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-383-                    .resource_create_buffer_from_user(size, ptr, PIPE_BIND_GLOBAL, 0)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-384-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-385-                dev.screen().resource_create_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-386-                    size,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-387-                    ResourceType::Normal,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-388-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-389-                    PIPE_RESOURCE_FLAG_FRONTEND_VM,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-390-                )
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-391-            };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-392-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-393-            let res = res.ok_or(CL_OUT_OF_RESOURCES)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-394-            if !dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-395-                if Platform::dbg().memory {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-396-                    eprintln!("assigning {address:x} to {res:?}");
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-397-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-398-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-399-                if !dev.screen().resource_assign_vma(&res, address) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-400-                    return Err(CL_OUT_OF_RESOURCES);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-401-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-402-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-403-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-404-            buffers.insert(dev, res);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-405-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-406-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:407:        self.svm.lock().unwrap().svm_ptrs.insert(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-408-            ptr as usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-409-            SVMAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-410-                layout: layout,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-411-                vma,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-412-                alloc: Arc::new(Allocation::new(buffers, 0, ptr)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-413-            },
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-414-        );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-415-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-416-        Ok(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-417-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-418-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-419-    pub fn copy_svm_to_dev(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-420-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-421-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-422-        ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-423-    ) -> CLResult<Option<PipeResourceOwned>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-424-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-425-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:426:        let Some(alloc) = svm.svm_ptrs.find_alloc_precise(ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-427-            return Ok(None);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-428-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-429-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-430-        Ok(Some(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-431-            alloc.alloc.get_res_for_access(ctx, RWFlags::RW)?.new_ref(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-432-        ))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-433-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-434-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-435-    pub fn copy_svm_to_host(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-436-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-437-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-438-        svm_ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-439-        flags: cl_map_flags,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-440-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-441-        // no need to copy
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-442-        if bit_check(flags, CL_MAP_WRITE_INVALIDATE_REGION) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-443-            return Ok(());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-444-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-445-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-446-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:447:        let Some((_, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-448-            return Ok(());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-449-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-450-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-451-        alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RW)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-452-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-453-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-454-    pub fn copy_svm(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-455-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-456-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-457-        src_addr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-458-        dst_addr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-459-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-460-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-461-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:462:        let src = svm.svm_ptrs.find_alloc(src_addr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:463:        let dst = svm.svm_ptrs.find_alloc(dst_addr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-464-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-465-        if let Some((src_base, src_alloc)) = src {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-466-            let src_res = src_alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-467-            let src_offset = src_addr - src_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-468-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-469-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-470-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-471-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-472-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-473-                ctx.resource_copy_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-474-                    src_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-475-                    src_offset as i32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-476-                    dst_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-477-                    dst_offset as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-478-                    size as i32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-479-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-480-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-481-                let map = ctx
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-482-                    .buffer_map(src_res, src_offset as i32, size as i32, RWFlags::RD)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-483-                    .ok_or(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-484-                unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-485-                    ptr::copy_nonoverlapping(map.ptr(), dst_addr as *mut c_void, size);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-486-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-487-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-488-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-489-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-490-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-491-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-492-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-493-                ctx.buffer_subdata(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-494-                    dst_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-495-                    dst_offset as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-496-                    src_addr as *const c_void,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-497-                    size as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-498-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-499-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-500-                unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-501-                    ptr::copy(src_addr as *const c_void, dst_addr as *mut c_void, size);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-502-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-503-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-504-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-505-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-506-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-507-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-508-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-509-    pub fn clear_svm<const T: usize>(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-510-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-511-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-512-        svm_ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-513-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-514-        pattern: [u8; T],
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-515-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-516-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-517-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:518:        if let Some((base, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-519-            let res = alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-520-            let offset = svm_ptr - base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-521-            ctx.clear_buffer(res, &pattern, offset as u32, size as u32);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-522-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-523-            let slice = unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-524-                slice::from_raw_parts_mut(svm_ptr as *mut _, size / size_of_val(&pattern))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-525-            };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-526-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-527-            slice.fill(pattern);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-528-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-529-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-530-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-531-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-532-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-533-    pub fn migrate_svm(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-534-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-535-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-536-        pointers: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-537-        sizes: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-538-        to_device: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-539-        content_undefined: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-540-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-541-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-542-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-543-        if ctx.dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-544-            ctx.svm_migrate(&pointers, &sizes, to_device, content_undefined);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-545-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-546-            for ptr in pointers {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:547:                let Some((_, alloc)) = svm.svm_ptrs.find_alloc(ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-548-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-549-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-550-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-551-                // we assume it's only read, so it remains valid on the host until future commands
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-552-                // have different needs.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-553-                if to_device {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-554-                    alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-555-                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-556-                    alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-557-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-558-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-559-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-560-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-561-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-562-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:563:    pub fn get_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, Arc<Allocation>)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-564-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-565-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-566-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:567:            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-568-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-569-            .map(|(base, alloc)| (base as *mut c_void, Arc::clone(&alloc.alloc)))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-570-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-571-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-572-    pub fn find_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, usize)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-573-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-574-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-575-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:576:            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-577-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-578-            .map(|(ptr, alloc)| (ptr as _, alloc.size()))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-579-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-580-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:581:    pub fn remove_svm_ptr(&self, ptr: usize) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:582:        self.svm.lock().unwrap().svm_ptrs.remove(ptr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-583-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-584-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-585-    pub fn add_bda_ptr(&self, buffer: &Arc<Buffer>) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-586-        if let Some(iter) = buffer.dev_addresses() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-587-            let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-588-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-589-            for (dev, address) in iter {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-590-                let Some(address) = address else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-591-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-592-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-593-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-594-                bda_ptrs.entry(dev).or_default().insert(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-595-                    address.get(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-596-                    TrackedBDAAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-597-                        buffer: Arc::downgrade(buffer),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-598-                        size: buffer.size as _,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-599-                    },
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-600-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-601-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-602-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-603-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-604-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-605-    pub fn find_bda_alloc(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-606-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-607-        dev: &Device,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-608-        ptr: cl_mem_device_address_ext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-609-    ) -> Option<Arc<Buffer>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-610-        let lock = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-611-        let (_, mem) = lock.get(dev)?.find_alloc(ptr)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-612-        mem.buffer.upgrade()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-613-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-614-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-615-    pub fn remove_bda(&self, buf: &Buffer) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-616-        let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-617-
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-71-            unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-72-                let ret = munmap(address, self.size());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-73-                debug_assert_eq!(0, ret);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-74-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-75-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-76-            for (dev, res) in &self.alloc.get_real_resource().res {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-77-                if !dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-78-                    dev.screen().resource_assign_vma(res, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-79-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-80-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-81-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-82-            Platform::get()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-83-                .vm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-84-                .as_ref()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-85-                .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-86-                .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-87-                .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-88-                .free(vma, NonZeroU64::new(self.size() as u64).unwrap());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-89-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-90-            // SAFETY: we make sure that svm_pointer is a valid allocation and reuse the same layout
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-91-            // from the allocation
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-92-            unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-93-                alloc::dealloc(self.alloc.host_ptr().cast(), self.layout);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-94-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-95-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-96-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-97-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-98-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-99-impl AllocSize<usize> for SVMAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-100-    fn size(&self) -> usize {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-101-        SVMAlloc::size(self)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-102-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-103-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-104-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-105-struct SVMContext {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:106:    svm_ptrs: TrackedPointers<usize, SVMAlloc>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-107-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-108-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-109-pub struct Context {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-110-    pub base: CLObjectBase<CL_INVALID_CONTEXT>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-111-    pub devs: Vec<&'static Device>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-112-    pub properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-113-    pub dtors: Mutex<Vec<DeleteContextCB>>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-114-    // we track the pointers per device for quick access in hot paths.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-115-    bda_ptrs: Mutex<
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-116-        HashMap<&'static Device, TrackedPointers<cl_mem_device_address_ext, TrackedBDAAlloc>>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-117-    >,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-118-    svm: Mutex<SVMContext>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-119-    pub gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-120-    pub worker_queue: util::queue::Queue,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-121-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-122-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-123-impl_cl_type_trait!(cl_context, Context, CL_INVALID_CONTEXT);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-124-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-125-impl Context {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-126-    pub fn new(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-127-        devs: Vec<&'static Device>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-128-        properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-129-        gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-130-    ) -> Arc<Context> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-131-        let worker_count = u32::max(util::cpu_count() / 2, 1);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-132-        let max_job_count = worker_count * 8;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-133-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-134-        Arc::new(Self {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-135-            base: CLObjectBase::new(RusticlTypes::Context),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-136-            devs: devs,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-137-            properties: properties,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-138-            dtors: Mutex::new(Vec::new()),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-139-            bda_ptrs: Mutex::new(HashMap::new()),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-140-            svm: Mutex::new(SVMContext {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:141:                svm_ptrs: TrackedPointers::new(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-142-            }),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-143-            gl_ctx_manager: gl_ctx_manager,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-144-            worker_queue: util::queue::Queue::new(c"clctxworker", max_job_count, worker_count),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-145-        })
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-146-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-147-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-148-    pub fn create_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-149-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-150-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-151-        user_ptr: *mut c_void,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-152-        copy: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-153-        bda: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-154-        res_type: ResourceType,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-155-    ) -> CLResult<HashMap<&'static Device, PipeResourceOwned>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-156-        let adj_size: u32 = size.try_into_with_err(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-157-        let mut res = HashMap::new();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-158-        let mut pipe_flags = 0;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-159-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-160-        if bda {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-161-            pipe_flags |= PIPE_RESOURCE_FLAG_FIXED_ADDRESS;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-162-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-163-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-164-        for &dev in &self.devs {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-165-            let mut resource = None;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-166-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-167-            if !user_ptr.is_null() && !copy {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-168-                resource = dev.screen().resource_create_buffer_from_user(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-169-                    adj_size,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-170-                    user_ptr,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-171-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-172-                    pipe_flags,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-173-                )
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-174-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-175-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-176-            if resource.is_none() {
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-372-            return Err(CL_OUT_OF_HOST_MEMORY);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-373-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-374-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-375-        let address = ptr as u64;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-376-        let mut buffers = HashMap::new();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-377-        for &dev in &self.devs {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-378-            let size: u32 = size.get().try_into().map_err(|_| CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-379-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-380-            // For system SVM devices we simply create a userptr resource.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-381-            let res = if dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-382-                dev.screen()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-383-                    .resource_create_buffer_from_user(size, ptr, PIPE_BIND_GLOBAL, 0)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-384-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-385-                dev.screen().resource_create_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-386-                    size,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-387-                    ResourceType::Normal,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-388-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-389-                    PIPE_RESOURCE_FLAG_FRONTEND_VM,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-390-                )
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-391-            };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-392-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-393-            let res = res.ok_or(CL_OUT_OF_RESOURCES)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-394-            if !dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-395-                if Platform::dbg().memory {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-396-                    eprintln!("assigning {address:x} to {res:?}");
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-397-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-398-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-399-                if !dev.screen().resource_assign_vma(&res, address) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-400-                    return Err(CL_OUT_OF_RESOURCES);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-401-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-402-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-403-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-404-            buffers.insert(dev, res);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-405-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-406-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:407:        self.svm.lock().unwrap().svm_ptrs.insert(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-408-            ptr as usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-409-            SVMAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-410-                layout: layout,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-411-                vma,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-412-                alloc: Arc::new(Allocation::new(buffers, 0, ptr)),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-413-            },
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-414-        );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-415-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-416-        Ok(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-417-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-418-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-419-    pub fn copy_svm_to_dev(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-420-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-421-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-422-        ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-423-    ) -> CLResult<Option<PipeResourceOwned>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-424-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-425-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:426:        let Some(alloc) = svm.svm_ptrs.find_alloc_precise(ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-427-            return Ok(None);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-428-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-429-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-430-        Ok(Some(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-431-            alloc.alloc.get_res_for_access(ctx, RWFlags::RW)?.new_ref(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-432-        ))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-433-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-434-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-435-    pub fn copy_svm_to_host(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-436-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-437-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-438-        svm_ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-439-        flags: cl_map_flags,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-440-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-441-        // no need to copy
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-442-        if bit_check(flags, CL_MAP_WRITE_INVALIDATE_REGION) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-443-            return Ok(());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-444-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-445-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-446-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:447:        let Some((_, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-448-            return Ok(());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-449-        };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-450-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-451-        alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RW)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-452-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-453-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-454-    pub fn copy_svm(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-455-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-456-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-457-        src_addr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-458-        dst_addr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-459-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-460-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-461-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:462:        let src = svm.svm_ptrs.find_alloc(src_addr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:463:        let dst = svm.svm_ptrs.find_alloc(dst_addr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-464-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-465-        if let Some((src_base, src_alloc)) = src {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-466-            let src_res = src_alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-467-            let src_offset = src_addr - src_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-468-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-469-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-470-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-471-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-472-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-473-                ctx.resource_copy_buffer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-474-                    src_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-475-                    src_offset as i32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-476-                    dst_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-477-                    dst_offset as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-478-                    size as i32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-479-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-480-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-481-                let map = ctx
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-482-                    .buffer_map(src_res, src_offset as i32, size as i32, RWFlags::RD)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-483-                    .ok_or(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-484-                unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-485-                    ptr::copy_nonoverlapping(map.ptr(), dst_addr as *mut c_void, size);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-486-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-487-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-488-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-489-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-490-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-491-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-492-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-493-                ctx.buffer_subdata(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-494-                    dst_res,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-495-                    dst_offset as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-496-                    src_addr as *const c_void,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-497-                    size as u32,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-498-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-499-            } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-500-                unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-501-                    ptr::copy(src_addr as *const c_void, dst_addr as *mut c_void, size);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-502-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-503-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-504-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-505-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-506-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-507-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-508-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-509-    pub fn clear_svm<const T: usize>(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-510-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-511-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-512-        svm_ptr: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-513-        size: usize,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-514-        pattern: [u8; T],
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-515-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-516-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-517-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:518:        if let Some((base, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-519-            let res = alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-520-            let offset = svm_ptr - base;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-521-            ctx.clear_buffer(res, &pattern, offset as u32, size as u32);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-522-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-523-            let slice = unsafe {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-524-                slice::from_raw_parts_mut(svm_ptr as *mut _, size / size_of_val(&pattern))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-525-            };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-526-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-527-            slice.fill(pattern);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-528-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-529-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-530-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-531-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-532-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-533-    pub fn migrate_svm(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-534-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-535-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-536-        pointers: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-537-        sizes: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-538-        to_device: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-539-        content_undefined: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-540-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-541-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-542-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-543-        if ctx.dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-544-            ctx.svm_migrate(&pointers, &sizes, to_device, content_undefined);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-545-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-546-            for ptr in pointers {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:547:                let Some((_, alloc)) = svm.svm_ptrs.find_alloc(ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-548-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-549-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-550-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-551-                // we assume it's only read, so it remains valid on the host until future commands
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-552-                // have different needs.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-553-                if to_device {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-554-                    alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-555-                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-556-                    alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-557-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-558-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-559-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-560-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-561-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-562-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:563:    pub fn get_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, Arc<Allocation>)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-564-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-565-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-566-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:567:            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-568-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-569-            .map(|(base, alloc)| (base as *mut c_void, Arc::clone(&alloc.alloc)))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-570-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-571-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-572-    pub fn find_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, usize)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-573-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-574-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-575-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:576:            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-577-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-578-            .map(|(ptr, alloc)| (ptr as _, alloc.size()))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-579-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-580-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:581:    pub fn remove_svm_ptr(&self, ptr: usize) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:582:        self.svm.lock().unwrap().svm_ptrs.remove(ptr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-583-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-584-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-585-    pub fn add_bda_ptr(&self, buffer: &Arc<Buffer>) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-586-        if let Some(iter) = buffer.dev_addresses() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-587-            let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-588-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-589-            for (dev, address) in iter {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-590-                let Some(address) = address else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-591-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-592-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-593-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-594-                bda_ptrs.entry(dev).or_default().insert(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-595-                    address.get(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-596-                    TrackedBDAAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-597-                        buffer: Arc::downgrade(buffer),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-598-                        size: buffer.size as _,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-599-                    },
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-600-                );
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-601-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-602-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-603-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-604-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-605-    pub fn find_bda_alloc(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-606-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-607-        dev: &Device,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-608-        ptr: cl_mem_device_address_ext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-609-    ) -> Option<Arc<Buffer>> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-610-        let lock = self.bda_ptrs.lock().unwrap();
+
+=== Queue worker event processing ===
+
+=== Event call / completion path ===
+1-// Copyright 2020 Red Hat.
+2-// SPDX-License-Identifier: MIT
+3-
+4-use crate::api::icd::*;
+5-use crate::api::types::*;
+6-use crate::core::context::*;
+7-use crate::core::queue::*;
+8-use crate::impl_cl_type_trait;
+9-
+10-use mesa_rust::pipe::query::*;
+11-use mesa_rust_gen::*;
+12-use mesa_rust_util::static_assert;
+13-use rusticl_opencl_gen::*;
+14-
+15-use std::collections::HashSet;
+16-use std::mem;
+17-use std::sync::Arc;
+18-use std::sync::Condvar;
+19-use std::sync::Mutex;
+20-use std::sync::MutexGuard;
+21-use std::sync::Weak;
+22-use std::time::Duration;
+23-
+24-// we assert that those are a continous range of numbers so we won't have to use HashMaps
+25:static_assert!(CL_COMPLETE == 0);
+26-static_assert!(CL_RUNNING == 1);
+27-static_assert!(CL_SUBMITTED == 2);
+28-static_assert!(CL_QUEUED == 3);
+29-
+30-pub type EventSig =
+31-    Box<dyn FnOnce(&Context, &mut QueueContextWithState) -> CLResult<()> + Send + Sync>;
+32-
+33-pub enum EventTimes {
+34-    Queued = CL_PROFILING_COMMAND_QUEUED as isize,
+35-    Submit = CL_PROFILING_COMMAND_SUBMIT as isize,
+36-    Start = CL_PROFILING_COMMAND_START as isize,
+37-    End = CL_PROFILING_COMMAND_END as isize,
+38-}
+39-
+40-#[derive(Default)]
+41-struct EventMutState {
+42-    status: cl_int,
+43-    cbs: [Vec<EventCB>; 3],
+44-    work: Option<EventSig>,
+45-    time_queued: cl_ulong,
+46-    time_submit: cl_ulong,
+47-    time_start: cl_ulong,
+48-    time_end: cl_ulong,
+49-}
+50-
+51-pub struct Event {
+52-    pub base: CLObjectBase<CL_INVALID_EVENT>,
+53-    pub context: Arc<Context>,
+54-    pub queue: Option<Weak<Queue>>,
+55-    pub cmd_type: cl_command_type,
+56-    pub deps: Vec<Arc<Event>>,
+57-    state: Mutex<EventMutState>,
+58-    cv: Condvar,
+59-}
+60-
+61-impl_cl_type_trait!(cl_event, Event, CL_INVALID_EVENT);
+62-
+63-impl Event {
+64-    pub fn new(
+65-        queue: &Arc<Queue>,
+66-        cmd_type: cl_command_type,
+67-        deps: Vec<Arc<Event>>,
+68-        work: EventSig,
+69-    ) -> Arc<Event> {
+70-        Arc::new(Self {
+71-            base: CLObjectBase::new(RusticlTypes::Event),
+72-            context: Arc::clone(&queue.context),
+73-            queue: Some(Arc::downgrade(queue)),
+74-            cmd_type: cmd_type,
+75-            deps: deps,
+76-            state: Mutex::new(EventMutState {
+77-                status: CL_QUEUED as cl_int,
+78-                work: Some(work),
+79-                ..Default::default()
+80-            }),
+81-            cv: Condvar::new(),
+82-        })
+83-    }
+84-
+85-    pub fn new_user(context: Arc<Context>) -> Arc<Event> {
+86-        Arc::new(Self {
+87-            base: CLObjectBase::new(RusticlTypes::Event),
+88-            context: context,
+89-            queue: None,
+90-            cmd_type: CL_COMMAND_USER,
+91-            deps: Vec::new(),
+92-            state: Mutex::new(EventMutState {
+93-                status: CL_SUBMITTED as cl_int,
+94-                ..Default::default()
+95-            }),
+96-            cv: Condvar::new(),
+97-        })
+98-    }
+99-
+100-    fn state(&self) -> MutexGuard<'_, EventMutState> {
+101-        self.state.lock().unwrap()
+102-    }
+103-
+104-    pub fn status(&self) -> cl_int {
+105-        self.state().status
+106-    }
+107-
+108:    fn set_status(&self, mut lock: MutexGuard<EventMutState>, new: cl_int) {
+109-        lock.status = new;
+110-
+111-        // signal on completion or an error
+112:        if new <= CL_COMPLETE as cl_int {
+113-            self.cv.notify_all();
+114-        }
+115-
+116:        // errors we treat as CL_COMPLETE
+117:        let cb_max = if new < 0 { CL_COMPLETE } else { new as u32 };
+118-
+119-        // there are only callbacks for those
+120:        if ![CL_COMPLETE, CL_RUNNING, CL_SUBMITTED].contains(&cb_max) {
+121-            return;
+122-        }
+123-
+124-        let mut cbs = Vec::new();
+125-        // Collect all cbs we need to call first. Technically it is not required to call them in
+126-        // order, but let's be nice to applications as it's for free
+127-        for idx in (cb_max..=CL_SUBMITTED).rev() {
+128-            cbs.extend(
+129-                // use mem::take as each callback is only supposed to be called exactly once
+130-                mem::take(&mut lock.cbs[idx as usize])
+131-                    .into_iter()
+132-                    // we need to save the status this cb was registered with
+133-                    .map(|cb| (idx as cl_int, cb)),
+134-            );
+135-        }
+136-
+137-        // applications might want to access the event in the callback, so drop the lock before
+138-        // calling into the callbacks.
+139-        drop(lock);
+140-
+141-        for (idx, cb) in cbs {
+142-            // from the CL spec:
+143-            //
+144-            // event_command_status is equal to the command_exec_callback_type used while
+145-            // registering the callback. [...] If the callback is called as the result of the
+146-            // command associated with event being abnormally terminated, an appropriate error code
+147-            // for the error that caused the termination will be passed to event_command_status
+148-            // instead.
+149-            let status = if new < 0 { new } else { idx };
+150-            cb.call(self, status);
+151-        }
+152-    }
+153-
+154-    pub fn set_user_status(&self, status: cl_int) {
+155:        self.set_status(self.state(), status);
+156-    }
+157-
+158-    pub fn is_error(&self) -> bool {
+159-        self.status() < 0
+160-    }
+161-
+162-    pub fn is_user(&self) -> bool {
+163-        self.cmd_type == CL_COMMAND_USER
+164-    }
+165-
+166-    pub fn set_time(&self, which: EventTimes, value: cl_ulong) {
+167-        let mut lock = self.state();
+168-        match which {
+169-            EventTimes::Queued => lock.time_queued = value,
+170-            EventTimes::Submit => lock.time_submit = value,
+171-            EventTimes::Start => lock.time_start = value,
+172-            EventTimes::End => lock.time_end = value,
+173-        }
+174-    }
+175-
+176-    pub fn get_time(&self, which: EventTimes) -> cl_ulong {
+177-        let lock = self.state();
+178-
+179-        match which {
+180-            EventTimes::Queued => lock.time_queued,
+181-            EventTimes::Submit => lock.time_submit,
+182-            EventTimes::Start => lock.time_start,
+183-            EventTimes::End => lock.time_end,
+184-        }
+185-    }
+186-
+187-    pub fn add_cb(&self, state: cl_int, cb: EventCB) {
+188-        let mut lock = self.state();
+189-        let status = lock.status;
+190-
+191-        // call cb if the status was already reached
+192-        if state >= status {
+193-            drop(lock);
+194-            cb.call(self, state);
+195-        } else {
+196-            lock.cbs.get_mut(state as usize).unwrap().push(cb);
+197-        }
+198-    }
+199-
+200-    pub(super) fn signal(&self) {
+201-        let state = self.state();
+202-        // we don't want to call signal on errored events, but if that still happens, handle it
+203-        // gracefully
+204-        debug_assert_eq!(state.status, CL_SUBMITTED as cl_int);
+205-        if state.status < 0 {
+206-            return;
+207-        }
+208:        self.set_status(state, CL_RUNNING as cl_int);
+209:        self.set_status(self.state(), CL_COMPLETE as cl_int);
+210-    }
+211-
+212-    pub fn wait(&self) -> cl_int {
+213-        let mut lock = self.state();
+214-        while lock.status >= CL_RUNNING as cl_int {
+215-            lock = self
+216-                .cv
+217-                .wait_timeout(lock, Duration::from_secs(1))
+218-                .unwrap()
+219-                .0;
+220-        }
+221-        lock.status
+222-    }
+223-
+224-    // We always assume that work here simply submits stuff to the hardware even if it's just doing
+225-    // sw emulation or nothing at all.
+226-    // If anything requets waiting, we will update the status through fencing later.
+227:    pub fn call(&self, ctx: &mut QueueContextWithState) -> cl_int {
+228-        let mut lock = self.state();
+229-        let mut status = lock.status;
+230-        let profiling_enabled = lock.time_queued != 0;
+231-        if status == CL_QUEUED as cl_int {
+232-            if profiling_enabled {
+233-                // We already have the lock so can't call set_time on the event
+234-                lock.time_submit = ctx.dev.screen().get_timestamp();
+235-            }
+236-            let mut query_start = None;
+237-            let mut query_end = None;
+238-            status = lock.work.take().map_or(
+239-                // if there is no work
+240-                CL_SUBMITTED as cl_int,
+241-                |w| {
+242-                    if profiling_enabled {
+243-                        query_start =
+244-                            PipeQueryGen::<{ pipe_query_type::PIPE_QUERY_TIMESTAMP }>::new(ctx.ctx);
+245-                    }
+246-
+247-                    let res = w(&self.context, ctx).err().map_or(
+248-                        // return the error if there is one
+249-                        CL_SUBMITTED as cl_int,
+250-                        |e| e,
+251-                    );
+252-                    if profiling_enabled {
+253-                        query_end =
+254-                            PipeQueryGen::<{ pipe_query_type::PIPE_QUERY_TIMESTAMP }>::new(ctx.ctx);
+255-                    }
+256-                    res
+257-                },
+258-            );
+259-
+260-            if profiling_enabled {
+261-                lock.time_start = query_start.unwrap().read_blocked();
+262-                lock.time_end = query_end.unwrap().read_blocked();
+263-            }
+264:            self.set_status(lock, status);
+265-        }
+266-        status
+267-    }
+268-
+269:    fn deep_unflushed_deps_impl<'a>(&'a self, result: &mut HashSet<&'a Event>) {
+270-        if self.status() <= CL_SUBMITTED as i32 {
+271-            return;
+272-        }
+273-
+274-        // only scan dependencies if it's a new one
+275-        if result.insert(self) {
+276-            for e in &self.deps {
+277:                e.deep_unflushed_deps_impl(result);
+278-            }
+279-        }
+280-    }
+281-
+282-    /// does a deep search and returns a list of all dependencies including `events` which haven't
+283:    /// been flushed out yet
+284:    pub fn deep_unflushed_deps(events: &[Arc<Event>]) -> HashSet<&Event> {
+285-        let mut result = HashSet::new();
+286-
+287-        for e in events {
+288:            e.deep_unflushed_deps_impl(&mut result);
+289-        }
+290-
+291-        result
+292-    }
+293-
+294:    /// does a deep search and returns a list of all queues which haven't been flushed yet
+295:    pub fn deep_unflushed_queues(events: &[Arc<Event>]) -> HashSet<Arc<Queue>> {
+296:        Event::deep_unflushed_deps(events)
+297-            .iter()
+298-            .filter_map(|e| e.queue.as_ref())
+299:            // We don't have to do anything for destroyed queues as they already flush on drop.
+300-            .filter_map(Weak::upgrade)
+301-            .collect()
+302-    }
+303-}
+304-
+305-impl Drop for Event {
+306-    // implement drop in order to prevent stack overflows of long dependency chains.
+307-    //
+308-    // This abuses the fact that `Arc::into_inner` only succeeds when there is one strong reference
+309-    // so we turn a recursive drop chain into a drop list for events having no other references.
+310-    fn drop(&mut self) {
+311-        if self.deps.is_empty() {
+312-            return;
+313-        }
+314-
+315-        let mut deps_list = vec![mem::take(&mut self.deps)];
+316-        while let Some(deps) = deps_list.pop() {
+317-            for dep in deps {
+318-                if let Some(mut dep) = Arc::into_inner(dep) {
+319-                    deps_list.push(mem::take(&mut dep.deps));
+320-                }
+321-            }
+322-        }
+323-    }
+324-}
+325-
+326-// TODO worker thread per device
+327-// Condvar to wait on new events to work on
+328:// notify condvar when flushing queue events to worker
+329:// attach fence to flushed events on context->flush
+330-// store "newest" event for in-order queues per queue
+331-// reordering/graph building done in worker
+
+============================================================
+MESA 26.2.0
+============================================================
+
+=== KernelArgValue SVM definition ===
+
+=== SVM use during kernel dispatch ===
+
+=== Context SVM allocation lookup/removal ===
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-71-            unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-72-                let ret = munmap(address, self.size());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-73-                debug_assert_eq!(0, ret);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-74-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-75-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-76-            for (dev, res) in &self.alloc.get_real_resource().res {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-77-                if !dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-78-                    dev.screen().resource_assign_vma(res, 0);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-79-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-80-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-81-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-82-            Platform::get()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-83-                .vm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-84-                .as_ref()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-85-                .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-86-                .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-87-                .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-88-                .free(vma, NonZeroU64::new(self.size() as u64).unwrap());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-89-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-90-            // SAFETY: we make sure that svm_pointer is a valid allocation and reuse the same layout
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-91-            // from the allocation
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-92-            unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-93-                alloc::dealloc(self.alloc.host_ptr().cast(), self.layout);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-94-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-95-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-96-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-97-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-98-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-99-impl AllocSize<usize> for SVMAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-100-    fn size(&self) -> usize {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-101-        SVMAlloc::size(self)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-102-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-103-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-104-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-105-struct SVMContext {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:106:    svm_ptrs: TrackedPointers<usize, SVMAlloc>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-107-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-108-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-109-pub struct Context {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-110-    pub base: CLObjectBase<CL_INVALID_CONTEXT>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-111-    pub devs: Vec<&'static Device>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-112-    pub properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-113-    pub dtors: Mutex<Vec<DeleteContextCB>>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-114-    // we track the pointers per device for quick access in hot paths.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-115-    bda_ptrs: Mutex<
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-116-        HashMap<&'static Device, TrackedPointers<cl_mem_device_address_ext, TrackedBDAAlloc>>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-117-    >,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-118-    svm: Mutex<SVMContext>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-119-    pub gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-120-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-121-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-122-impl_cl_type_trait!(cl_context, Context, CL_INVALID_CONTEXT);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-123-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-124-impl Context {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-125-    pub fn new(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-126-        devs: Vec<&'static Device>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-127-        properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-128-        gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-129-    ) -> Arc<Context> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-130-        Arc::new(Self {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-131-            base: CLObjectBase::new(RusticlTypes::Context),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-132-            devs: devs,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-133-            properties: properties,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-134-            dtors: Mutex::new(Vec::new()),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-135-            bda_ptrs: Mutex::new(HashMap::new()),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-136-            svm: Mutex::new(SVMContext {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:137:                svm_ptrs: TrackedPointers::new(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-138-            }),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-139-            gl_ctx_manager: gl_ctx_manager,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-140-        })
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-141-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-142-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-143-    pub fn create_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-144-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-145-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-146-        user_ptr: *mut c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-147-        copy: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-148-        bda: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-149-        res_type: ResourceType,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-150-    ) -> CLResult<HashMap<&'static Device, PipeResourceOwned>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-151-        let adj_size: u32 = size.try_into_with_err(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-152-        let mut res = HashMap::new();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-153-        let mut pipe_flags = 0;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-154-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-155-        if bda {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-156-            pipe_flags |= PIPE_RESOURCE_FLAG_FIXED_ADDRESS;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-157-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-158-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-159-        for &dev in &self.devs {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-160-            let mut resource = None;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-161-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-162-            if !user_ptr.is_null() && !copy {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-163-                resource = dev.screen().resource_create_buffer_from_user(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-164-                    adj_size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-165-                    user_ptr,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-166-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-167-                    pipe_flags,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-168-                )
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-169-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-170-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-171-            if resource.is_none() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-172-                resource = dev.screen().resource_create_buffer(
+--
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-367-            return Err(CL_OUT_OF_HOST_MEMORY);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-368-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-369-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-370-        let address = ptr as u64;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-371-        let mut buffers = HashMap::new();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-372-        for &dev in &self.devs {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-373-            let size: u32 = size.get().try_into().map_err(|_| CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-374-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-375-            // For system SVM devices we simply create a userptr resource.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-376-            let res = if dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-377-                dev.screen()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-378-                    .resource_create_buffer_from_user(size, ptr, PIPE_BIND_GLOBAL, 0)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-379-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-380-                dev.screen().resource_create_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-381-                    size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-382-                    ResourceType::Normal,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-383-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-384-                    PIPE_RESOURCE_FLAG_FRONTEND_VM,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-385-                )
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-386-            };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-387-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-388-            let res = res.ok_or(CL_OUT_OF_RESOURCES)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-389-            if !dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-390-                if Platform::dbg().memory {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-391-                    eprintln!("assigning {address:x} to {res:?}");
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-392-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-393-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-394-                if !dev.screen().resource_assign_vma(&res, address) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-395-                    return Err(CL_OUT_OF_RESOURCES);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-396-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-397-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-398-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-399-            buffers.insert(dev, res);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-400-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-401-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:402:        self.svm.lock().unwrap().svm_ptrs.insert(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-403-            ptr as usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-404-            SVMAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-405-                layout: layout,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-406-                vma,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-407-                alloc: Arc::new(Allocation::new(buffers, 0, ptr)),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-408-            },
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-409-        );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-410-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-411-        Ok(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-412-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-413-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-414-    pub fn copy_svm_to_dev(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-415-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-416-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-417-        ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-418-    ) -> CLResult<Option<PipeResourceOwned>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-419-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-420-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:421:        let Some(alloc) = svm.svm_ptrs.find_alloc_precise(ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-422-            return Ok(None);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-423-        };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-424-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-425-        Ok(Some(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-426-            alloc.alloc.get_res_for_access(ctx, RWFlags::RW)?.new_ref(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-427-        ))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-428-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-429-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-430-    pub fn copy_svm_to_host(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-431-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-432-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-433-        svm_ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-434-        flags: cl_map_flags,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-435-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-436-        // no need to copy
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-437-        if bit_check(flags, CL_MAP_WRITE_INVALIDATE_REGION) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-438-            return Ok(());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-439-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-440-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-441-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:442:        let Some((_, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-443-            return Ok(());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-444-        };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-445-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-446-        alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RW)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-447-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-448-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-449-    pub fn copy_svm(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-450-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-451-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-452-        src_addr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-453-        dst_addr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-454-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-455-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-456-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:457:        let src = svm.svm_ptrs.find_alloc(src_addr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:458:        let dst = svm.svm_ptrs.find_alloc(dst_addr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-459-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-460-        if let Some((src_base, src_alloc)) = src {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-461-            let src_res = src_alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-462-            let src_offset = src_addr - src_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-463-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-464-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-465-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-466-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-467-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-468-                ctx.resource_copy_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-469-                    src_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-470-                    src_offset as i32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-471-                    dst_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-472-                    dst_offset as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-473-                    size as i32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-474-                );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-475-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-476-                let map = ctx
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-477-                    .buffer_map(src_res, src_offset as i32, size as i32, RWFlags::RD)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-478-                    .ok_or(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-479-                unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-480-                    ptr::copy_nonoverlapping(map.ptr(), dst_addr as *mut c_void, size);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-481-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-482-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-483-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-484-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-485-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-486-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-487-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-488-                ctx.buffer_subdata(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-489-                    dst_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-490-                    dst_offset as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-491-                    src_addr as *const c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-492-                    size as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-493-                );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-494-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-495-                unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-496-                    ptr::copy(src_addr as *const c_void, dst_addr as *mut c_void, size);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-497-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-498-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-499-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-500-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-501-        Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-502-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-503-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-504-    pub fn clear_svm<const T: usize>(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-505-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-506-        dev: &Device,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-507-        svm_ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-508-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-509-        pattern: [u8; T],
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-510-    ) -> CLResult<EventSig> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-511-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-512-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:513:        if svm.svm_ptrs.find_alloc(svm_ptr).is_some() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-514-            match dev.optimize_buffer_fill(&pattern, svm_ptr, size) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-515-                DeviceFillBuffer::Meta(pattern) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-516-                    Platform::get()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-517-                        .meta
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-518-                        .clear_svm(dev, svm_ptr, pattern.to_vec(), size)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-519-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-520-                DeviceFillBuffer::Clear(pattern) => Ok(Box::new(move |cl_ctx, ctx| {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-521-                    let svm = cl_ctx.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:522:                    if let Some((base, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-523-                        let res = alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-524-                        let offset = svm_ptr - base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-525-                        ctx.clear_buffer(res, &pattern, offset as u32, size as u32);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-526-                    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-527-                    Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-528-                })),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-529-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-530-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-531-            Ok(Box::new(move |_, _| {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-532-                let slice = unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-533-                    slice::from_raw_parts_mut(svm_ptr as *mut _, size / size_of_val(&pattern))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-534-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-535-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-536-                slice.fill(pattern);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-537-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-538-                Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-539-            }))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-540-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-541-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-542-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-543-    pub fn migrate_svm(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-544-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-545-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-546-        pointers: Vec<usize>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-547-        sizes: Vec<usize>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-548-        to_device: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-549-        content_undefined: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-550-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-551-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-552-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-553-        if ctx.dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-554-            ctx.svm_migrate(&pointers, &sizes, to_device, content_undefined);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-555-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-556-            for ptr in pointers {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:557:                let Some((_, alloc)) = svm.svm_ptrs.find_alloc(ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-558-                    continue;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-559-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-560-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-561-                // we assume it's only read, so it remains valid on the host until future commands
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-562-                // have different needs.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-563-                if to_device {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-564-                    alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-565-                } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-566-                    alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-567-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-568-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-569-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-570-        Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-571-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-572-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:573:    pub fn get_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, Arc<Allocation>)> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-574-        self.svm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-575-            .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-576-            .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:577:            .svm_ptrs
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-578-            .find_alloc(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-579-            .map(|(base, alloc)| (base as *mut c_void, Arc::clone(&alloc.alloc)))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-580-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-581-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-582-    pub fn find_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, usize)> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-583-        self.svm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-584-            .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-585-            .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:586:            .svm_ptrs
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-587-            .find_alloc(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-588-            .map(|(ptr, alloc)| (ptr as _, alloc.size()))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-589-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-590-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:591:    pub fn remove_svm_ptr(&self, ptr: usize) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:592:        self.svm.lock().unwrap().svm_ptrs.remove(ptr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-593-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-594-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-595-    pub fn add_bda_ptr(&self, buffer: &Arc<Buffer>) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-596-        if let Some(iter) = buffer.dev_addresses() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-597-            let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-598-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-599-            for (dev, address) in iter {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-600-                let Some(address) = address else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-601-                    continue;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-602-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-603-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-604-                bda_ptrs.entry(dev).or_default().insert(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-605-                    address.get(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-606-                    TrackedBDAAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-607-                        buffer: Arc::downgrade(buffer),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-608-                        size: buffer.size as _,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-609-                    },
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-610-                );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-611-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-612-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-613-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-614-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-615-    pub fn find_bda_alloc(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-616-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-617-        dev: &Device,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-618-        ptr: cl_mem_device_address_ext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-619-    ) -> Option<Arc<Buffer>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-620-        let lock = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-621-        let (_, mem) = lock.get(dev)?.find_alloc(ptr)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-622-        mem.buffer.upgrade()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-623-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-624-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-625-    pub fn remove_bda(&self, buf: &Buffer) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-626-        let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-627-
+--
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-803-                                * [pixel_size, dst_row_pitch, dst_slice_pitch],
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-804-                        ),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-805-                        region[0] * pixel_size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-806-                    )
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-807-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-808-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-809-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-810-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-811-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-812-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-813-impl MemBase {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-814-    pub fn new_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-815-        context: Arc<Context>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-816-        flags: cl_mem_flags,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-817-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-818-        mut host_ptr: *mut c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-819-        props: Properties<cl_mem_properties>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-820-    ) -> CLResult<Arc<Buffer>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-821-        let bda = props
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-822-            .get(&CL_MEM_DEVICE_PRIVATE_ADDRESS_EXT.into())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-823-            .copied()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-824-            == Some(CL_TRUE.into());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-825-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-826-        // if it's a SVM host ptr, we just use the already allocated resource if it exists, because
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-827-        // this is actually mandated by the spec. The size requirement will be checked inside the
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-828-        // API layer.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-829-        //
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-830-        // From the OpenCL spec:
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-831-        //   If clCreateBuffer or clCreateBufferWithProperties is called with a pointer returned
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-832-        //   clSVMAlloc as its host_ptr argument, and CL_MEM_USE_HOST_PTR is set in its flags
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-833-        //   argument, clCreateBuffer or clCreateBufferWithProperties will succeed and return
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-834-        //   valid non-zero buffer object as long as the size argument is no larger than the size
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-835-        //   argument passed in the original clSVMAlloc call. The new buffer object returned has the
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-836-        //   shared memory as the underlying storage.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-837-        let svm = bit_check(flags, CL_MEM_USE_HOST_PTR)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs:838:            .then(|| context.get_svm_alloc(host_ptr as usize))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-839-            .flatten();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-840-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-841-        let alloc = if let Some((svm_ptr, ref svm_alloc)) = svm {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-842-            // SAFETY: svm_ptr is the base of the allocation host_ptr points into.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-843-            let offset = unsafe { host_ptr.byte_offset_from(svm_ptr) } as usize;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-844-            Allocation::new_svm(Arc::clone(svm_alloc), offset)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-845-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-846-            let res_type = if bit_check(flags, CL_MEM_ALLOC_HOST_PTR) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-847-                ResourceType::Staging
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-848-            } else if bit_check(flags, CL_MEM_IMMUTABLE_EXT) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-849-                ResourceType::Immutable
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-850-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-851-                ResourceType::Normal
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-852-            };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-853-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-854-            let buffer = context.create_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-855-                size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-856-                host_ptr,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-857-                bit_check(flags, CL_MEM_COPY_HOST_PTR),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-858-                bda,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-859-                res_type,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-860-            )?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-861-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-862-            // We can only keep the host_ptr when `CL_MEM_USE_HOST_PTR` is set.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-863-            if !bit_check(flags, CL_MEM_USE_HOST_PTR) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-864-                host_ptr = ptr::null_mut()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-865-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-866-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-867-            Allocation::new(buffer, 0, host_ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-868-        };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-869-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-870-        let addresses = bda.then(|| {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-871-            context
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-872-                .devs
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/memory.rs-873-                .iter()
+--
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-71-            unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-72-                let ret = munmap(address, self.size());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-73-                debug_assert_eq!(0, ret);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-74-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-75-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-76-            for (dev, res) in &self.alloc.get_real_resource().res {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-77-                if !dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-78-                    dev.screen().resource_assign_vma(res, 0);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-79-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-80-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-81-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-82-            Platform::get()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-83-                .vm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-84-                .as_ref()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-85-                .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-86-                .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-87-                .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-88-                .free(vma, NonZeroU64::new(self.size() as u64).unwrap());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-89-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-90-            // SAFETY: we make sure that svm_pointer is a valid allocation and reuse the same layout
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-91-            // from the allocation
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-92-            unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-93-                alloc::dealloc(self.alloc.host_ptr().cast(), self.layout);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-94-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-95-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-96-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-97-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-98-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-99-impl AllocSize<usize> for SVMAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-100-    fn size(&self) -> usize {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-101-        SVMAlloc::size(self)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-102-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-103-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-104-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-105-struct SVMContext {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:106:    svm_ptrs: TrackedPointers<usize, SVMAlloc>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-107-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-108-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-109-pub struct Context {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-110-    pub base: CLObjectBase<CL_INVALID_CONTEXT>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-111-    pub devs: Vec<&'static Device>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-112-    pub properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-113-    pub dtors: Mutex<Vec<DeleteContextCB>>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-114-    // we track the pointers per device for quick access in hot paths.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-115-    bda_ptrs: Mutex<
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-116-        HashMap<&'static Device, TrackedPointers<cl_mem_device_address_ext, TrackedBDAAlloc>>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-117-    >,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-118-    svm: Mutex<SVMContext>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-119-    pub gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-120-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-121-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-122-impl_cl_type_trait!(cl_context, Context, CL_INVALID_CONTEXT);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-123-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-124-impl Context {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-125-    pub fn new(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-126-        devs: Vec<&'static Device>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-127-        properties: Properties<cl_context_properties>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-128-        gl_ctx_manager: Option<GLCtxManager>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-129-    ) -> Arc<Context> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-130-        Arc::new(Self {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-131-            base: CLObjectBase::new(RusticlTypes::Context),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-132-            devs: devs,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-133-            properties: properties,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-134-            dtors: Mutex::new(Vec::new()),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-135-            bda_ptrs: Mutex::new(HashMap::new()),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-136-            svm: Mutex::new(SVMContext {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:137:                svm_ptrs: TrackedPointers::new(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-138-            }),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-139-            gl_ctx_manager: gl_ctx_manager,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-140-        })
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-141-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-142-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-143-    pub fn create_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-144-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-145-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-146-        user_ptr: *mut c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-147-        copy: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-148-        bda: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-149-        res_type: ResourceType,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-150-    ) -> CLResult<HashMap<&'static Device, PipeResourceOwned>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-151-        let adj_size: u32 = size.try_into_with_err(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-152-        let mut res = HashMap::new();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-153-        let mut pipe_flags = 0;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-154-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-155-        if bda {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-156-            pipe_flags |= PIPE_RESOURCE_FLAG_FIXED_ADDRESS;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-157-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-158-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-159-        for &dev in &self.devs {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-160-            let mut resource = None;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-161-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-162-            if !user_ptr.is_null() && !copy {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-163-                resource = dev.screen().resource_create_buffer_from_user(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-164-                    adj_size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-165-                    user_ptr,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-166-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-167-                    pipe_flags,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-168-                )
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-169-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-170-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-171-            if resource.is_none() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-172-                resource = dev.screen().resource_create_buffer(
+--
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-367-            return Err(CL_OUT_OF_HOST_MEMORY);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-368-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-369-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-370-        let address = ptr as u64;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-371-        let mut buffers = HashMap::new();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-372-        for &dev in &self.devs {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-373-            let size: u32 = size.get().try_into().map_err(|_| CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-374-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-375-            // For system SVM devices we simply create a userptr resource.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-376-            let res = if dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-377-                dev.screen()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-378-                    .resource_create_buffer_from_user(size, ptr, PIPE_BIND_GLOBAL, 0)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-379-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-380-                dev.screen().resource_create_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-381-                    size,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-382-                    ResourceType::Normal,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-383-                    PIPE_BIND_GLOBAL,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-384-                    PIPE_RESOURCE_FLAG_FRONTEND_VM,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-385-                )
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-386-            };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-387-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-388-            let res = res.ok_or(CL_OUT_OF_RESOURCES)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-389-            if !dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-390-                if Platform::dbg().memory {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-391-                    eprintln!("assigning {address:x} to {res:?}");
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-392-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-393-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-394-                if !dev.screen().resource_assign_vma(&res, address) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-395-                    return Err(CL_OUT_OF_RESOURCES);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-396-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-397-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-398-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-399-            buffers.insert(dev, res);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-400-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-401-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:402:        self.svm.lock().unwrap().svm_ptrs.insert(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-403-            ptr as usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-404-            SVMAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-405-                layout: layout,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-406-                vma,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-407-                alloc: Arc::new(Allocation::new(buffers, 0, ptr)),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-408-            },
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-409-        );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-410-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-411-        Ok(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-412-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-413-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-414-    pub fn copy_svm_to_dev(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-415-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-416-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-417-        ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-418-    ) -> CLResult<Option<PipeResourceOwned>> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-419-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-420-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:421:        let Some(alloc) = svm.svm_ptrs.find_alloc_precise(ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-422-            return Ok(None);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-423-        };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-424-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-425-        Ok(Some(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-426-            alloc.alloc.get_res_for_access(ctx, RWFlags::RW)?.new_ref(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-427-        ))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-428-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-429-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-430-    pub fn copy_svm_to_host(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-431-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-432-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-433-        svm_ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-434-        flags: cl_map_flags,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-435-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-436-        // no need to copy
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-437-        if bit_check(flags, CL_MAP_WRITE_INVALIDATE_REGION) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-438-            return Ok(());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-439-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-440-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-441-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:442:        let Some((_, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-443-            return Ok(());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-444-        };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-445-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-446-        alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RW)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-447-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-448-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-449-    pub fn copy_svm(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-450-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-451-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-452-        src_addr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-453-        dst_addr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-454-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-455-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-456-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:457:        let src = svm.svm_ptrs.find_alloc(src_addr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:458:        let dst = svm.svm_ptrs.find_alloc(dst_addr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-459-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-460-        if let Some((src_base, src_alloc)) = src {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-461-            let src_res = src_alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-462-            let src_offset = src_addr - src_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-463-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-464-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-465-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-466-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-467-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-468-                ctx.resource_copy_buffer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-469-                    src_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-470-                    src_offset as i32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-471-                    dst_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-472-                    dst_offset as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-473-                    size as i32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-474-                );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-475-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-476-                let map = ctx
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-477-                    .buffer_map(src_res, src_offset as i32, size as i32, RWFlags::RD)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-478-                    .ok_or(CL_OUT_OF_HOST_MEMORY)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-479-                unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-480-                    ptr::copy_nonoverlapping(map.ptr(), dst_addr as *mut c_void, size);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-481-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-482-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-483-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-484-            if let Some((dst_base, dst_alloc)) = dst {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-485-                let dst_res = dst_alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-486-                let dst_offset = dst_addr - dst_base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-487-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-488-                ctx.buffer_subdata(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-489-                    dst_res,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-490-                    dst_offset as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-491-                    src_addr as *const c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-492-                    size as u32,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-493-                );
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-494-            } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-495-                unsafe {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-496-                    ptr::copy(src_addr as *const c_void, dst_addr as *mut c_void, size);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-497-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-498-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-499-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-500-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-501-        Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-502-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-503-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-504-    pub fn clear_svm<const T: usize>(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-505-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-506-        dev: &Device,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-507-        svm_ptr: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-508-        size: usize,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-509-        pattern: [u8; T],
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-510-    ) -> CLResult<EventSig> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-511-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-512-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:513:        if svm.svm_ptrs.find_alloc(svm_ptr).is_some() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-514-            match dev.optimize_buffer_fill(&pattern, svm_ptr, size) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-515-                DeviceFillBuffer::Meta(pattern) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-516-                    Platform::get()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-517-                        .meta
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-518-                        .clear_svm(dev, svm_ptr, pattern.to_vec(), size)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-519-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-520-                DeviceFillBuffer::Clear(pattern) => Ok(Box::new(move |cl_ctx, ctx| {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-521-                    let svm = cl_ctx.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:522:                    if let Some((base, alloc)) = svm.svm_ptrs.find_alloc(svm_ptr) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-523-                        let res = alloc.alloc.get_res_for_access(ctx, RWFlags::WR)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-524-                        let offset = svm_ptr - base;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-525-                        ctx.clear_buffer(res, &pattern, offset as u32, size as u32);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-526-                    }
+
+=== Queue worker event processing ===
+
+=== Event call / completion path ===
+1-// Copyright 2020 Red Hat.
+2-// SPDX-License-Identifier: MIT
+3-
+4-use crate::api::icd::*;
+5-use crate::api::types::*;
+6-use crate::core::context::*;
+7-use crate::core::queue::*;
+8-use crate::impl_cl_type_trait;
+9-
+10-use mesa_rust::pipe::query::*;
+11-use mesa_rust_gen::*;
+12-use mesa_rust_util::static_assert;
+13-use rusticl_opencl_gen::*;
+14-
+15-use std::collections::HashSet;
+16-use std::mem;
+17-use std::sync::Arc;
+18-use std::sync::Condvar;
+19-use std::sync::Mutex;
+20-use std::sync::MutexGuard;
+21-use std::sync::Weak;
+22-use std::time::Duration;
+23-
+24-// we assert that those are a continous range of numbers so we won't have to use HashMaps
+25:static_assert!(CL_COMPLETE == 0);
+26-static_assert!(CL_RUNNING == 1);
+27-static_assert!(CL_SUBMITTED == 2);
+28-static_assert!(CL_QUEUED == 3);
+29-
+30-pub type EventSig =
+31-    Box<dyn FnOnce(&Context, &mut QueueContextWithState) -> CLResult<()> + Send + Sync>;
+32-
+33-pub enum EventTimes {
+34-    Queued = CL_PROFILING_COMMAND_QUEUED as isize,
+35-    Submit = CL_PROFILING_COMMAND_SUBMIT as isize,
+36-    Start = CL_PROFILING_COMMAND_START as isize,
+37-    End = CL_PROFILING_COMMAND_END as isize,
+38-}
+39-
+40-#[derive(Default)]
+41-struct EventMutState {
+42-    status: cl_int,
+43-    cbs: [Vec<EventCB>; 3],
+44-    work: Option<EventSig>,
+45-    time_queued: cl_ulong,
+46-    time_submit: cl_ulong,
+47-    time_start: cl_ulong,
+48-    time_end: cl_ulong,
+49-}
+50-
+51-pub struct Event {
+52-    pub base: CLObjectBase<CL_INVALID_EVENT>,
+53-    pub context: Arc<Context>,
+54-    pub queue: Option<Weak<Queue>>,
+55-    pub cmd_type: cl_command_type,
+56-    pub deps: Vec<Arc<Event>>,
+57-    state: Mutex<EventMutState>,
+58-    cv: Condvar,
+59-}
+60-
+61-impl_cl_type_trait!(cl_event, Event, CL_INVALID_EVENT);
+62-
+63-impl Event {
+64-    pub fn new(
+65-        queue: &Arc<Queue>,
+66-        cmd_type: cl_command_type,
+67-        deps: Vec<Arc<Event>>,
+68-        work: EventSig,
+69-    ) -> Arc<Event> {
+70-        Arc::new(Self {
+71-            base: CLObjectBase::new(RusticlTypes::Event),
+72-            context: Arc::clone(&queue.context),
+73-            queue: Some(Arc::downgrade(queue)),
+74-            cmd_type: cmd_type,
+75-            deps: deps,
+76-            state: Mutex::new(EventMutState {
+77-                status: CL_QUEUED as cl_int,
+78-                work: Some(work),
+79-                ..Default::default()
+80-            }),
+81-            cv: Condvar::new(),
+82-        })
+83-    }
+84-
+85-    pub fn new_user(context: Arc<Context>) -> Arc<Event> {
+86-        Arc::new(Self {
+87-            base: CLObjectBase::new(RusticlTypes::Event),
+88-            context: context,
+89-            queue: None,
+90-            cmd_type: CL_COMMAND_USER,
+91-            deps: Vec::new(),
+92-            state: Mutex::new(EventMutState {
+93-                status: CL_SUBMITTED as cl_int,
+94-                ..Default::default()
+95-            }),
+96-            cv: Condvar::new(),
+97-        })
+98-    }
+99-
+100-    fn state(&self) -> MutexGuard<'_, EventMutState> {
+101-        self.state.lock().unwrap()
+102-    }
+103-
+104-    pub fn status(&self) -> cl_int {
+105-        self.state().status
+106-    }
+107-
+108:    fn set_status(&self, mut lock: MutexGuard<EventMutState>, new: cl_int) {
+109-        lock.status = new;
+110-
+111-        // signal on completion or an error
+112:        if new <= CL_COMPLETE as cl_int {
+113-            self.cv.notify_all();
+114-        }
+115-
+116:        // errors we treat as CL_COMPLETE
+117:        let cb_max = if new < 0 { CL_COMPLETE } else { new as u32 };
+118-
+119-        // there are only callbacks for those
+120:        if ![CL_COMPLETE, CL_RUNNING, CL_SUBMITTED].contains(&cb_max) {
+121-            return;
+122-        }
+123-
+124-        let mut cbs = Vec::new();
+125-        // Collect all cbs we need to call first. Technically it is not required to call them in
+126-        // order, but let's be nice to applications as it's for free
+127-        for idx in (cb_max..=CL_SUBMITTED).rev() {
+128-            cbs.extend(
+129-                // use mem::take as each callback is only supposed to be called exactly once
+130-                mem::take(&mut lock.cbs[idx as usize])
+131-                    .into_iter()
+132-                    // we need to save the status this cb was registered with
+133-                    .map(|cb| (idx as cl_int, cb)),
+134-            );
+135-        }
+136-
+137-        // applications might want to access the event in the callback, so drop the lock before
+138-        // calling into the callbacks.
+139-        drop(lock);
+140-
+141-        for (idx, cb) in cbs {
+142-            // from the CL spec:
+143-            //
+144-            // event_command_status is equal to the command_exec_callback_type used while
+145-            // registering the callback. [...] If the callback is called as the result of the
+146-            // command associated with event being abnormally terminated, an appropriate error code
+147-            // for the error that caused the termination will be passed to event_command_status
+148-            // instead.
+149-            let status = if new < 0 { new } else { idx };
+150-            cb.call(self, status);
+151-        }
+152-    }
+153-
+154-    pub fn set_user_status(&self, status: cl_int) {
+155:        self.set_status(self.state(), status);
+156-    }
+157-
+158-    pub fn is_error(&self) -> bool {
+159-        self.status() < 0
+160-    }
+161-
+162-    pub fn is_user(&self) -> bool {
+163-        self.cmd_type == CL_COMMAND_USER
+164-    }
+165-
+166-    pub fn set_time(&self, which: EventTimes, value: cl_ulong) {
+167-        let mut lock = self.state();
+168-        match which {
+169-            EventTimes::Queued => lock.time_queued = value,
+170-            EventTimes::Submit => lock.time_submit = value,
+171-            EventTimes::Start => lock.time_start = value,
+172-            EventTimes::End => lock.time_end = value,
+173-        }
+174-    }
+175-
+176-    pub fn get_time(&self, which: EventTimes) -> cl_ulong {
+177-        let lock = self.state();
+178-
+179-        match which {
+180-            EventTimes::Queued => lock.time_queued,
+181-            EventTimes::Submit => lock.time_submit,
+182-            EventTimes::Start => lock.time_start,
+183-            EventTimes::End => lock.time_end,
+184-        }
+185-    }
+186-
+187-    pub fn add_cb(&self, state: cl_int, cb: EventCB) {
+188-        let mut lock = self.state();
+189-        let status = lock.status;
+190-
+191-        // call cb if the status was already reached
+192-        if state >= status {
+193-            drop(lock);
+194-            cb.call(self, state);
+195-        } else {
+196-            lock.cbs.get_mut(state as usize).unwrap().push(cb);
+197-        }
+198-    }
+199-
+200-    pub(super) fn signal(&self) {
+201-        let state = self.state();
+202-        // we don't want to call signal on errored events, but if that still happens, handle it
+203-        // gracefully
+204-        debug_assert_eq!(state.status, CL_SUBMITTED as cl_int);
+205-        if state.status < 0 {
+206-            return;
+207-        }
+208:        self.set_status(state, CL_RUNNING as cl_int);
+209:        self.set_status(self.state(), CL_COMPLETE as cl_int);
+210-    }
+211-
+212-    pub fn wait(&self) -> cl_int {
+213-        let mut lock = self.state();
+214-        while lock.status >= CL_RUNNING as cl_int {
+215-            lock = self
+216-                .cv
+217-                .wait_timeout(lock, Duration::from_secs(1))
+218-                .unwrap()
+219-                .0;
+220-        }
+221-        lock.status
+222-    }
+223-
+224-    // We always assume that work here simply submits stuff to the hardware even if it's just doing
+225-    // sw emulation or nothing at all.
+226-    // If anything requets waiting, we will update the status through fencing later.
+227:    pub fn call(&self, ctx: &mut QueueContextWithState) -> cl_int {
+228-        let mut lock = self.state();
+229-        let mut status = lock.status;
+230-        let profiling_enabled = lock.time_queued != 0;
+231-        if status == CL_QUEUED as cl_int {
+232-            if profiling_enabled {
+233-                // We already have the lock so can't call set_time on the event
+234-                lock.time_submit = ctx.dev.screen().get_timestamp();
+235-            }
+236-            let mut query_start = None;
+237-            let mut query_end = None;
+238-            status = lock.work.take().map_or(
+239-                // if there is no work
+240-                CL_SUBMITTED as cl_int,
+241-                |w| {
+242-                    if profiling_enabled {
+243-                        query_start =
+244-                            PipeQueryGen::<{ pipe_query_type::PIPE_QUERY_TIMESTAMP }>::new(ctx.ctx);
+245-                    }
+246-
+247-                    let res = w(&self.context, ctx).err().map_or(
+248-                        // return the error if there is one
+249-                        CL_SUBMITTED as cl_int,
+250-                        |e| e,
+251-                    );
+252-                    if profiling_enabled {
+253-                        query_end =
+254-                            PipeQueryGen::<{ pipe_query_type::PIPE_QUERY_TIMESTAMP }>::new(ctx.ctx);
+255-                    }
+256-                    res
+257-                },
+258-            );
+259-
+260-            if profiling_enabled {
+261-                lock.time_start = query_start.unwrap().read_blocked();
+262-                lock.time_end = query_end.unwrap().read_blocked();
+263-            }
+264:            self.set_status(lock, status);
+265-        }
+266-        status
+267-    }
+268-
+269:    fn deep_unflushed_deps_impl<'a>(&'a self, result: &mut HashSet<&'a Event>) {
+270-        if self.status() <= CL_SUBMITTED as i32 {
+271-            return;
+272-        }
+273-
+274-        // only scan dependencies if it's a new one
+275-        if result.insert(self) {
+276-            for e in &self.deps {
+277:                e.deep_unflushed_deps_impl(result);
+278-            }
+279-        }
+280-    }
+281-
+282-    /// does a deep search and returns a list of all dependencies including `events` which haven't
+283:    /// been flushed out yet
+284:    pub fn deep_unflushed_deps(events: &[Arc<Event>]) -> HashSet<&Event> {
+285-        let mut result = HashSet::new();
+286-
+287-        for e in events {
+288:            e.deep_unflushed_deps_impl(&mut result);
+289-        }
+290-
+291-        result
+292-    }
+293-
+294:    /// does a deep search and returns a list of all queues which haven't been flushed yet
+295:    pub fn deep_unflushed_queues(events: &[Arc<Event>]) -> HashSet<Arc<Queue>> {
+296:        Event::deep_unflushed_deps(events)
+297-            .iter()
+298-            .filter_map(|e| e.queue.as_ref())
+299:            // We don't have to do anything for destroyed queues as they already flush on drop.
+300-            .filter_map(Weak::upgrade)
+301-            .collect()
+302-    }
+303-}
+304-
+305-impl Drop for Event {
+306-    // implement drop in order to prevent stack overflows of long dependency chains.
+307-    //
+308-    // This abuses the fact that `Arc::into_inner` only succeeds when there is one strong reference
+309-    // so we turn a recursive drop chain into a drop list for events having no other references.
+310-    fn drop(&mut self) {
+311-        if self.deps.is_empty() {
+312-            return;
+313-        }
+314-
+315-        let mut deps_list = vec![mem::take(&mut self.deps)];
+316-        while let Some(deps) = deps_list.pop() {
+317-            for dep in deps {
+318-                if let Some(mut dep) = Arc::into_inner(dep) {
+319-                    deps_list.push(mem::take(&mut dep.deps));
+320-                }
+321-            }
+322-        }
+323-    }
+324-}
+325-
+326-// TODO worker thread per device
+327-// Condvar to wait on new events to work on
+328:// notify condvar when flushing queue events to worker
+329:// attach fence to flushed events on context->flush
+330-// store "newest" event for in-order queues per queue
+331-// reordering/graph building done in worker

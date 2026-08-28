@@ -19,3 +19,12 @@ probes/source_smoke
 /probes/dynamic_local_probe
 /probes/dynamic_local_boundary_probe
 /probes/dynamic_local_byte_boundary_probe
+
+# Generated probe binaries
+/probes/*
+
+# Generated review bundles
+/review-bundles/
+
+# Local Mesa/vendor builds
+/vendor-src/

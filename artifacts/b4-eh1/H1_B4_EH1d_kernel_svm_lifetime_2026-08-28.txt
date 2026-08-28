@@ -1,0 +1,956 @@
+
+============================================================
+MESA 26.0.3
+============================================================
+
+=== KernelArgValue definition ===
+29-use std::collections::HashSet;
+30-use std::convert::TryInto;
+31-use std::ffi::CStr;
+32-use std::fmt::Debug;
+33-use std::fmt::Display;
+34-use std::ops::Index;
+35-use std::ops::Not;
+36-use std::os::raw::c_void;
+37-use std::ptr;
+38-use std::slice;
+39-use std::sync::Arc;
+40-use std::sync::OnceLock;
+41-use std::sync::Weak;
+42-
+43-// According to the CL spec we are not allowed to let any cl_kernel object hold any references on
+44-// its arguments as this might make it unfeasible for applications to free the backing memory of
+45-// memory objects allocated with `CL_USE_HOST_PTR`.
+46-//
+47-// However those arguments might temporarily get referenced by event objects, so we'll use Weak in
+48-// order to upgrade the reference when needed. It's also safer to use Weak over raw pointers,
+49-// because it makes it impossible to run into use-after-free issues.
+50-//
+51-// Technically we also need to do it for samplers, but there it's kinda pointless to take a weak
+52-// reference as samplers don't have the same host_ptr or any similar problems as cl_mem objects.
+53-#[derive(Clone)]
+54:pub enum KernelArgValue {
+55-    None,
+56-    /// cl_ext_buffer_device_address
+57-    BDA(u64),
+58-    SVM(usize),
+59-    Buffer(Weak<Buffer>),
+60-    Constant(Vec<u8>),
+61-    Image(Weak<Image>),
+62-    LocalMem(usize),
+63-    Sampler(Arc<Sampler>),
+64-}
+65-
+66-#[repr(u8)]
+67-#[derive(Hash, PartialEq, Eq, Clone, Copy)]
+68-pub enum KernelArgType {
+69-    Constant(/* size */ u16), // for anything passed by value
+70-    Image,
+71-    RWImage,
+72-    Sampler,
+73-    Texture,
+74-    MemGlobal,
+75-    MemConstant,
+76-    MemLocal,
+77-}
+78-
+79-impl KernelArgType {
+
+=== KernelArgValue::SVM uses ===
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-500-    } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-501-        Err(CL_INVALID_ARG_INDEX)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-502-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-503-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-504-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-505-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-506-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-507-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-508-#[cl_entrypoint(clSetKernelArgSVMPointer)]
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-509-fn set_kernel_arg_svm_pointer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-510-    kernel: cl_kernel,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-511-    arg_index: cl_uint,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-512-    arg_value: *const ::std::os::raw::c_void,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-513-) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-514-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-515-    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-516-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-517-    // may require callers to pass either null or a valid CL object, satisfying
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-518-    // validity constraints.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-519-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-520-    let arg_index = arg_index as usize;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-521-    let arg_value = arg_value as usize;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-522-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-523-    if !kernel.has_svm_devs() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-524-        return Err(CL_INVALID_OPERATION);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-525-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-526-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-527-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-528-        if !matches!(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-529-            arg.kind,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-530-            KernelArgType::MemConstant | KernelArgType::MemGlobal
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-531-        ) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-532-            return Err(CL_INVALID_ARG_INDEX);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-533-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-534-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs:535:        let arg_value = KernelArgValue::SVM(arg_value);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-536-        kernel.set_kernel_arg(arg_index, arg_value)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-537-    } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-538-        Err(CL_INVALID_ARG_INDEX)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-539-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-540-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-541-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-542-}
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-543-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-544-#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-545-fn set_kernel_arg_device_pointer(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-546-    kernel: cl_kernel,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-547-    arg_index: cl_uint,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-548-    arg_value: cl_mem_device_address_ext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-549-) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-550-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-551-    // objects are not thread-safe...", so no other threads must hold a
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-552-    // reference to this `cl_kernel`. Additionally, we may require callers to
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-553-    // pass either null or a valid CL object, satisfying validity constraints.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-554-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-555-    let arg_index = arg_index as usize;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-556-    let devs = &kernel.prog.context.devs;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-557-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-558-    // CL_INVALID_OPERATION if no devices in the context associated with kernel support the device
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-559-    // pointer.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-560-    if devs.iter().any(|dev| !dev.bda_supported()) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-561-        return Err(CL_INVALID_OPERATION);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-562-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-563-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-564-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-565-    let Some(arg) = kernel.kernel_info.args.get(arg_index) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-566-        return Err(CL_INVALID_ARG_INDEX);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-567-    };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-568-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-569-    // The device pointer can only be used for arguments that are declared to be a pointer to global
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/api/kernel.rs-570-    // memory allocated with clCreateBufferWithProperties with the CL_MEM_DEVICE_PRIVATE_ADDRESS_EXT
+--
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1638-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1639-                        match value {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1640-                            KernelArgValue::Constant(c) => exec_builder.add_values(c),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1641-                            KernelArgValue::BDA(address) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1642-                                bdas.push(*address);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1643-                                if !api_arg.dead {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1644-                                    exec_builder.add_pointer(*address);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1645-                                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1646-                            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1647-                            KernelArgValue::Buffer(buffer) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1648-                                let buffer = &buffer_arcs[&(buffer.as_ptr() as usize)];
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1649-                                let rw = if api_arg.spirv.address_qualifier
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1650-                                    == clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_CONSTANT
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1651-                                {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1652-                                    RWFlags::RD
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1653-                                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1654-                                    RWFlags::RW
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1655-                                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1656-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1657-                                // if the argument is dead, based on what kind of memory it is, we
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1658-                                // might need to migrate and make it available to the invocation
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1659-                                // regardless.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1660-                                if api_arg.dead {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1661-                                    if let Some(address) = buffer.dev_address(ctx.dev) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1662-                                        let _ = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1663-                                        bdas.push(address.get());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1664-                                    } else if buffer.is_svm() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1665-                                        let _ = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1666-                                        svms.insert(buffer.host_ptr() as usize);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1667-                                    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1668-                                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1669-                                    let res = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1670-                                    exec_builder.add_global(res, buffer.offset());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1671-                                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1672-                            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs:1673:                            &KernelArgValue::SVM(handle) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1674-                                // get the base address so we deduplicate properly
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1675-                                if let Some((base, _)) = cl_ctx.find_svm_alloc(handle) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1676-                                    svms.insert(base as usize);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1677-                                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1678-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1679-                                if !api_arg.dead {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1680-                                    exec_builder.add_pointer(handle as u64);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1681-                                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1682-                            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1683-                            KernelArgValue::Image(image) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1684-                                let image = &image_arcs[&(image.as_ptr() as usize)];
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1685-                                let (formats, orders) = if api_arg.kind == KernelArgType::Image {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1686-                                    iviews.push(image.image_view(ctx, false)?);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1687-                                    (&mut img_formats, &mut img_orders)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1688-                                } else if api_arg.kind == KernelArgType::RWImage {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1689-                                    iviews.push(image.image_view(ctx, true)?);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1690-                                    (&mut img_formats, &mut img_orders)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1691-                                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1692-                                    sviews.push(image.sampler_view(ctx.ctx)?);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1693-                                    (&mut tex_formats, &mut tex_orders)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1694-                                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1695-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1696-                                assert!(arg.offset >= formats.len());
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1697-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1698-                                formats.resize(arg.offset, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1699-                                orders.resize(arg.offset, 0);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1700-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1701-                                formats.push(image.image_format.image_channel_data_type as u16);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1702-                                orders.push(image.image_format.image_channel_order as u16);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1703-                            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1704-                            KernelArgValue::LocalMem(size) => {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1705-                                // TODO 32 bit
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1706-                                let pot = cmp::min(*size, 0x80);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1707-                                variable_local_size = variable_local_size
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/kernel.rs-1708-                                    .next_multiple_of(pot.next_power_of_two() as u64);
+
+=== get_svm_alloc uses ===
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-528-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-529-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-530-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-531-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-532-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-533-    pub fn migrate_svm(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-534-        &self,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-535-        ctx: &QueueContext,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-536-        pointers: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-537-        sizes: Vec<usize>,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-538-        to_device: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-539-        content_undefined: bool,
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-540-    ) -> CLResult<()> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-541-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-542-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-543-        if ctx.dev.system_svm_supported() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-544-            ctx.svm_migrate(&pointers, &sizes, to_device, content_undefined);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-545-        } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-546-            for ptr in pointers {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-547-                let Some((_, alloc)) = svm.svm_ptrs.find_alloc(ptr) else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-548-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-549-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-550-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-551-                // we assume it's only read, so it remains valid on the host until future commands
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-552-                // have different needs.
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-553-                if to_device {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-554-                    alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-555-                } else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-556-                    alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-557-                }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-558-            }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-559-        }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-560-        Ok(())
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-561-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-562-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs:563:    pub fn get_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, Arc<Allocation>)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-564-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-565-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-566-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-567-            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-568-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-569-            .map(|(base, alloc)| (base as *mut c_void, Arc::clone(&alloc.alloc)))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-570-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-571-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-572-    pub fn find_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, usize)> {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-573-        self.svm
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-574-            .lock()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-575-            .unwrap()
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-576-            .svm_ptrs
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-577-            .find_alloc(ptr)
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-578-            .map(|(ptr, alloc)| (ptr as _, alloc.size()))
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-579-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-580-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-581-    pub fn remove_svm_ptr(&self, ptr: usize) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-582-        self.svm.lock().unwrap().svm_ptrs.remove(ptr);
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-583-    }
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-584-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-585-    pub fn add_bda_ptr(&self, buffer: &Arc<Buffer>) {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-586-        if let Some(iter) = buffer.dev_addresses() {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-587-            let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-588-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-589-            for (dev, address) in iter {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-590-                let Some(address) = address else {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-591-                    continue;
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-592-                };
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-593-
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-594-                bda_ptrs.entry(dev).or_default().insert(
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-595-                    address.get(),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-596-                    TrackedBDAAlloc {
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-597-                        buffer: Arc::downgrade(buffer),
+vendor-src/mesa-26.0.3/src/gallium/frontends/rusticl/core/context.rs-598-                        size: buffer.size as _,
+
+=== clSetKernelArgSVMPointer body ===
+473-                    || arg.kind == KernelArgType::Image
+474-                        && bit_check(img.flags, CL_MEM_READ_ONLY | CL_MEM_IMMUTABLE_EXT)
+475-                    || arg.kind == KernelArgType::RWImage
+476-                        && bit_check(img.flags, CL_MEM_IMMUTABLE_EXT)
+477-                {
+478-                    return Err(CL_INVALID_ARG_VALUE);
+479-                }
+480-
+481-                KernelArgValue::Image(Arc::downgrade(&img))
+482-            }
+483-            KernelArgType::Sampler if !arg.dead => {
+484-                let ptr: *const cl_sampler = arg_value.cast();
+485-                // SAFETY: for a sampler arg arg_value points to a cl_sampler object.
+486-                KernelArgValue::Sampler(Sampler::arc_from_raw(unsafe { *ptr })?)
+487-            }
+488-            _ => {
+489-                debug_assert!(
+490-                    arg.dead
+491-                        || matches!(
+492-                            arg.kind,
+493-                            KernelArgType::MemConstant | KernelArgType::MemGlobal
+494-                        )
+495-                );
+496-                KernelArgValue::None
+497-            }
+498-        };
+499-        k.set_kernel_arg(arg_index, arg)
+500-    } else {
+501-        Err(CL_INVALID_ARG_INDEX)
+502-    }
+503-
+504-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
+505-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
+506-}
+507-
+508:#[cl_entrypoint(clSetKernelArgSVMPointer)]
+509-fn set_kernel_arg_svm_pointer(
+510-    kernel: cl_kernel,
+511-    arg_index: cl_uint,
+512-    arg_value: *const ::std::os::raw::c_void,
+513-) -> CLResult<()> {
+514-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+515:    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
+516-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
+517-    // may require callers to pass either null or a valid CL object, satisfying
+518-    // validity constraints.
+519-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+520-    let arg_index = arg_index as usize;
+521-    let arg_value = arg_value as usize;
+522-
+523-    if !kernel.has_svm_devs() {
+524-        return Err(CL_INVALID_OPERATION);
+525-    }
+526-
+527-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
+528-        if !matches!(
+529-            arg.kind,
+530-            KernelArgType::MemConstant | KernelArgType::MemGlobal
+531-        ) {
+532-            return Err(CL_INVALID_ARG_INDEX);
+533-        }
+534-
+535-        let arg_value = KernelArgValue::SVM(arg_value);
+536-        kernel.set_kernel_arg(arg_index, arg_value)
+537-    } else {
+538-        Err(CL_INVALID_ARG_INDEX)
+539-    }
+540-
+541-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+542-}
+543-
+544-#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
+545-fn set_kernel_arg_device_pointer(
+546-    kernel: cl_kernel,
+547-    arg_index: cl_uint,
+548-    arg_value: cl_mem_device_address_ext,
+549-) -> CLResult<()> {
+550-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+
+=== Kernel enqueue closure ===
+744-        // CL_DEVICE_MAX_WORK_ITEM_SIZES[0], …, CL_DEVICE_MAX_WORK_ITEM_SIZES[work_dim - 1].
+745-        if lws > q.device.max_block_sizes()[i] {
+746-            return Err(CL_INVALID_WORK_ITEM_SIZE);
+747-        }
+748-
+749-        // CL_INVALID_WORK_GROUP_SIZE if the work-group size must be uniform and the
+750-        // local_work_size is not NULL, [...] if the global_work_size is not evenly divisible by
+751-        // the local_work_size.
+752-        if lws != 0 && gws % lws != 0 {
+753-            return Err(CL_INVALID_WORK_GROUP_SIZE);
+754-        }
+755-
+756-        // CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and does not match the
+757-        // required work-group size for kernel in the program source.
+758-        if lws != 0 && k.work_group_size()[i] != 0 && lws != k.work_group_size()[i] {
+759-            return Err(CL_INVALID_WORK_GROUP_SIZE);
+760-        }
+761-
+762-        // CL_INVALID_GLOBAL_WORK_SIZE if any of the values specified in global_work_size[0], …
+763-        // global_work_size[work_dim - 1] exceed the maximum value representable by size_t on
+764-        // the device on which the kernel-instance will be enqueued.
+765-        if gws as u64 > device_max {
+766-            return Err(CL_INVALID_GLOBAL_WORK_SIZE);
+767-        }
+768-
+769-        // CL_INVALID_GLOBAL_OFFSET if the value specified in global_work_size + the
+770-        // corresponding values in global_work_offset for any dimensions is greater than the
+771-        // maximum value representable by size t on the device on which the kernel-instance
+772-        // will be enqueued
+773-        if u64::checked_add(gws as u64, gwo as u64)
+774-            .filter(|&x| x <= device_max)
+775-            .is_none()
+776-        {
+777-            return Err(CL_INVALID_GLOBAL_OFFSET);
+778-        }
+779-    }
+780-
+781-    // CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and the total number of work-items
+782-    // in the work-group computed as local_work_size[0] × … local_work_size[work_dim - 1] is greater
+783-    // than the value specified by CL_KERNEL_WORK_GROUP_SIZE in the Kernel Object Device Queries
+784-    // table.
+785-    if threads != 0 && threads > k.max_threads_per_block(q.device) {
+786-        return Err(CL_INVALID_WORK_GROUP_SIZE);
+787-    }
+788-
+789-    // If global_work_size is NULL, or the value in any passed dimension is 0 then the kernel
+790-    // command will trivially succeed after its event dependencies are satisfied and subsequently
+791-    // update its completion event.
+792-    let cb: EventSig = if global_work_size.contains(&0) {
+793-        Box::new(|_, _| Ok(()))
+794-    } else {
+795-        k.launch(
+796-            &q,
+797-            work_dim,
+798-            local_work_size,
+799-            global_work_size,
+800-            global_work_offset,
+801-        )?
+802-    };
+803-
+804:    create_and_queue(q, CL_COMMAND_NDRANGE_KERNEL, evs, event, false, cb)
+805-
+806-    //• CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and is not consistent with the required number of sub-groups for kernel in the program source.
+807-    //• CL_MISALIGNED_SUB_BUFFER_OFFSET if a sub-buffer object is specified as the value for an argument that is a buffer object and the offset specified when the sub-buffer object is created is not aligned to CL_DEVICE_MEM_BASE_ADDR_ALIGN value for device associated with queue. This error code
+808-    //• CL_INVALID_IMAGE_SIZE if an image object is specified as an argument value and the image dimensions (image width, height, specified or compute row and/or slice pitch) are not supported by device associated with queue.
+809-    //• CL_IMAGE_FORMAT_NOT_SUPPORTED if an image object is specified as an argument value and the image format (image channel order and data type) is not supported by device associated with queue.
+810-    //• CL_OUT_OF_RESOURCES if there is a failure to queue the execution instance of kernel on the command-queue because of insufficient resources needed to execute the kernel. For example, the explicitly specified local_work_size causes a failure to execute the kernel because of insufficient resources such as registers or local memory. Another example would be the number of read-only image args used in kernel exceed the CL_DEVICE_MAX_READ_IMAGE_ARGS value for device or the number of write-only and read-write image args used in kernel exceed the CL_DEVICE_MAX_READ_WRITE_IMAGE_ARGS value for device or the number of samplers used in kernel exceed CL_DEVICE_MAX_SAMPLERS for device.
+811-    //• CL_MEM_OBJECT_ALLOCATION_FAILURE if there is a failure to allocate memory for data store associated with image or buffer objects specified as arguments to kernel.
+812-    //• CL_INVALID_OPERATION if SVM pointers are passed as arguments to a kernel and the device does not support SVM or if system pointers are passed as arguments to a kernel and/or stored inside SVM allocations passed as kernel arguments and the device does not support fine grain system SVM allocations.
+813-}
+814-
+815-#[cl_entrypoint(clEnqueueTask)]
+816-fn enqueue_task(
+817-    command_queue: cl_command_queue,
+818-    kernel: cl_kernel,
+819-    num_events_in_wait_list: cl_uint,
+820-    event_wait_list: *const cl_event,
+821-    event: *mut cl_event,
+822-) -> CLResult<()> {
+823-    // clEnqueueTask is equivalent to calling clEnqueueNDRangeKernel with work_dim set to 1,
+824-    // global_work_offset set to NULL, global_work_size[0] set to 1, and local_work_size[0] set to
+825-    // 1.
+826-    enqueue_ndrange_kernel(
+827-        command_queue,
+828-        kernel,
+829-        1,
+830-        ptr::null(),
+831-        [1, 1, 1].as_ptr(),
+832-        [1, 0, 0].as_ptr(),
+833-        num_events_in_wait_list,
+834-        event_wait_list,
+835-        event,
+836-    )
+837-}
+838-
+839-#[cl_entrypoint(clCloneKernel)]
+840-fn clone_kernel(source_kernel: cl_kernel) -> CLResult<cl_kernel> {
+841-    let k = Kernel::ref_from_raw(source_kernel)?;
+842-    Ok(Arc::new(k.clone()).into_cl())
+843-}
+844-
+845-#[cl_entrypoint(clGetKernelSuggestedLocalWorkSizeKHR)]
+846-fn get_kernel_suggested_local_work_size_khr(
+847-    command_queue: cl_command_queue,
+848-    kernel: cl_kernel,
+849-    work_dim: cl_uint,
+850-    global_work_offset: *const usize,
+851-    global_work_size: *const usize,
+852-    suggested_local_work_size: *mut usize,
+853-) -> CLResult<()> {
+854-    // CL_INVALID_GLOBAL_WORK_SIZE if global_work_size is NULL or if any of the values specified in
+855-    // global_work_size are 0.
+856-    if global_work_size.is_null() {
+857-        return Err(CL_INVALID_GLOBAL_WORK_SIZE);
+858-    }
+859-
+860-    // CL_INVALID_VALUE if suggested_local_work_size is NULL.
+861-    if suggested_local_work_size.is_null() {
+862-        return Err(CL_INVALID_VALUE);
+863-    }
+864-
+
+============================================================
+MESA 26.2.0
+============================================================
+
+=== KernelArgValue definition ===
+30-use std::convert::TryInto;
+31-use std::ffi::CStr;
+32-use std::ffi::CString;
+33-use std::fmt::Debug;
+34-use std::fmt::Display;
+35-use std::ops::Index;
+36-use std::ops::Not;
+37-use std::os::raw::c_void;
+38-use std::ptr;
+39-use std::slice;
+40-use std::sync::Arc;
+41-use std::sync::OnceLock;
+42-use std::sync::Weak;
+43-
+44-// According to the CL spec we are not allowed to let any cl_kernel object hold any references on
+45-// its arguments as this might make it unfeasible for applications to free the backing memory of
+46-// memory objects allocated with `CL_USE_HOST_PTR`.
+47-//
+48-// However those arguments might temporarily get referenced by event objects, so we'll use Weak in
+49-// order to upgrade the reference when needed. It's also safer to use Weak over raw pointers,
+50-// because it makes it impossible to run into use-after-free issues.
+51-//
+52-// Technically we also need to do it for samplers, but there it's kinda pointless to take a weak
+53-// reference as samplers don't have the same host_ptr or any similar problems as cl_mem objects.
+54-#[derive(Clone)]
+55:pub enum KernelArgValue {
+56-    None,
+57-    /// cl_ext_buffer_device_address
+58-    BDA(u64),
+59-    SVM(usize),
+60-    Buffer {
+61-        buffer: Weak<Buffer>,
+62-        offset: usize,
+63-    },
+64-    Constant(Vec<u8>),
+65-    Image(Weak<Image>),
+66-    LocalMem(usize),
+67-    Sampler(Arc<Sampler>),
+68-}
+69-
+70-#[repr(u8)]
+71-#[derive(Hash, PartialEq, Eq, Clone, Copy)]
+72-pub enum KernelArgType {
+73-    Constant(/* size */ u16), // for anything passed by value
+74-    Image,
+75-    RWImage,
+76-    Sampler,
+77-    Texture,
+78-    MemGlobal,
+79-    MemConstant,
+80-    MemLocal,
+
+=== KernelArgValue::SVM uses ===
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-510-    } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-511-        Err(CL_INVALID_ARG_INDEX)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-512-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-513-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-514-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-515-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-516-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-517-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-518-#[cl_entrypoint(clSetKernelArgSVMPointer)]
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-519-fn set_kernel_arg_svm_pointer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-520-    kernel: cl_kernel,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-521-    arg_index: cl_uint,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-522-    arg_value: *const ::std::os::raw::c_void,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-523-) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-524-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-525-    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-526-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-527-    // may require callers to pass either null or a valid CL object, satisfying
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-528-    // validity constraints.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-529-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-530-    let arg_index = arg_index as usize;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-531-    let arg_value = arg_value as usize;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-532-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-533-    if !kernel.has_svm_devs() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-534-        return Err(CL_INVALID_OPERATION);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-535-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-536-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-537-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-538-        if !matches!(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-539-            arg.kind,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-540-            KernelArgType::MemConstant | KernelArgType::MemGlobal
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-541-        ) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-542-            return Err(CL_INVALID_ARG_INDEX);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-543-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-544-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs:545:        let arg_value = KernelArgValue::SVM(arg_value);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-546-        kernel.set_kernel_arg(arg_index, arg_value)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-547-    } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-548-        Err(CL_INVALID_ARG_INDEX)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-549-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-550-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-551-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-552-}
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-553-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-554-#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-555-fn set_kernel_arg_device_pointer(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-556-    kernel: cl_kernel,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-557-    arg_index: cl_uint,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-558-    arg_value: cl_mem_device_address_ext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-559-) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-560-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-561-    // objects are not thread-safe...", so no other threads must hold a
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-562-    // reference to this `cl_kernel`. Additionally, we may require callers to
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-563-    // pass either null or a valid CL object, satisfying validity constraints.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-564-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-565-    let arg_index = arg_index as usize;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-566-    let devs = &kernel.prog.context.devs;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-567-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-568-    // CL_INVALID_OPERATION if no devices in the context associated with kernel support the device
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-569-    // pointer.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-570-    if devs.iter().any(|dev| !dev.bda_supported()) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-571-        return Err(CL_INVALID_OPERATION);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-572-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-573-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-574-    // CL_INVALID_ARG_INDEX if arg_index is not a valid argument index.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-575-    let Some(arg) = kernel.kernel_info.args.get(arg_index) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-576-        return Err(CL_INVALID_ARG_INDEX);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-577-    };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-578-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-579-    // The device pointer can only be used for arguments that are declared to be a pointer to global
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/api/kernel.rs-580-    // memory allocated with clCreateBufferWithProperties with the CL_MEM_DEVICE_PRIVATE_ADDRESS_EXT
+--
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1810-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1811-                        match value {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1812-                            KernelArgValue::Constant(c) => exec_builder.add_values(c),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1813-                            KernelArgValue::BDA(address) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1814-                                bdas.push(*address);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1815-                                if !api_arg.dead {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1816-                                    exec_builder.add_pointer(*address);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1817-                                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1818-                            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1819-                            KernelArgValue::Buffer { buffer, offset } => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1820-                                let buffer = &buffer_arcs[&(buffer.as_ptr() as usize)];
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1821-                                let rw = if api_arg.spirv.address_qualifier
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1822-                                    == clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_CONSTANT
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1823-                                {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1824-                                    RWFlags::RD
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1825-                                } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1826-                                    RWFlags::RW
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1827-                                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1828-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1829-                                // if the argument is dead, based on what kind of memory it is, we
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1830-                                // might need to migrate and make it available to the invocation
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1831-                                // regardless.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1832-                                if api_arg.dead {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1833-                                    if let Some(address) = buffer.dev_address(ctx.dev) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1834-                                        let _ = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1835-                                        bdas.push(address.get());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1836-                                    } else if buffer.is_svm() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1837-                                        let _ = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1838-                                        svms.insert(buffer.host_ptr() as usize);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1839-                                    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1840-                                } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1841-                                    let res = buffer.get_res_for_access(ctx, rw)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1842-                                    exec_builder.add_global(res, buffer.offset() + offset);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1843-                                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1844-                            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs:1845:                            &KernelArgValue::SVM(handle) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1846-                                // get the base address so we deduplicate properly
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1847-                                if let Some((base, _)) = cl_ctx.find_svm_alloc(handle) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1848-                                    svms.insert(base as usize);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1849-                                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1850-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1851-                                if !api_arg.dead {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1852-                                    exec_builder.add_pointer(handle as u64);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1853-                                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1854-                            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1855-                            KernelArgValue::Image(image) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1856-                                let image = &image_arcs[&(image.as_ptr() as usize)];
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1857-                                let (formats, orders) = if api_arg.kind == KernelArgType::Image {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1858-                                    iviews.push(image.image_view(ctx, false)?);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1859-                                    (&mut img_formats, &mut img_orders)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1860-                                } else if api_arg.kind == KernelArgType::RWImage {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1861-                                    iviews.push(image.image_view(ctx, true)?);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1862-                                    (&mut img_formats, &mut img_orders)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1863-                                } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1864-                                    sviews.push(image.sampler_view(ctx.ctx)?);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1865-                                    (&mut tex_formats, &mut tex_orders)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1866-                                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1867-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1868-                                assert!(arg.offset >= formats.len());
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1869-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1870-                                formats.resize(arg.offset, 0);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1871-                                orders.resize(arg.offset, 0);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1872-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1873-                                formats.push(image.image_format.image_channel_data_type as u16);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1874-                                orders.push(image.image_format.image_channel_order as u16);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1875-                            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1876-                            KernelArgValue::LocalMem(size) => {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1877-                                // TODO 32 bit
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1878-                                let pot = cmp::min(*size, 0x80);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1879-                                variable_local_size = variable_local_size
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/kernel.rs-1880-                                    .next_multiple_of(pot.next_power_of_two() as u64);
+
+=== get_svm_alloc uses ===
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-538-                Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-539-            }))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-540-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-541-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-542-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-543-    pub fn migrate_svm(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-544-        &self,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-545-        ctx: &QueueContext,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-546-        pointers: Vec<usize>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-547-        sizes: Vec<usize>,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-548-        to_device: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-549-        content_undefined: bool,
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-550-    ) -> CLResult<()> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-551-        let svm = self.svm.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-552-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-553-        if ctx.dev.system_svm_supported() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-554-            ctx.svm_migrate(&pointers, &sizes, to_device, content_undefined);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-555-        } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-556-            for ptr in pointers {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-557-                let Some((_, alloc)) = svm.svm_ptrs.find_alloc(ptr) else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-558-                    continue;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-559-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-560-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-561-                // we assume it's only read, so it remains valid on the host until future commands
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-562-                // have different needs.
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-563-                if to_device {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-564-                    alloc.alloc.get_res_for_access(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-565-                } else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-566-                    alloc.alloc.migrate_to_hostptr(ctx, RWFlags::RD)?;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-567-                }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-568-            }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-569-        }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-570-        Ok(())
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-571-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-572-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs:573:    pub fn get_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, Arc<Allocation>)> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-574-        self.svm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-575-            .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-576-            .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-577-            .svm_ptrs
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-578-            .find_alloc(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-579-            .map(|(base, alloc)| (base as *mut c_void, Arc::clone(&alloc.alloc)))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-580-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-581-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-582-    pub fn find_svm_alloc(&self, ptr: usize) -> Option<(*mut c_void, usize)> {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-583-        self.svm
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-584-            .lock()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-585-            .unwrap()
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-586-            .svm_ptrs
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-587-            .find_alloc(ptr)
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-588-            .map(|(ptr, alloc)| (ptr as _, alloc.size()))
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-589-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-590-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-591-    pub fn remove_svm_ptr(&self, ptr: usize) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-592-        self.svm.lock().unwrap().svm_ptrs.remove(ptr);
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-593-    }
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-594-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-595-    pub fn add_bda_ptr(&self, buffer: &Arc<Buffer>) {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-596-        if let Some(iter) = buffer.dev_addresses() {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-597-            let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-598-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-599-            for (dev, address) in iter {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-600-                let Some(address) = address else {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-601-                    continue;
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-602-                };
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-603-
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-604-                bda_ptrs.entry(dev).or_default().insert(
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-605-                    address.get(),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-606-                    TrackedBDAAlloc {
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-607-                        buffer: Arc::downgrade(buffer),
+vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/context.rs-608-                        size: buffer.size as _,
+
+=== clSetKernelArgSVMPointer body ===
+483-                    || arg.kind == KernelArgType::Image
+484-                        && bit_check(img.flags, CL_MEM_READ_ONLY | CL_MEM_IMMUTABLE_EXT)
+485-                    || arg.kind == KernelArgType::RWImage
+486-                        && bit_check(img.flags, CL_MEM_IMMUTABLE_EXT)
+487-                {
+488-                    return Err(CL_INVALID_ARG_VALUE);
+489-                }
+490-
+491-                KernelArgValue::Image(Arc::downgrade(&img))
+492-            }
+493-            KernelArgType::Sampler if !arg.dead => {
+494-                let ptr: *const cl_sampler = arg_value.cast();
+495-                // SAFETY: for a sampler arg arg_value points to a cl_sampler object.
+496-                KernelArgValue::Sampler(Sampler::arc_from_raw(unsafe { *ptr })?)
+497-            }
+498-            _ => {
+499-                debug_assert!(
+500-                    arg.dead
+501-                        || matches!(
+502-                            arg.kind,
+503-                            KernelArgType::MemConstant | KernelArgType::MemGlobal
+504-                        )
+505-                );
+506-                KernelArgValue::None
+507-            }
+508-        };
+509-        k.set_kernel_arg(arg_index, arg)
+510-    } else {
+511-        Err(CL_INVALID_ARG_INDEX)
+512-    }
+513-
+514-    //• CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t when the specified arg_value is not a valid device queue object. This error code is missing before version 2.0.
+515-    //• CL_MAX_SIZE_RESTRICTION_EXCEEDED if the size in bytes of the memory object (if the argument is a memory object) or arg_size (if the argument is declared with local qualifier) exceeds a language- specified maximum size restriction for this argument, such as the MaxByteOffset SPIR-V decoration. This error code is missing before version 2.2.
+516-}
+517-
+518:#[cl_entrypoint(clSetKernelArgSVMPointer)]
+519-fn set_kernel_arg_svm_pointer(
+520-    kernel: cl_kernel,
+521-    arg_index: cl_uint,
+522-    arg_value: *const ::std::os::raw::c_void,
+523-) -> CLResult<()> {
+524-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+525:    // objects are not thread-safe: ..., clSetKernelArgSVMPointer, ...", so no
+526-    // other threads must hold a reference to this `cl_kernel`. Additionally, we
+527-    // may require callers to pass either null or a valid CL object, satisfying
+528-    // validity constraints.
+529-    let kernel = unsafe { Kernel::mut_ref_from_raw(kernel) }?;
+530-    let arg_index = arg_index as usize;
+531-    let arg_value = arg_value as usize;
+532-
+533-    if !kernel.has_svm_devs() {
+534-        return Err(CL_INVALID_OPERATION);
+535-    }
+536-
+537-    if let Some(arg) = kernel.kernel_info.args.get(arg_index) {
+538-        if !matches!(
+539-            arg.kind,
+540-            KernelArgType::MemConstant | KernelArgType::MemGlobal
+541-        ) {
+542-            return Err(CL_INVALID_ARG_INDEX);
+543-        }
+544-
+545-        let arg_value = KernelArgValue::SVM(arg_value);
+546-        kernel.set_kernel_arg(arg_index, arg_value)
+547-    } else {
+548-        Err(CL_INVALID_ARG_INDEX)
+549-    }
+550-
+551-    // CL_INVALID_ARG_VALUE if arg_value specified is not a valid value.
+552-}
+553-
+554-#[cl_entrypoint(clSetKernelArgDevicePointerEXT)]
+555-fn set_kernel_arg_device_pointer(
+556-    kernel: cl_kernel,
+557-    arg_index: cl_uint,
+558-    arg_value: cl_mem_device_address_ext,
+559-) -> CLResult<()> {
+560-    // SAFETY: Per spec, "OpenCL calls that modify the state of `cl_kernel`
+
+=== Kernel enqueue closure ===
+758-        // CL_DEVICE_MAX_WORK_ITEM_SIZES[0], …, CL_DEVICE_MAX_WORK_ITEM_SIZES[work_dim - 1].
+759-        if lws > q.device.max_block_sizes()[i] {
+760-            return Err(CL_INVALID_WORK_ITEM_SIZE);
+761-        }
+762-
+763-        // CL_INVALID_WORK_GROUP_SIZE if the work-group size must be uniform and the
+764-        // local_work_size is not NULL, [...] if the global_work_size is not evenly divisible by
+765-        // the local_work_size.
+766-        if lws != 0 && gws % lws != 0 {
+767-            return Err(CL_INVALID_WORK_GROUP_SIZE);
+768-        }
+769-
+770-        // CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and does not match the
+771-        // required work-group size for kernel in the program source.
+772-        if lws != 0 && k.work_group_size()[i] != 0 && lws != k.work_group_size()[i] {
+773-            return Err(CL_INVALID_WORK_GROUP_SIZE);
+774-        }
+775-
+776-        // CL_INVALID_GLOBAL_WORK_SIZE if any of the values specified in global_work_size[0], …
+777-        // global_work_size[work_dim - 1] exceed the maximum value representable by size_t on
+778-        // the device on which the kernel-instance will be enqueued.
+779-        if gws as u64 > device_max {
+780-            return Err(CL_INVALID_GLOBAL_WORK_SIZE);
+781-        }
+782-
+783-        // CL_INVALID_GLOBAL_OFFSET if the value specified in global_work_size + the
+784-        // corresponding values in global_work_offset for any dimensions is greater than the
+785-        // maximum value representable by size t on the device on which the kernel-instance
+786-        // will be enqueued
+787-        if u64::checked_add(gws as u64, gwo as u64)
+788-            .filter(|&x| x <= device_max)
+789-            .is_none()
+790-        {
+791-            return Err(CL_INVALID_GLOBAL_OFFSET);
+792-        }
+793-    }
+794-
+795-    // CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and the total number of work-items
+796-    // in the work-group computed as local_work_size[0] × … local_work_size[work_dim - 1] is greater
+797-    // than the value specified by CL_KERNEL_WORK_GROUP_SIZE in the Kernel Object Device Queries
+798-    // table.
+799-    if threads != 0 && threads > k.max_threads_per_block(q.device) {
+800-        return Err(CL_INVALID_WORK_GROUP_SIZE);
+801-    }
+802-
+803-    // If global_work_size is NULL, or the value in any passed dimension is 0 then the kernel
+804-    // command will trivially succeed after its event dependencies are satisfied and subsequently
+805-    // update its completion event.
+806-    let cb: EventSig = if global_work_size.contains(&0) {
+807-        Box::new(|_, _| Ok(()))
+808-    } else {
+809-        k.launch(
+810-            q.device,
+811-            work_dim,
+812-            local_work_size,
+813-            global_work_size,
+814-            global_work_offset,
+815-        )?
+816-    };
+817-
+818:    create_and_queue(q, CL_COMMAND_NDRANGE_KERNEL, evs, event, false, cb)
+819-
+820-    //• CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and is not consistent with the required number of sub-groups for kernel in the program source.
+821-    //• CL_MISALIGNED_SUB_BUFFER_OFFSET if a sub-buffer object is specified as the value for an argument that is a buffer object and the offset specified when the sub-buffer object is created is not aligned to CL_DEVICE_MEM_BASE_ADDR_ALIGN value for device associated with queue. This error code
+822-    //• CL_INVALID_IMAGE_SIZE if an image object is specified as an argument value and the image dimensions (image width, height, specified or compute row and/or slice pitch) are not supported by device associated with queue.
+823-    //• CL_IMAGE_FORMAT_NOT_SUPPORTED if an image object is specified as an argument value and the image format (image channel order and data type) is not supported by device associated with queue.
+824-    //• CL_OUT_OF_RESOURCES if there is a failure to queue the execution instance of kernel on the command-queue because of insufficient resources needed to execute the kernel. For example, the explicitly specified local_work_size causes a failure to execute the kernel because of insufficient resources such as registers or local memory. Another example would be the number of read-only image args used in kernel exceed the CL_DEVICE_MAX_READ_IMAGE_ARGS value for device or the number of write-only and read-write image args used in kernel exceed the CL_DEVICE_MAX_READ_WRITE_IMAGE_ARGS value for device or the number of samplers used in kernel exceed CL_DEVICE_MAX_SAMPLERS for device.
+825-    //• CL_MEM_OBJECT_ALLOCATION_FAILURE if there is a failure to allocate memory for data store associated with image or buffer objects specified as arguments to kernel.
+826-    //• CL_INVALID_OPERATION if SVM pointers are passed as arguments to a kernel and the device does not support SVM or if system pointers are passed as arguments to a kernel and/or stored inside SVM allocations passed as kernel arguments and the device does not support fine grain system SVM allocations.
+827-}
+828-
+829-#[cl_entrypoint(clEnqueueTask)]
+830-fn enqueue_task(
+831-    command_queue: cl_command_queue,
+832-    kernel: cl_kernel,
+833-    num_events_in_wait_list: cl_uint,
+834-    event_wait_list: *const cl_event,
+835-    event: *mut cl_event,
+836-) -> CLResult<()> {
+837-    // clEnqueueTask is equivalent to calling clEnqueueNDRangeKernel with work_dim set to 1,
+838-    // global_work_offset set to NULL, global_work_size[0] set to 1, and local_work_size[0] set to
+839-    // 1.
+840-    enqueue_ndrange_kernel(
+841-        command_queue,
+842-        kernel,
+843-        1,
+844-        ptr::null(),
+845-        [1, 1, 1].as_ptr(),
+846-        [1, 0, 0].as_ptr(),
+847-        num_events_in_wait_list,
+848-        event_wait_list,
+849-        event,
+850-    )
+851-}
+852-
+853-#[cl_entrypoint(clCloneKernel)]
+854-fn clone_kernel(source_kernel: cl_kernel) -> CLResult<cl_kernel> {
+855-    let k = Kernel::ref_from_raw(source_kernel)?;
+856-    Ok(Arc::new(k.clone()).into_cl())
+857-}
+858-
+859-#[cl_entrypoint(clGetKernelSuggestedLocalWorkSize)]
+860-fn get_kernel_suggested_local_work_size(
+861-    command_queue: cl_command_queue,
+862-    kernel: cl_kernel,
+863-    work_dim: cl_uint,
+864-    global_work_offset: *const usize,
+865-    global_work_size: *const usize,
+866-    suggested_local_work_size: *mut usize,
+867-) -> CLResult<()> {
+868-    // CL_INVALID_GLOBAL_WORK_SIZE if global_work_size is NULL or if any of the values specified in
+869-    // global_work_size are 0.
+870-    if global_work_size.is_null() {
+871-        return Err(CL_INVALID_GLOBAL_WORK_SIZE);
+872-    }
+873-
+874-    // CL_INVALID_VALUE if suggested_local_work_size is NULL.
+875-    if suggested_local_work_size.is_null() {
+876-        return Err(CL_INVALID_VALUE);
+877-    }
+878-
