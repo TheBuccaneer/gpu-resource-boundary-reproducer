@@ -1,0 +1,11 @@
+aug 29 19:34:30 rock-21m5002age kernel: audit: type=1400 audit(1788024870.830:277): apparmor="DENIED" operation="open" class="file" profile="snap.firefox.firefox" name="/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/snap.firefox.firefox-7a54b5e4-22fc-4d62-a7c5-ff668f758294.scope/cpu.max" pid=5238 comm=57656220436F6E74656E74 requested_mask="r" denied_mask="r" fsuid=1000 ouid=1000
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State Completed
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] AMDGPU device coredump file has been created
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] Check your /sys/class/drm/card1/device/devcoredump/data
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.2.1 timeout, signaled seq=206, emitted seq=207
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0:  Process b3_multi_local_ pid 5272 thread b3_multi_l:cs0 pid 5273
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: Starting comp_1.2.1 ring reset
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: Ring comp_1.2.1 reset succeeded
+aug 29 19:34:33 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] device wedged, but recovered through reset
+aug 29 19:34:35 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] REG_WAIT timeout 1us * 100 tries - dcn31_program_compbuf_size line:142

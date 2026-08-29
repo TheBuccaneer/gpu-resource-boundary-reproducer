@@ -1,0 +1,42 @@
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State Completed
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] AMDGPU device coredump file has been created
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] Check your /sys/class/drm/card1/device/devcoredump/data
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.3.1 timeout, signaled seq=66, emitted seq=67
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0:  Process sec1_victim_hea pid 4832 thread sec1_victi:cs0 pid 4834
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: Starting comp_1.3.1 ring reset
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: Ring comp_1.3.1 reset failed
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset begin!. Source:  1
+aug 29 20:48:00 rock-21m5002age kernel: [drm] MST_DSC Send DSC disable to synaptics
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: MODE2 reset
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset succeeded, trying to resume
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] PCIE GART of 1024M enabled (table at 0x000000F43FC00000).
+aug 29 20:48:00 rock-21m5002age kernel: amdgpu 0000:04:00.0: PSP is resuming...
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: reserve 0xa00000 from 0xf43e000000 for PSP TMR
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: RAS: optional ras ta ucode is not available
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: RAP: optional rap ta ucode is not available
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: SECUREDISPLAY: optional securedisplay ta ucode is not available
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: SMU is resuming...
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: SMU is resumed successfully!
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: kiq ring mec 2 pipe 1 q 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] DMUB hardware initialized: version=0x0400004A
+aug 29 20:48:01 rock-21m5002age kernel: [drm] MST_DSC Send DSC enable to synaptics
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring gfx_0.0.0 uses VM inv eng 0 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring gfx_0.1.0 uses VM inv eng 1 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.0.0 uses VM inv eng 4 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.0 uses VM inv eng 5 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.2.0 uses VM inv eng 6 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.3.0 uses VM inv eng 7 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.0.1 uses VM inv eng 8 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.1 uses VM inv eng 9 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.2.1 uses VM inv eng 10 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.3.1 uses VM inv eng 11 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring kiq_0.2.1.0 uses VM inv eng 12 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring sdma0 uses VM inv eng 13 on hub 0
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_dec_0 uses VM inv eng 0 on hub 8
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_enc_0.0 uses VM inv eng 1 on hub 8
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_enc_0.1 uses VM inv eng 4 on hub 8
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring jpeg_dec uses VM inv eng 5 on hub 8
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset(1) succeeded!
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] device wedged, but recovered through reset
+aug 29 20:48:01 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] *ERROR* Failed to initialize parser -125!

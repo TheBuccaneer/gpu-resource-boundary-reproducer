@@ -1,0 +1,13 @@
+experiment=SEC1E_COLD_TRIGGER03
+tag=20260829_193746
+boot_id=53667a84-1a57-4cd6-b69b-7564004d4506
+start_wall=2026-08-29T19:37:46+02:00
+kernel=7.0.0-30-generic
+victim_pid=6892
+trigger_call_mono_ns=281157708029
+trigger_return_mono_ns=284785541189
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0
+recovery_class=RING_RESET_ONLY

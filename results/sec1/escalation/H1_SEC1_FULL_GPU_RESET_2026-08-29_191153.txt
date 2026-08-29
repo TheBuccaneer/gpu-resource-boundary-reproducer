@@ -1,0 +1,289 @@
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State Completed
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] AMDGPU device coredump file has been created
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] Check your /sys/class/drm/card1/device/devcoredump/data
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.0.1 timeout, signaled seq=17680, emitted seq=17681
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0:  Process b3_multi_local_ pid 93689 thread b3_multi_l:cs0 pid 93690
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: Starting comp_1.0.1 ring reset
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: Ring comp_1.0.1 reset failed
+aug 29 19:11:53 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset begin!. Source:  1
+aug 29 19:11:54 rock-21m5002age kernel: [drm] MST_DSC Send DSC disable to synaptics
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: MODE2 reset
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset succeeded, trying to resume
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] PCIE GART of 1024M enabled (table at 0x000000F43FC00000).
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: PSP is resuming...
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: reserve 0xa00000 from 0xf43e000000 for PSP TMR
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: RAS: optional ras ta ucode is not available
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: RAP: optional rap ta ucode is not available
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: SECUREDISPLAY: optional securedisplay ta ucode is not available
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: SMU is resuming...
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: SMU is resumed successfully!
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: kiq ring mec 2 pipe 1 q 0
+aug 29 19:11:54 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] DMUB hardware initialized: version=0x0400004A
+aug 29 19:11:54 rock-21m5002age kernel: [drm] MST_DSC Send DSC enable to synaptics
+aug 29 19:11:55 rock-21m5002age kernel: [drm] MST_DSC Send DSC enable to synaptics
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring gfx_0.0.0 uses VM inv eng 0 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring gfx_0.1.0 uses VM inv eng 1 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.0.0 uses VM inv eng 4 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.0 uses VM inv eng 5 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.2.0 uses VM inv eng 6 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.3.0 uses VM inv eng 7 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.0.1 uses VM inv eng 8 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.1 uses VM inv eng 9 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.2.1 uses VM inv eng 10 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.3.1 uses VM inv eng 11 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring kiq_0.2.1.0 uses VM inv eng 12 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring sdma0 uses VM inv eng 13 on hub 0
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_dec_0 uses VM inv eng 0 on hub 8
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_enc_0.0 uses VM inv eng 1 on hub 8
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring vcn_enc_0.1 uses VM inv eng 4 on hub 8
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring jpeg_dec uses VM inv eng 5 on hub 8
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] REG_WAIT timeout 1us * 100 tries - dcn31_program_compbuf_size line:141
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] REG_WAIT timeout 1us * 100 tries - dcn31_program_compbuf_size line:142
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: GPU reset(15) succeeded!
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] device wedged, but recovered through reset
+aug 29 19:11:55 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] *ERROR* Failed to initialize parser -125!
+aug 29 19:11:55 rock-21m5002age systemd-coredump[93703]: Process 93689 (b3_multi_local_) of user 1000 terminated abnormally with signal 6/ABRT, processing...
+aug 29 19:11:55 rock-21m5002age systemd[1]: Started systemd-coredump@14-32769-93703_108185-0.service - Process Core Dump (PID 93703/UID 0).
+aug 29 19:11:55 rock-21m5002age systemd[1]: Started drkonqi-coredump-processor@14-32769-93703_108185-0.service - Pass systemd-coredump journal entries to relevant user for potential DrKonqi handling.
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Udev event detected
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-5 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-6 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-7 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-8 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-9 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-10 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-11 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-12 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-13 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-14 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-15 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-16 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-17 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-18 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-19 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-20 lacks R/W permissions
+aug 29 19:11:55 rock-21m5002age org_kde_powerdevil[3393]: [  3512] Device /dev/i2c-21 lacks R/W permissions
+aug 29 19:11:56 rock-21m5002age systemd-coredump[93706]: Process 93689 (b3_multi_local_) of user 1000 dumped core.
+                                                         
+                                                         Module linux-vdso.so.1 from deb linux-7.0.0-30.30.amd64
+                                                         Module libmd.so.0 from deb libmd-1.1.0-2build4.amd64
+                                                         Module libbsd.so.0 from deb libbsd-0.12.2-2build2.amd64
+                                                         Module libtinfo.so.6 from deb ncurses-6.6+20251231-1.amd64
+                                                         Module libxml2.so.16 from deb libxml2-2.15.2+dfsg-0.1ubuntu0.1.amd64
+                                                         Module libedit.so.2 from deb libedit-3.1-20251016-1.amd64
+                                                         Module libffi.so.8 from deb libffi-3.5.2-4.amd64
+                                                         Module libgcc_s.so.1 from deb gcc-16-16-20260322-1ubuntu1.amd64
+                                                         Module libstdc++.so.6 from deb gcc-16-16-20260322-1ubuntu1.amd64
+                                                         Module libLLVMSPIRVLib.so.21.1 from deb spirv-llvm-translator-21-21.1.5-1.amd64
+                                                         Module libclang-cpp.so.21.1 from deb llvm-toolchain-21-1:21.1.8-6ubuntu1.amd64
+                                                         Module libdrm_amdgpu.so.1 from deb libdrm-2.4.131-1.amd64
+                                                         Module libelf.so.1 from deb elfutils-0.194-4.amd64
+                                                         Module libexpat.so.1 from deb expat-2.7.4-1.amd64
+                                                         Module libLLVM.so.21.1 from deb llvm-toolchain-21-1:21.1.8-6ubuntu1.amd64
+                                                         Module libdrm.so.2 from deb libdrm-2.4.131-1.amd64
+                                                         Module libzstd.so.1 from deb libzstd-1.5.7+dfsg-3.amd64
+                                                         Module libz.so.1 from deb zlib-1:1.3.dfsg+really1.3.1-1ubuntu3.amd64
+                                                         Module libRusticlOpenCL.so.1 from deb mesa-26.0.8-1ubuntu0.3.amd64
+                                                         Module libOpenCL.so.1 from deb ocl-icd-2.3.4-1.amd64
+                                                         Stack trace of thread 93690:
+                                                         #0  0x00007e5fe882896e __GI_abort (libc.so.6 + 0x2896e)
+                                                         #1  0x00007e5fe62fc600 amdgpu_ctx_set_sw_reset_status (libRusticlOpenCL.so.1 + 0x6fc600)
+                                                         #2  0x00007e5fe63008e9 amdgpu_cs_submit_ib<(queue_type)0> (libRusticlOpenCL.so.1 + 0x7008e9)
+                                                         #3  0x00007e5fe608ce52 util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48ce52)
+                                                         #4  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #5  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #6  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93689:
+                                                         #0  0x00007e5fe8934c8d syscall (libc.so.6 + 0x134c8d)
+                                                         #1  0x00007e5fe5ed27eb _ZN3std3sys3pal4unix5futex10futex_wait17h51ecc58f32fd2060E (libRusticlOpenCL.so.1 + 0x2d27eb)
+                                                         #2  0x00007e5fe5e0f01b _ZN3std4sync6poison7condvar7Condvar12wait_timeout17hd14c75273061b1dfE (libRusticlOpenCL.so.1 + 0x20f01b)
+                                                         #3  0x00007e5fe5dcb972 _ZN7rusticl4core5event5Event4wait17he3cb68b629a09555E (libRusticlOpenCL.so.1 + 0x1cb972)
+                                                         #4  0x00007e5fe5e8ca9d _ZN7rusticl4core5queue5Queue5flush28_$u7b$$u7b$closure$u7d$$u7d$17h27f86aba6453b893E (libRusticlOpenCL.so.1 + 0x28ca9d)
+                                                         #5  0x00007e5fe5e3f230 _ZN4core6option15Option$LT$T$GT$3map17h4fd32ec33cf78daeE (libRusticlOpenCL.so.1 + 0x23f230)
+                                                         #6  0x00007e5fe5e8c890 _ZN7rusticl4core5queue5Queue5flush17hc8c9aedff0649fe2E (libRusticlOpenCL.so.1 + 0x28c890)
+                                                         #7  0x00007e5fe5e47890 _ZN7rusticl3api5event16create_and_queue17h36c63b86a8358e77E (libRusticlOpenCL.so.1 + 0x247890)
+                                                         #8  0x00007e5fe5dfaca9 _ZN7rusticl3api6memory19enqueue_read_buffer17h9fe23cfefae59683E (libRusticlOpenCL.so.1 + 0x1faca9)
+                                                         #9  0x00007e5fe5df8d78 _ZN7rusticl3api6memory19clEnqueueReadBuffer17h697a3e88b582c302E (libRusticlOpenCL.so.1 + 0x1f8d78)
+                                                         #10 0x000058141016aa43 main (/home/rock/projects/OpenCL2/probes/b3_multi_local_probe + 0x1a43)
+                                                         #11 0x00007e5fe882a601 __libc_start_call_main (libc.so.6 + 0x2a601)
+                                                         #12 0x00007e5fe882a718 __libc_start_main_impl (libc.so.6 + 0x2a718)
+                                                         #13 0x000058141016ac65 _start (/home/rock/projects/OpenCL2/probes/b3_multi_local_probe + 0x1c65)
+                                                         
+                                                         Stack trace of thread 93692:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93691:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93694:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93693:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93695:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93700:
+                                                         #0  0x00007e5fe8934c8d syscall (libc.so.6 + 0x134c8d)
+                                                         #1  0x00007e5fe608405a sys_futex (libRusticlOpenCL.so.1 + 0x48405a)
+                                                         #2  0x00007e5fe608ca30 do_futex_fence_wait (libRusticlOpenCL.so.1 + 0x48ca30)
+                                                         #3  0x00007e5fe62ff41c util_queue_fence_wait (libRusticlOpenCL.so.1 + 0x6ff41c)
+                                                         #4  0x00007e5fe62d674d si_flush_gfx_cs (libRusticlOpenCL.so.1 + 0x6d674d)
+                                                         #5  0x00007e5fe62f8b14 amdgpu_bo_map (libRusticlOpenCL.so.1 + 0x6f8b14)
+                                                         #6  0x00007e5fe62bac2e si_buffer_map (libRusticlOpenCL.so.1 + 0x6bac2e)
+                                                         #7  0x00007e5fe5ea5b87 _ZN9mesa_rust4pipe7context11PipeContext12resource_map17hb689562e6c289238E (libRusticlOpenCL.so.1 + 0x2a5b87)
+                                                         #8  0x00007e5fe5ea5f32 _ZN9mesa_rust4pipe7context11PipeContext16buffer_map_flags17h077a45b71855bc90E (libRusticlOpenCL.so.1 + 0x2a5f32)
+                                                         #9  0x00007e5fe5ea5542 _ZN9mesa_rust4pipe7context11PipeContext10buffer_map17h4b39f1ef44b1f93cE (libRusticlOpenCL.so.1 + 0x2a5542)
+                                                         #10 0x00007e5fe5de619c _ZN7rusticl4core6memory6Buffer2tx17ha58e74933cda5b87E (libRusticlOpenCL.so.1 + 0x1e619c)
+                                                         #11 0x00007e5fe5de646c _ZN7rusticl4core6memory6Buffer4read17h8f678723e00652d1E (libRusticlOpenCL.so.1 + 0x1e646c)
+                                                         #12 0x00007e5fe5dfae50 _ZN7rusticl3api6memory19enqueue_read_buffer28_$u7b$$u7b$closure$u7d$$u7d$17h1999766ee1952cfbE (libRusticlOpenCL.so.1 + 0x1fae50)
+                                                         #13 0x00007e5fe5e796dd _ZN4core3ops8function6FnOnce40call_once$u7b$$u7b$vtable.shim$u7d$$u7d$17h11924d7290b14715E (libRusticlOpenCL.so.1 + 0x2796dd)
+                                                         #14 0x00007e5fe5e6b68e _ZN90_$LT$alloc..boxed..Box$LT$F$C$A$GT$$u20$as$u20$core..ops..function..FnOnce$LT$Args$GT$$GT$9call_once17hba5e8974e448ba25E (libRusticlOpenCL.so.1 + 0x26b68e)
+                                                         #15 0x00007e5fe5dcb6d0 _ZN7rusticl4core5event5Event4call28_$u7b$$u7b$closure$u7d$$u7d$17hd45574627d19d647E (libRusticlOpenCL.so.1 + 0x1cb6d0)
+                                                         #16 0x00007e5fe5e40f22 _ZN4core6option15Option$LT$T$GT$6map_or17hfd56e38cadf517fbE (libRusticlOpenCL.so.1 + 0x240f22)
+                                                         #17 0x00007e5fe5dcb2e7 _ZN7rusticl4core5event5Event4call17hfe2959058fb6f939E (libRusticlOpenCL.so.1 + 0x1cb2e7)
+                                                         #18 0x00007e5fe5e8a07a _ZN7rusticl4core5queue10QueueEvent4call17hd90a18519e517af6E (libRusticlOpenCL.so.1 + 0x28a07a)
+                                                         #19 0x00007e5fe5e8be68 _ZN7rusticl4core5queue5Queue3new28_$u7b$$u7b$closure$u7d$$u7d$17hf99f67ba2d616536E (libRusticlOpenCL.so.1 + 0x28be68)
+                                                         #20 0x00007e5fe5db4079 _ZN3std3sys9backtrace28__rust_begin_short_backtrace17hcef1f311b4c9f89eE (libRusticlOpenCL.so.1 + 0x1b4079)
+                                                         #21 0x00007e5fe5e56194 _ZN3std6thread9lifecycle15spawn_unchecked28_$u7b$$u7b$closure$u7d$$u7d$28_$u7b$$u7b$closure$u7d$$u7d$17hfa6bb550bfa198d4E (libRusticlOpenCL.so.1 + 0x256194)
+                                                         #22 0x00007e5fe5e54232 _ZN115_$LT$core..panic..unwind_safe..AssertUnwindSafe$LT$F$GT$$u20$as$u20$core..ops..function..FnOnce$LT$$LP$$RP$$GT$$GT$9call_once17h8c67c3f127111b2fE (libRusticlOpenCL.so.1 + 0x254232)
+                                                         #23 0x00007e5fe5e25b22 _ZN3std9panicking12catch_unwind7do_call17h3ebf4bf188dad5b0E (libRusticlOpenCL.so.1 + 0x225b22)
+                                                         #24 0x00007e5fe5e6b96d __rust_try (libRusticlOpenCL.so.1 + 0x26b96d)
+                                                         #25 0x00007e5fe5e55d27 _ZN3std6thread9lifecycle15spawn_unchecked28_$u7b$$u7b$closure$u7d$$u7d$17hecf7c0afa4b52c0eE (libRusticlOpenCL.so.1 + 0x255d27)
+                                                         #26 0x00007e5fe5e7998d _ZN4core3ops8function6FnOnce40call_once$u7b$$u7b$vtable.shim$u7d$$u7d$17h53c76af2f0900561E (libRusticlOpenCL.so.1 + 0x27998d)
+                                                         #27 0x00007e5fe5ed4354 _ZN3std3sys6thread4unix6Thread3new12thread_start17hadd7dade7e7ac1beE (libRusticlOpenCL.so.1 + 0x2d4354)
+                                                         #28 0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #29 0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93697:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93701:
+                                                         #0  0x00007e5fe8934c8d syscall (libc.so.6 + 0x134c8d)
+                                                         #1  0x00007e5fe5ecce66 _ZN3std3sys3pal4unix5futex10futex_wait17h51ecc58f32fd2060E (libRusticlOpenCL.so.1 + 0x2cce66)
+                                                         #2  0x00007e5fe5db4e52 _ZN3std4sync4mpmc7context7Context10wait_until17he8f5ddf46a22fe5dE (libRusticlOpenCL.so.1 + 0x1b4e52)
+                                                         #3  0x00007e5fe5e95082 _ZN3std4sync4mpmc4list16Channel$LT$T$GT$4recv28_$u7b$$u7b$closure$u7d$$u7d$17hf513f653dcced8ddE (libRusticlOpenCL.so.1 + 0x295082)
+                                                         #4  0x00007e5fe5db6ed4 _ZN3std4sync4mpmc7context7Context4with28_$u7b$$u7b$closure$u7d$$u7d$17hac9f0ec467d365dcE (libRusticlOpenCL.so.1 + 0x1b6ed4)
+                                                         #5  0x00007e5fe5db7ed8 _ZN3std6thread5local17LocalKey$LT$T$GT$8try_with17h69807e32aae5bb42E (libRusticlOpenCL.so.1 + 0x1b7ed8)
+                                                         #6  0x00007e5fe5db51bf _ZN3std4sync4mpmc7context7Context4with17h3a30e1bf5e568555E (libRusticlOpenCL.so.1 + 0x1b51bf)
+                                                         #7  0x00007e5fe5e94d54 _ZN3std4sync4mpmc4list16Channel$LT$T$GT$4recv17h41bd0ac473392ee3E (libRusticlOpenCL.so.1 + 0x294d54)
+                                                         #8  0x00007e5fe5dc05c0 _ZN3std4sync4mpmc17Receiver$LT$T$GT$4recv17hfe58585f5ca0fd2fE (libRusticlOpenCL.so.1 + 0x1c05c0)
+                                                         #9  0x00007e5fe5e54584 _ZN3std4sync4mpsc17Receiver$LT$T$GT$4recv17h441005a665f3af7fE (libRusticlOpenCL.so.1 + 0x254584)
+                                                         #10 0x00007e5fe5e8b860 _ZN7rusticl4core5queue5Queue3new28_$u7b$$u7b$closure$u7d$$u7d$17h119d93ad397a89e1E (libRusticlOpenCL.so.1 + 0x28b860)
+                                                         #11 0x00007e5fe5db4059 _ZN3std3sys9backtrace28__rust_begin_short_backtrace17h11f3003c2576d694E (libRusticlOpenCL.so.1 + 0x1b4059)
+                                                         #12 0x00007e5fe5e560f5 _ZN3std6thread9lifecycle15spawn_unchecked28_$u7b$$u7b$closure$u7d$$u7d$28_$u7b$$u7b$closure$u7d$$u7d$17ha8183f3bf70389feE (libRusticlOpenCL.so.1 + 0x2560f5)
+                                                         #13 0x00007e5fe5e54202 _ZN115_$LT$core..panic..unwind_safe..AssertUnwindSafe$LT$F$GT$$u20$as$u20$core..ops..function..FnOnce$LT$$LP$$RP$$GT$$GT$9call_once17h7cdcdd590fcb0916E (libRusticlOpenCL.so.1 + 0x254202)
+                                                         #14 0x00007e5fe5e25b62 _ZN3std9panicking12catch_unwind7do_call17hb5156ac9a06052f5E (libRusticlOpenCL.so.1 + 0x225b62)
+                                                         #15 0x00007e5fe5e6b96d __rust_try (libRusticlOpenCL.so.1 + 0x26b96d)
+                                                         #16 0x00007e5fe5e559e6 _ZN3std6thread9lifecycle15spawn_unchecked28_$u7b$$u7b$closure$u7d$$u7d$17h59da53ee6603ca52E (libRusticlOpenCL.so.1 + 0x2559e6)
+                                                         #17 0x00007e5fe5e797dd _ZN4core3ops8function6FnOnce40call_once$u7b$$u7b$vtable.shim$u7d$$u7d$17h2c5672b285973150E (libRusticlOpenCL.so.1 + 0x2797dd)
+                                                         #18 0x00007e5fe5ed4354 _ZN3std3sys6thread4unix6Thread3new12thread_start17hadd7dade7e7ac1beE (libRusticlOpenCL.so.1 + 0x2d4354)
+                                                         #19 0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #20 0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93696:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93699:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93702:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         
+                                                         Stack trace of thread 93698:
+                                                         #0  0x00007e5fe88aca82 __syscall_cancel_arch (libc.so.6 + 0xaca82)
+                                                         #1  0x00007e5fe88a058c __internal_syscall_cancel (libc.so.6 + 0xa058c)
+                                                         #2  0x00007e5fe88a0967 __futex_abstimed_wait_common64 (libc.so.6 + 0xa0967)
+                                                         #3  0x00007e5fe88a3347 __pthread_cond_wait_common (libc.so.6 + 0xa3347)
+                                                         #4  0x00007e5fe60d51dd cnd_wait (libRusticlOpenCL.so.1 + 0x4d51dd)
+                                                         #5  0x00007e5fe608cd7c util_queue_thread_func (libRusticlOpenCL.so.1 + 0x48cd7c)
+                                                         #6  0x00007e5fe60d511c impl_thrd_routine (libRusticlOpenCL.so.1 + 0x4d511c)
+                                                         #7  0x00007e5fe88a407a start_thread (libc.so.6 + 0xa407a)
+                                                         #8  0x00007e5fe893772c __clone3 (libc.so.6 + 0x13772c)
+                                                         ELF object binary architecture: AMD x86-64
+aug 29 19:11:56 rock-21m5002age systemd[1]: systemd-coredump@14-32769-93703_108185-0.service: Deactivated successfully.
+aug 29 19:11:56 rock-21m5002age systemd[1]: systemd-coredump@14-32769-93703_108185-0.service: Consumed 1.318s CPU time over 1.350s wall clock time, 389.9M memory peak.
+aug 29 19:11:56 rock-21m5002age systemd[1]: systemd-coredump@14-32769-93703_108185-0.service: Triggering OnSuccess= dependencies.
+aug 29 19:11:56 rock-21m5002age systemd[1]: Starting apport-coredump-hook@14-32769-93703_108185-0.service...
+aug 29 19:11:56 rock-21m5002age systemd[1]: apport-coredump-hook@14-32769-93703_108185-0.service: Deactivated successfully.
+aug 29 19:11:56 rock-21m5002age systemd[1]: Finished apport-coredump-hook@14-32769-93703_108185-0.service.
+aug 29 19:11:57 rock-21m5002age drkonqi-coredump-processor[93707]: "/home/rock/projects/OpenCL2/probes/b3_multi_local_probe" 93689 "/var/lib/systemd/coredump/core.b3_multi_local_.1000.dfdc38a16c6a4a21b1809debb00499e1.93689.1788023515000000.zst"
+aug 29 19:11:57 rock-21m5002age systemd[2774]: Started drkonqi-coredump-launcher@19-12301-93707_73575-0.service - Launch DrKonqi for a systemd-coredump crash (PID 93707/UID 0).
+aug 29 19:11:57 rock-21m5002age drkonqi-coredump-launcher[93729]: Unable to find file for pid 93689 expected at "kcrash-metadata/b3_multi_local_probe.dfdc38a16c6a4a21b1809debb00499e1.93689.ini"
+aug 29 19:11:57 rock-21m5002age drkonqi-coredump-launcher[93729]: KCrash metadata not marked complete. Please file a bug at bugs.kde.org giving as much detail about the crash as possible and maybe include the file ""
+aug 29 19:11:57 rock-21m5002age systemd[1]: drkonqi-coredump-processor@14-32769-93703_108185-0.service: Deactivated successfully.

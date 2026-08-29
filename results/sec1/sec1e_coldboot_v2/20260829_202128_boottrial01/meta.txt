@@ -1,0 +1,16 @@
+experiment=SEC1E_COLDBOOT_V2
+trial=1
+boot_id=280b10d2-3aca-41db-b850-72adb671763c
+tag=20260829_202128
+start_wall=2026-08-29T20:21:28+02:00
+kernel=7.0.0-30-generic
+victim_binary=sec1_victim_heartbeat_v2
+display_condition=one_active_three_connected_disabled
+victim_pid=4973
+trigger_call_mono_ns=259837784329
+trigger_return_mono_ns=264695463759
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0
+recovery_class=FULL_GPU_RESET

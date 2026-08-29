@@ -1,0 +1,16 @@
+experiment=SEC1E_COLDBOOT_V2
+trial=7
+boot_id=7c02723e-57fc-4823-96f9-6e5e6505cdbd
+tag=20260829_204339
+start_wall=2026-08-29T20:43:39+02:00
+kernel=7.0.0-30-generic
+victim_binary=sec1_victim_heartbeat_v2
+display_condition=one_active_three_connected_disabled
+victim_pid=4804
+trigger_call_mono_ns=62114894809
+trigger_return_mono_ns=65725125672
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0
+recovery_class=RING_RESET_ONLY

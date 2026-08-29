@@ -1,0 +1,6 @@
+trigger_call_mono_ns=16722899079129
+trigger_return_mono_ns=16726438552632
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0

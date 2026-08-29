@@ -1,0 +1,27 @@
+RUN_START label=SEC1E_DISP1_T01_20260829_194941 interval_ms=200 max_iterations=0 pid=5141 wall_s=1788025781.956040 mono_ns=107019123792
+INIT gen=0 clGetPlatformIDs=0
+INIT gen=0 clGetDeviceIDs=0
+INIT gen=0 clCreateContext=0
+INIT gen=0 clCreateCommandQueueWithProperties=0
+INIT gen=0 clCreateProgramWithSource=0
+INIT gen=0 clBuildProgram=0
+INIT gen=0 clCreateKernel=0
+INIT gen=0 clCreateBuffer=0
+INIT gen=0 clSetKernelArg(out)=0
+HB seq=1 gen=0 mono_ns=107173289389 wall_s=1788025782.110206 elapsed_ms=5.24 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=2 gen=0 mono_ns=107373425838 wall_s=1788025782.310344 elapsed_ms=2.39 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=3 gen=0 mono_ns=107573566757 wall_s=1788025782.510485 elapsed_ms=2.23 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=4 gen=0 mono_ns=107773914395 wall_s=1788025782.710833 elapsed_ms=1.98 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=5 gen=0 mono_ns=107974244993 wall_s=1788025782.911164 elapsed_ms=2.67 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=6 gen=0 mono_ns=108174629854 wall_s=1788025783.111548 elapsed_ms=2.05 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=7 gen=0 mono_ns=108374787394 wall_s=1788025783.311704 elapsed_ms=1.54 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=8 gen=0 mono_ns=108575166110 wall_s=1788025783.512084 elapsed_ms=2.82 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=9 gen=0 mono_ns=108775514936 wall_s=1788025783.712433 elapsed_ms=1.97 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=10 gen=0 mono_ns=108975977178 wall_s=1788025783.912895 elapsed_ms=1.78 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=11 gen=0 mono_ns=109176366230 wall_s=1788025784.113284 elapsed_ms=2.14 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=12 gen=0 mono_ns=109376541578 wall_s=1788025784.313460 elapsed_ms=1.81 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=13 gen=0 mono_ns=109577458393 wall_s=1788025784.514376 elapsed_ms=2.31 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=14 gen=0 mono_ns=109777796045 wall_s=1788025784.714714 elapsed_ms=2.97 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=15 gen=0 mono_ns=109978246763 wall_s=1788025784.915165 elapsed_ms=2.72 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=16 gen=0 mono_ns=110178660887 wall_s=1788025785.115579 elapsed_ms=3150.26 enqueue_err=0 finish_err=0 read_err=0 result_ok=0 status=WRONG_RESULT
+amdgpu: The CS has cancelled because the context is lost. This context is innocent.

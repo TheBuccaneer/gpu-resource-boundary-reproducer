@@ -1,0 +1,16 @@
+experiment=SEC1E_DISP1_TRIGGER01
+display_condition=one_active_three_connected_disabled
+active_output=DP-8
+trigger_number=1
+tag=20260829_194941
+boot_id=1ae1fbf8-c510-4643-a59b-819465b0e84c
+start_wall=2026-08-29T19:49:41+02:00
+kernel=7.0.0-30-generic
+victim_pid=5141
+trigger_call_mono_ns=110036940432
+trigger_return_mono_ns=114824995558
+attacker_exit=134
+victim_alive=0
+victim_hung_after_sigint=0
+victim_exit=134
+recovery_class=FULL_GPU_RESET

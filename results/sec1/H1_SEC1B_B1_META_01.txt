@@ -1,0 +1,15 @@
+=== SEC1B START ===
+start_wall=2026-08-29T19:00:36+02:00
+start_mono_ns=15996741878658
+victim_pid=89914
+trigger_call_wall=2026-08-29T19:00:41+02:00
+trigger_call_mono_ns=16001786125274
+trigger_return_wall=2026-08-29T19:00:45+02:00
+trigger_return_mono_ns=16005498102833
+trigger_exit=134
+victim_alive_after_post_window=1
+post_window_end_mono_ns=16015533668281
+victim_still_alive_after_SIGINT=0
+victim_exit=0
+end_wall=2026-08-29T19:00:57+02:00
+end_mono_ns=16017585774758
