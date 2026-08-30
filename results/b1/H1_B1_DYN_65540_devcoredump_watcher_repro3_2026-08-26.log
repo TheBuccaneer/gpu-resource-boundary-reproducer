@@ -1,0 +1,10 @@
+watching=/sys/class/drm/card1/device/devcoredump/data
+output=/home/rock/projects/OpenCL2/results/b1/H1_B1_DYN_65540_amdgpu_devcoredump_repro3_2026-08-26.bin
+wait_seconds=120
+devcoredump_detected=2026-08-26T11:35:32+02:00
+capture_start=2026-08-26T11:35:32+02:00
+read=SUCCESS
+capture_end=2026-08-26T11:36:21+02:00
+capture=SUCCESS
+6040372 /home/rock/projects/OpenCL2/results/b1/H1_B1_DYN_65540_amdgpu_devcoredump_repro3_2026-08-26.bin
+bc0545e1daae6a42c24c9f7342d18629bded59f18ae3c40fab480f7b66d8108b  /home/rock/projects/OpenCL2/results/b1/H1_B1_DYN_65540_amdgpu_devcoredump_repro3_2026-08-26.bin

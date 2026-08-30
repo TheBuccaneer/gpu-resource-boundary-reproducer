@@ -1,0 +1,235 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+cycle=0 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=0
+cycle=0 map_write=0
+cycle=0 unmap_write=0
+cycle=0 finish_write=0
+cycle=0 clCreateKernel=0
+cycle=0 set_svm_ptr=0
+cycle=0 set_n=0
+cycle=0 enqueue=0
+cycle=0 finish_kernel=0
+cycle=0 map_read=0
+cycle=0 first=0x10000001 last=0x10000400 mismatches=0
+cycle=0 unmap_read=0
+cycle=0 finish_final=0
+cycle=0 clSVMFree=done
+cycle=1 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=1 map_write=0
+cycle=1 unmap_write=0
+cycle=1 finish_write=0
+cycle=1 clCreateKernel=0
+cycle=1 set_svm_ptr=0
+cycle=1 set_n=0
+cycle=1 enqueue=0
+cycle=1 finish_kernel=0
+cycle=1 map_read=0
+cycle=1 first=0x10010001 last=0x10010400 mismatches=0
+cycle=1 unmap_read=0
+cycle=1 finish_final=0
+cycle=1 clSVMFree=done
+cycle=2 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=2 map_write=0
+cycle=2 unmap_write=0
+cycle=2 finish_write=0
+cycle=2 clCreateKernel=0
+cycle=2 set_svm_ptr=0
+cycle=2 set_n=0
+cycle=2 enqueue=0
+cycle=2 finish_kernel=0
+cycle=2 map_read=0
+cycle=2 first=0x10020001 last=0x10020400 mismatches=0
+cycle=2 unmap_read=0
+cycle=2 finish_final=0
+cycle=2 clSVMFree=done
+cycle=3 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=3 map_write=0
+cycle=3 unmap_write=0
+cycle=3 finish_write=0
+cycle=3 clCreateKernel=0
+cycle=3 set_svm_ptr=0
+cycle=3 set_n=0
+cycle=3 enqueue=0
+cycle=3 finish_kernel=0
+cycle=3 map_read=0
+cycle=3 first=0x10030001 last=0x10030400 mismatches=0
+cycle=3 unmap_read=0
+cycle=3 finish_final=0
+cycle=3 clSVMFree=done
+cycle=4 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=4 map_write=0
+cycle=4 unmap_write=0
+cycle=4 finish_write=0
+cycle=4 clCreateKernel=0
+cycle=4 set_svm_ptr=0
+cycle=4 set_n=0
+cycle=4 enqueue=0
+cycle=4 finish_kernel=0
+cycle=4 map_read=0
+cycle=4 first=0x10040001 last=0x10040400 mismatches=0
+cycle=4 unmap_read=0
+cycle=4 finish_final=0
+cycle=4 clSVMFree=done
+cycle=5 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=5 map_write=0
+cycle=5 unmap_write=0
+cycle=5 finish_write=0
+cycle=5 clCreateKernel=0
+cycle=5 set_svm_ptr=0
+cycle=5 set_n=0
+cycle=5 enqueue=0
+cycle=5 finish_kernel=0
+cycle=5 map_read=0
+cycle=5 first=0x10050001 last=0x10050400 mismatches=0
+cycle=5 unmap_read=0
+cycle=5 finish_final=0
+cycle=5 clSVMFree=done
+cycle=6 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=6 map_write=0
+cycle=6 unmap_write=0
+cycle=6 finish_write=0
+cycle=6 clCreateKernel=0
+cycle=6 set_svm_ptr=0
+cycle=6 set_n=0
+cycle=6 enqueue=0
+cycle=6 finish_kernel=0
+cycle=6 map_read=0
+cycle=6 first=0x10060001 last=0x10060400 mismatches=0
+cycle=6 unmap_read=0
+cycle=6 finish_final=0
+cycle=6 clSVMFree=done
+cycle=7 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=7 map_write=0
+cycle=7 unmap_write=0
+cycle=7 finish_write=0
+cycle=7 clCreateKernel=0
+cycle=7 set_svm_ptr=0
+cycle=7 set_n=0
+cycle=7 enqueue=0
+cycle=7 finish_kernel=0
+cycle=7 map_read=0
+cycle=7 first=0x10070001 last=0x10070400 mismatches=0
+cycle=7 unmap_read=0
+cycle=7 finish_final=0
+cycle=7 clSVMFree=done
+cycle=8 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=8 map_write=0
+cycle=8 unmap_write=0
+cycle=8 finish_write=0
+cycle=8 clCreateKernel=0
+cycle=8 set_svm_ptr=0
+cycle=8 set_n=0
+cycle=8 enqueue=0
+cycle=8 finish_kernel=0
+cycle=8 map_read=0
+cycle=8 first=0x10080001 last=0x10080400 mismatches=0
+cycle=8 unmap_read=0
+cycle=8 finish_final=0
+cycle=8 clSVMFree=done
+cycle=9 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=9 map_write=0
+cycle=9 unmap_write=0
+cycle=9 finish_write=0
+cycle=9 clCreateKernel=0
+cycle=9 set_svm_ptr=0
+cycle=9 set_n=0
+cycle=9 enqueue=0
+cycle=9 finish_kernel=0
+cycle=9 map_read=0
+cycle=9 first=0x10090001 last=0x10090400 mismatches=0
+cycle=9 unmap_read=0
+cycle=9 finish_final=0
+cycle=9 clSVMFree=done
+cycle=10 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=10 map_write=0
+cycle=10 unmap_write=0
+cycle=10 finish_write=0
+cycle=10 clCreateKernel=0
+cycle=10 set_svm_ptr=0
+cycle=10 set_n=0
+cycle=10 enqueue=0
+cycle=10 finish_kernel=0
+cycle=10 map_read=0
+cycle=10 first=0x100a0001 last=0x100a0400 mismatches=0
+cycle=10 unmap_read=0
+cycle=10 finish_final=0
+cycle=10 clSVMFree=done
+cycle=11 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=11 map_write=0
+cycle=11 unmap_write=0
+cycle=11 finish_write=0
+cycle=11 clCreateKernel=0
+cycle=11 set_svm_ptr=0
+cycle=11 set_n=0
+cycle=11 enqueue=0
+cycle=11 finish_kernel=0
+cycle=11 map_read=0
+cycle=11 first=0x100b0001 last=0x100b0400 mismatches=0
+cycle=11 unmap_read=0
+cycle=11 finish_final=0
+cycle=11 clSVMFree=done
+cycle=12 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=12 map_write=0
+cycle=12 unmap_write=0
+cycle=12 finish_write=0
+cycle=12 clCreateKernel=0
+cycle=12 set_svm_ptr=0
+cycle=12 set_n=0
+cycle=12 enqueue=0
+cycle=12 finish_kernel=0
+cycle=12 map_read=0
+cycle=12 first=0x100c0001 last=0x100c0400 mismatches=0
+cycle=12 unmap_read=0
+cycle=12 finish_final=0
+cycle=12 clSVMFree=done
+cycle=13 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=13 map_write=0
+cycle=13 unmap_write=0
+cycle=13 finish_write=0
+cycle=13 clCreateKernel=0
+cycle=13 set_svm_ptr=0
+cycle=13 set_n=0
+cycle=13 enqueue=0
+cycle=13 finish_kernel=0
+cycle=13 map_read=0
+cycle=13 first=0x100d0001 last=0x100d0400 mismatches=0
+cycle=13 unmap_read=0
+cycle=13 finish_final=0
+cycle=13 clSVMFree=done
+cycle=14 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=14 map_write=0
+cycle=14 unmap_write=0
+cycle=14 finish_write=0
+cycle=14 clCreateKernel=0
+cycle=14 set_svm_ptr=0
+cycle=14 set_n=0
+cycle=14 enqueue=0
+cycle=14 finish_kernel=0
+cycle=14 map_read=0
+cycle=14 first=0x100e0001 last=0x100e0400 mismatches=0
+cycle=14 unmap_read=0
+cycle=14 finish_final=0
+cycle=14 clSVMFree=done
+cycle=15 clSVMAlloc=success addr=0x1ffffffff000 reuse_previous=1
+cycle=15 map_write=0
+cycle=15 unmap_write=0
+cycle=15 finish_write=0
+cycle=15 clCreateKernel=0
+cycle=15 set_svm_ptr=0
+cycle=15 set_n=0
+cycle=15 enqueue=0
+cycle=15 finish_kernel=0
+cycle=15 map_read=0
+cycle=15 first=0x100f0001 last=0x100f0400 mismatches=0
+cycle=15 unmap_read=0
+cycle=15 finish_final=0
+cycle=15 clSVMFree=done
+cycles=16
+reuse_previous_count=15
+total_mismatches=0
+B4-C2=PASS

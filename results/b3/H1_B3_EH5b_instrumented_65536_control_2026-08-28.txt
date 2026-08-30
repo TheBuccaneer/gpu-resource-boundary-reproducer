@@ -1,0 +1,6 @@
+A_bytes=32768
+B_bytes=32768
+requested_sum=65536
+amdgpu: amdgpu_query_sw_info(amdgpu_sw_info_address_prt_wa_control_bit) failed.
+MESA: error: amdgpu: ac_query_gpu_info failed.
+clGetPlatformIDs=0 platforms=1

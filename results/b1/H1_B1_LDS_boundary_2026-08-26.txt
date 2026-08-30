@@ -1,0 +1,22 @@
+===== LOCAL_INTS=16383 BYTES=65532 =====
+clCreateProgramWithSource=0
+clBuildProgram=0
+about_to_clCreateKernel
+clCreateKernel=0
+CL_KERNEL_LOCAL_MEM_SIZE=65532 query_err=0
+exit=0
+
+===== LOCAL_INTS=16384 BYTES=65536 =====
+clCreateProgramWithSource=0
+clBuildProgram=0
+about_to_clCreateKernel
+clCreateKernel=0
+CL_KERNEL_LOCAL_MEM_SIZE=65536 query_err=0
+exit=0
+
+===== LOCAL_INTS=16385 BYTES=65540 =====
+clCreateProgramWithSource=0
+clBuildProgram=0
+about_to_clCreateKernel
+exit=136
+

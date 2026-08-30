@@ -1,0 +1,23 @@
+clGetPlatformIDs(count)=0 platforms=1
+platform=rusticl
+device=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic)
+vendor=AMD
+device_version=OpenCL 3.0 
+driver_version=26.0.3-1ubuntu1
+opencl_c_version=OpenCL C 1.2 
+CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS=3 err=0
+CL_DEVICE_MAX_WORK_GROUP_SIZE=1024 err=0
+CL_DEVICE_MAX_WORK_ITEM_SIZES err=0 [0]=1024 [1]=1024 [2]=1024
+CL_DEVICE_NON_UNIFORM_WORK_GROUP_SUPPORT=0 err=0
+CL_DEVICE_PREFERRED_WORK_GROUP_SIZE_MULTIPLE=64 err=0
+clCreateContext=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+CL_KERNEL_WORK_GROUP_SIZE=512 err=0
+CL_KERNEL_COMPILE_WORK_GROUP_SIZE=0,0,0 err=0
+CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE=64 err=0
+CL_KERNEL_LOCAL_MEM_SIZE=0 err=0
+CL_KERNEL_PRIVATE_MEM_SIZE=0 err=0
+RELATION=KERNEL_LT_DEVICE
+B2-C0=PASS

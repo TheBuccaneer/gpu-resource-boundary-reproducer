@@ -1,0 +1,24 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clSVMAlloc=success addr=0x1ffffffff000
+clEnqueueSVMMap(write)=0
+expected_sum=524800
+clEnqueueSVMUnmap(write)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clCreateBuffer(out)=0
+clSetKernelArgSVMPointer=0
+clSetKernelArg(out)=0
+clSetKernelArg(n)=0
+clEnqueueNDRangeKernel=0 event=yes
+clEnqueueSVMFree=0 event=yes
+clWaitForEvents(free)=0
+free_event_status=0 query_err=0
+clEnqueueReadBuffer(out)=0
+actual_sum=0
+fresh_alloc=success addr=0x1ffffffff000 old_addr=0x1ffffffff000 same_addr=1
+B4-C3=FAIL

@@ -1,0 +1,54 @@
+clGetPlatformIDs=0 platforms=1
+clGetDeviceIDs=0
+device=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic)
+compute_units=6
+local_mem=65536
+ctxA clCreateContext=0
+ctxA clCreateCommandQueueWithProperties=0
+ctxA clCreateProgramWithSource=0
+ctxA clBuildProgram=0
+ctxA clCreateKernel(victim)=0
+victim_local_mem=32768
+ctxA clCreateBuffer(sink)=0
+ctxB clCreateContext=0
+ctxB clCreateCommandQueueWithProperties=0
+readerA clCreateProgramWithSource=0
+readerA clBuildProgram=0
+readerA clCreateKernel=0
+readerA clCreateBuffer=0
+readerB clCreateProgramWithSource=0
+readerB clBuildProgram=0
+readerB clCreateKernel=0
+readerB clCreateBuffer=0
+SEC2-PREBUILT-READERS=READY
+ctxA clEnqueueNDRangeKernel(victim)=0
+ctxA clFinish(victim)=0
+ctxA pattern=0xa5c30000 XOR index
+ctxA kept alive during ctxB
+O2 mode=reset
+O2-PRE clEnqueueNDRangeKernel=0
+O2-PRE clEnqueueReadBuffer=0
+O2-PRE victim_to_reader_gap_us=15
+O2-PRE exact_matches=786432
+O2-PRE range_matches=786432
+O2-PRE longest_exact_run=8192
+O2-PRECHECK=PASS
+O2-REPRIME clEnqueueNDRangeKernel=0
+O2-REPRIME clFinish=0
+O2-REPRIME=PASS
+O2-RESET-READY
+O2-RESET-RESUME input=10
+reader_context=ctxB
+victim_to_reader_gap_us=3875404
+ctxR clEnqueueNDRangeKernel(reader)=0
+ctxR clEnqueueReadBuffer=0
+samples=786432
+exact_matches=0
+range_matches=0
+longest_exact_run=0
+O2-POST exact_matches=0
+O2-POST range_matches=0
+O2-POST longest_exact_run=0
+O2-POSTCHECK=NO_EXACT_MATCH
+SEC2-PREBUILT-READER-CONTEXT-SWITCH=NO_EXACT_MATCH
+ctxA released after ctxB

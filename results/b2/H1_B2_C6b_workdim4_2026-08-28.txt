@@ -1,0 +1,10 @@
+clGetPlatformIDs=0 platforms=1
+CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS=3 err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+requested_work_dim=4
+clEnqueueNDRangeKernel=-53
+B2-C6b=PASS

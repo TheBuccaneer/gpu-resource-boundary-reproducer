@@ -1,0 +1,21 @@
+requested_local=65532
+last_index=16382
+clGetPlatformIDs=0
+clGetDeviceIDs=0
+CL_DEVICE_LOCAL_MEM_SIZE=65536 query_err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBuffer=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(local,65532)=0
+clSetKernelArg(last_index)=0
+clSetKernelArg(out)=0
+CL_KERNEL_LOCAL_MEM_SIZE=65532 query_err=0
+clEnqueueNDRangeKernel=0
+clFinish=0
+clEnqueueReadBuffer=0
+first=0x11111111
+last=0x22222222
+B1-DYN-BOUNDARY=PASS

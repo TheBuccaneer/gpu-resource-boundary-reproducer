@@ -1,0 +1,23 @@
+requested_local=65536
+last_index=65535
+=== Rusticl warning: Patched Mesa libclc not detected. Upstream libclc may contain known bugs or breaking changes and isn't guaranteed to work reliably. Please visit https://gitlab.freedesktop.org/karolherbst/mesa-libclc for more information. ===
+clGetPlatformIDs=0
+clGetDeviceIDs=0
+CL_DEVICE_LOCAL_MEM_SIZE=65536 query_err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBuffer=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(local,65536)=0
+clSetKernelArg(last_index)=0
+clSetKernelArg(out)=0
+CL_KERNEL_LOCAL_MEM_SIZE=65536 query_err=0
+clEnqueueNDRangeKernel=0
+B1_EH5 variable=65536 static=0 total=65536 lds_blocks=128 limit=65536 rsrc2_before=0x0000008a rsrc2_after=0x0040008a
+clFinish=0
+clEnqueueReadBuffer=0
+first=0x00000011
+last=0x00000022
+B1-DYN-BOUNDARY=PASS

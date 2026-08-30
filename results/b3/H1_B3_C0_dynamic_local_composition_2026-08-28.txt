@@ -1,0 +1,16 @@
+clGetPlatformIDs=0 platforms=1
+CL_DEVICE_LOCAL_MEM_SIZE=65536 err=0
+CL_DEVICE_MAX_WORK_GROUP_SIZE=1024 err=0
+clCreateContext=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+BEFORE_LOCAL_MEM=0 err=0
+BEFORE_KERNEL_WG=512 err=0
+clSetKernelArg(A,4096)=0
+AFTER_A_LOCAL_MEM=4096 err=0
+AFTER_A_KERNEL_WG=512 err=0
+clSetKernelArg(B,8192)=0
+AFTER_AB_LOCAL_MEM=12288 err=0
+AFTER_AB_KERNEL_WG=512 err=0
+B3-C0=PASS

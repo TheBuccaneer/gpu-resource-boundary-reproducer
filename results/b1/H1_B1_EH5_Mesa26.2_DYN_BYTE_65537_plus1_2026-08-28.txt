@@ -1,0 +1,20 @@
+requested_local=65537
+last_index=65536
+=== Rusticl warning: Patched Mesa libclc not detected. Upstream libclc may contain known bugs or breaking changes and isn't guaranteed to work reliably. Please visit https://gitlab.freedesktop.org/karolherbst/mesa-libclc for more information. ===
+clGetPlatformIDs=0
+clGetDeviceIDs=0
+CL_DEVICE_LOCAL_MEM_SIZE=65536 query_err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBuffer=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(local,65537)=0
+clSetKernelArg(last_index)=0
+clSetKernelArg(out)=0
+CL_KERNEL_LOCAL_MEM_SIZE=65537 query_err=0
+clEnqueueNDRangeKernel=0
+B1_EH5 variable=65537 static=0 total=65537 lds_blocks=129 limit=65536 rsrc2_before=0x0000008a rsrc2_after=0x0040808a
+clFinish=0
+amdgpu: The CS has cancelled because the context is lost. This context is guilty of a hard recovery.

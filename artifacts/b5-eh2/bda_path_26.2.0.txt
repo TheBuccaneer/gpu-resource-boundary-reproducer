@@ -1,0 +1,111 @@
+=== MESA 26.2.0 ===
+
+=== find_bda_alloc ===
+603-
+604-                bda_ptrs.entry(dev).or_default().insert(
+605-                    address.get(),
+606-                    TrackedBDAAlloc {
+607-                        buffer: Arc::downgrade(buffer),
+608-                        size: buffer.size as _,
+609-                    },
+610-                );
+611-            }
+612-        }
+613-    }
+614-
+615:    pub fn find_bda_alloc(
+616-        &self,
+617-        dev: &Device,
+618-        ptr: cl_mem_device_address_ext,
+619-    ) -> Option<Arc<Buffer>> {
+620-        let lock = self.bda_ptrs.lock().unwrap();
+621-        let (_, mem) = lock.get(dev)?.find_alloc(ptr)?;
+622-        mem.buffer.upgrade()
+623-    }
+624-
+625-    pub fn remove_bda(&self, buf: &Buffer) {
+626-        let mut bda_ptrs = self.bda_ptrs.lock().unwrap();
+627-
+
+=== BDA kernel argument ===
+1801-                    exec_builder.add_zero_padding(arg.offset);
+1802-                }
+1803-
+1804-                match arg.kind {
+1805-                    CompiledKernelArgType::APIArg(idx) => {
+1806-                        let api_arg = &args[idx];
+1807-                        let Some(value) = &arg_values[idx] else {
+1808-                            continue;
+1809-                        };
+1810-
+1811-                        match value {
+1812-                            KernelArgValue::Constant(c) => exec_builder.add_values(c),
+1813:                            KernelArgValue::BDA(address) => {
+1814-                                bdas.push(*address);
+1815-                                if !api_arg.dead {
+1816-                                    exec_builder.add_pointer(*address);
+1817-                                }
+1818-                            }
+1819-                            KernelArgValue::Buffer { buffer, offset } => {
+1820-                                let buffer = &buffer_arcs[&(buffer.as_ptr() as usize)];
+1821-                                let rw = if api_arg.spirv.address_qualifier
+1822-                                    == clc_kernel_arg_address_qualifier::CLC_KERNEL_ARG_ADDRESS_CONSTANT
+1823-                                {
+1824-                                    RWFlags::RD
+1825-                                } else {
+
+=== BDA resource resolution ===
+1938-                        exec_builder.add_values(&[work_dim as u8; 1]);
+1939-                    }
+1940-                    CompiledKernelArgType::NumWorkgroups => {
+1941-                        exec_builder.add_values(unsafe {
+1942-                            as_byte_slice(&[grid[0] as u32, grid[1] as u32, grid[2] as u32])
+1943-                        });
+1944-                    }
+1945-                }
+1946-            }
+1947-
+1948-            // dedup with a HashSet
+1949-            let bdas = bdas
+1950-                .into_iter()
+1951-                // Ignore invalid pointers as they are legal to be passed in, but illegal to
+1952-                // dereference.
+1953:                .filter_map(|address| cl_ctx.find_bda_alloc(ctx.dev, address))
+1954-                .collect::<HashSet<_>>();
+1955-
+1956-            let mut bdas: Vec<_> = bdas
+1957-                .iter()
+1958-                .map(|buffer| buffer.get_res_for_access(ctx, RWFlags::RW))
+1959-                .collect::<CLResult<_>>()?;
+1960-
+1961-            let svms_new = svms
+1962-                .into_iter()
+1963-                .filter_map(|svm| cl_ctx.copy_svm_to_dev(ctx, svm).transpose())
+1964-                .collect::<CLResult<Vec<_>>>()?;
+1965-
+1966-            // uhhh
+1967-            for svm in &svms_new {
+1968-                bdas.push(svm);
+
+=== launch_grid BDA resources ===
+1988-                        // Each iteration we need to update the kernel side workgroup id offsets.
+1989-                        exec_builder.set_workgroup_id_offset(this_offsets);
+1990-
+1991-                        let this_grid = [
+1992-                            cmp::min(hw_max_grid[0], grid[0] - hw_max_grid[0] * x) as u32,
+1993-                            cmp::min(hw_max_grid[1], grid[1] - hw_max_grid[1] * y) as u32,
+1994-                            cmp::min(hw_max_grid[2], grid[2] - hw_max_grid[2] * z) as u32,
+1995-                        ];
+1996-
+1997-                        ctx.update_cb0(exec_builder.input())?;
+1998:                        ctx.launch_grid(
+1999-                            work_dim,
+2000-                            block,
+2001-                            this_grid,
+2002-                            variable_local_size as u32,
+2003-                            &bdas,
+2004-                        );
+2005-
+2006-                        if Platform::dbg().sync_every_event {
+2007-                            ctx.flush().wait();
+2008-                        }

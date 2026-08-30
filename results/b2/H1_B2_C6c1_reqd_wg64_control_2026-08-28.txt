@@ -1,0 +1,18 @@
+requested_local=64
+requested_global=64
+clGetPlatformIDs=0 platforms=1
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+CL_KERNEL_COMPILE_WORK_GROUP_SIZE=64,1,1 err=0
+CL_KERNEL_WORK_GROUP_SIZE=64 err=0
+clCreateBuffer=0
+clSetKernelArg=0
+clEnqueueNDRangeKernel=0
+clFinish=0
+clEnqueueReadBuffer=0
+observed_local=64
+observed_global=64
+B2-C6c1=PASS

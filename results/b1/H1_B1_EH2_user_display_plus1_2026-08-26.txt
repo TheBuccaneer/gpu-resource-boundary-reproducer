@@ -1,0 +1,3 @@
+aug 26 12:49:03 rock-21m5002age systemd[3621]: Started drkonqi-coredump-launcher@5-16386-75708_91282-0.service - Launch DrKonqi for a systemd-coredump crash (PID 75708/UID 0).
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-launcher[75723]: Unable to find file for pid 75684 expected at "kcrash-metadata/dynamic_local_byte_boundary_probe.4b362a86dafa4939a13d542484ba2b01.75684.ini"
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-launcher[75723]: KCrash metadata not marked complete. Please file a bug at bugs.kde.org giving as much detail about the crash as possible and maybe include the file ""

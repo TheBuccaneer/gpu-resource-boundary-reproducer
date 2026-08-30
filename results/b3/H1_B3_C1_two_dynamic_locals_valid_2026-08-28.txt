@@ -1,0 +1,25 @@
+A_bytes=4096
+B_bytes=8192
+requested_sum=12288
+clGetPlatformIDs=0 platforms=1
+CL_DEVICE_LOCAL_MEM_SIZE=65536 err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(A,4096)=0
+clSetKernelArg(B,8192)=0
+clSetKernelArg(a_last)=0
+clSetKernelArg(b_last)=0
+clCreateBuffer=0
+clSetKernelArg(out)=0
+CL_KERNEL_LOCAL_MEM_SIZE=12288 err=0
+clEnqueueNDRangeKernel=0
+clFinish=0
+clEnqueueReadBuffer=0
+A_first=0x11
+A_last=0x22
+B_first=0x33
+B_last=0x44
+B3-C1=PASS

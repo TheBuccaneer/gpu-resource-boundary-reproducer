@@ -1,0 +1,16 @@
+clGetPlatformIDs=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBuffer=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(local,32768)=0
+clSetKernelArg(out)=0
+CL_KERNEL_LOCAL_MEM_SIZE=32768 query_err=0
+clEnqueueNDRangeKernel=0
+clFinish=0
+clEnqueueReadBuffer=0
+result=0x12345678
+B1-DYN=PASS

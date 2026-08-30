@@ -1,0 +1,366 @@
+     87090:	
+     87090:	file=libOpenCL.so.1 [0];  needed by clinfo [0]
+     87090:	find library=libOpenCL.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libOpenCL.so.1
+     87090:	
+     87090:	file=libOpenCL.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdc07ca0  base: 0x0000734ffdbf2000   size: 0x0000000000016620
+     87090:	    entry: 0x0000734ffdbf2000  phdr: 0x0000734ffdbf2040  phnum:                 13
+     87090:	
+     87090:	
+     87090:	file=libc.so.6 [0];  needed by clinfo [0]
+     87090:	find library=libc.so.6 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libc.so.6
+     87090:	
+     87090:	file=libc.so.6 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffda11940  base: 0x0000734ffd800000   size: 0x0000000000220d90
+     87090:	    entry: 0x0000734ffd82a820  phdr: 0x0000734ffd800040  phnum:                 15
+     87090:	
+     87090:	
+     87090:	calling init: /lib64/ld-linux-x86-64.so.2
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libc.so.6
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1
+     87090:	
+     87090:	
+     87090:	initialize program: clinfo
+     87090:	
+     87090:	
+     87090:	transferring control: clinfo
+     87090:	
+     87090:	
+     87090:	file=libRusticlOpenCL.so.1 [0];  dynamically loaded by /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 [0]
+     87090:	find library=libRusticlOpenCL.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+     87090:	
+     87090:	file=libRusticlOpenCL.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffd50c418  base: 0x0000734ffac00000   size: 0x0000000002af4478
+     87090:	    entry: 0x0000734ffac00000  phdr: 0x0000734ffac00040  phnum:                 11
+     87090:	
+     87090:	
+     87090:	file=libz.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libz.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libz.so.1
+     87090:	
+     87090:	file=libz.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdbeddc0  base: 0x0000734ffdbd1000   size: 0x000000000001d098
+     87090:	    entry: 0x0000734ffdbd1000  phdr: 0x0000734ffdbd1040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libzstd.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libzstd.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libzstd.so.1
+     87090:	
+     87090:	file=libzstd.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdbcfcb8  base: 0x0000734ffdb0e000   size: 0x00000000000c2030
+     87090:	    entry: 0x0000734ffdb0e000  phdr: 0x0000734ffdb0e040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libdrm.so.2 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libdrm.so.2 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libdrm.so.2
+     87090:	
+     87090:	file=libdrm.so.2 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdb0cde8  base: 0x0000734ffdaf7000   size: 0x0000000000016bd8
+     87090:	    entry: 0x0000734ffdaf7000  phdr: 0x0000734ffdaf7040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libLLVM.so.21.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libLLVM.so.21.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1
+     87090:	
+     87090:	file=libLLVM.so.21.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffa9d89b0  base: 0x0000734ff2600000   size: 0x00000000084d5a99
+     87090:	    entry: 0x0000734ff2600000  phdr: 0x0000734ff2600040  phnum:                 11
+     87090:	
+     87090:	
+     87090:	file=libexpat.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libexpat.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libexpat.so.1
+     87090:	
+     87090:	file=libexpat.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdaf5dd0  base: 0x0000734ffdaca000   size: 0x000000000002c080
+     87090:	    entry: 0x0000734ffdaca000  phdr: 0x0000734ffdaca040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libelf.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libelf.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libelf.so.1
+     87090:	
+     87090:	file=libelf.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdac8d80  base: 0x0000734ffdaa9000   size: 0x00000000000201d0
+     87090:	    entry: 0x0000734ffdaa9000  phdr: 0x0000734ffdaa9040  phnum:                 13
+     87090:	
+     87090:	
+     87090:	file=libdrm_amdgpu.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libdrm_amdgpu.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+     87090:	
+     87090:	file=libdrm_amdgpu.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffdaa7dd0  base: 0x0000734ffda9c000   size: 0x000000000000c270
+     87090:	    entry: 0x0000734ffda9c000  phdr: 0x0000734ffda9c040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libclang-cpp.so.21.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libclang-cpp.so.21.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1
+     87090:	
+     87090:	file=libclang-cpp.so.21.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ff2576160  base: 0x0000734feec00000   size: 0x00000000039964a0
+     87090:	    entry: 0x0000734feec00000  phdr: 0x0000734feec00040  phnum:                 13
+     87090:	
+     87090:	
+     87090:	file=libLLVMSPIRVLib.so.21.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libLLVMSPIRVLib.so.21.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1
+     87090:	
+     87090:	file=libLLVMSPIRVLib.so.21.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734feebd8680  base: 0x0000734fee800000   size: 0x00000000003e1b60
+     87090:	    entry: 0x0000734fee800000  phdr: 0x0000734fee800040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libstdc++.so.6 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libstdc++.so.6 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+     87090:	
+     87090:	file=libstdc++.so.6 [0];  generating link map
+     87090:	  dynamic: 0x0000734fee697cb8  base: 0x0000734fee400000   size: 0x000000000029f440
+     87090:	    entry: 0x0000734fee400000  phdr: 0x0000734fee400040  phnum:                 13
+     87090:	
+     87090:	
+     87090:	file=libm.so.6 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libm.so.6 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libm.so.6
+     87090:	
+     87090:	file=libm.so.6 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffabfeb98  base: 0x0000734ffaada000   size: 0x0000000000125018
+     87090:	    entry: 0x0000734ffaada000  phdr: 0x0000734ffaada040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libgcc_s.so.1 [0];  needed by /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	find library=libgcc_s.so.1 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+     87090:	
+     87090:	file=libgcc_s.so.1 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffda9adb0  base: 0x0000734ffda6e000   size: 0x000000000002d3a8
+     87090:	    entry: 0x0000734ffda6e000  phdr: 0x0000734ffda6e040  phnum:                 13
+     87090:	
+     87090:	
+     87090:	file=libffi.so.8 [0];  needed by /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+     87090:	find library=libffi.so.8 [0]; searching
+     87090:	 search path=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v3:/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v2:/usr/lib/x86_64-linux-gnu/../lib		(RUNPATH from file /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1)
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v3/libffi.so.8
+     87090:	    (no such file)
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v2/libffi.so.8
+     87090:	    (no such file)
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/libffi.so.8
+     87090:	    (no such file)
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libffi.so.8
+     87090:	
+     87090:	file=libffi.so.8 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffda6cdb8  base: 0x0000734ffda5d000   size: 0x00000000000106d0
+     87090:	    entry: 0x0000734ffda5d000  phdr: 0x0000734ffda5d040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libedit.so.2 [0];  needed by /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+     87090:	find library=libedit.so.2 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libedit.so.2
+     87090:	
+     87090:	file=libedit.so.2 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffda57c80  base: 0x0000734ffda23000   size: 0x0000000000039080
+     87090:	    entry: 0x0000734ffda23000  phdr: 0x0000734ffda23040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libxml2.so.16 [0];  needed by /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+     87090:	find library=libxml2.so.16 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libxml2.so.16
+     87090:	
+     87090:	file=libxml2.so.16 [0];  generating link map
+     87090:	  dynamic: 0x0000734fee3fd990  base: 0x0000734fee29d000   size: 0x0000000000162440
+     87090:	    entry: 0x0000734fee29d000  phdr: 0x0000734fee29d040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libtinfo.so.6 [0];  needed by /usr/lib/x86_64-linux-gnu/libedit.so.2 [0]
+     87090:	find library=libtinfo.so.6 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+     87090:	
+     87090:	file=libtinfo.so.6 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffd7feab8  base: 0x0000734ffd7cb000   size: 0x0000000000034928
+     87090:	    entry: 0x0000734ffd7cb000  phdr: 0x0000734ffd7cb040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libbsd.so.0 [0];  needed by /usr/lib/x86_64-linux-gnu/libedit.so.2 [0]
+     87090:	find library=libbsd.so.0 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libbsd.so.0
+     87090:	
+     87090:	file=libbsd.so.0 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffd7c8a18  base: 0x0000734ffd7b5000   size: 0x00000000000150c0
+     87090:	    entry: 0x0000734ffd7b5000  phdr: 0x0000734ffd7b5040  phnum:                 12
+     87090:	
+     87090:	
+     87090:	file=libmd.so.0 [0];  needed by /usr/lib/x86_64-linux-gnu/libbsd.so.0 [0]
+     87090:	find library=libmd.so.0 [0]; searching
+     87090:	 search cache=/etc/ld.so.cache
+     87090:	  trying file=/usr/lib/x86_64-linux-gnu/libmd.so.0
+     87090:	
+     87090:	file=libmd.so.0 [0];  generating link map
+     87090:	  dynamic: 0x0000734ffd7b3d68  base: 0x0000734ffd7a6000   size: 0x000000000000e068
+     87090:	    entry: 0x0000734ffd7a6000  phdr: 0x0000734ffd7a6040  phnum:                 12
+     87090:	
+     87090:	activating NODELETE for /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+     87090:	activating NODELETE for /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1 [0]
+     87090:	activating NODELETE for /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1 [0]
+     87090:	activating NODELETE for /usr/lib/x86_64-linux-gnu/libstdc++.so.6 [0]
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libmd.so.0
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libbsd.so.0
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libtinfo.so.6
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libz.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libm.so.6
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libxml2.so.16
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libedit.so.2
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libffi.so.8
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libzstd.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libdrm.so.2
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libelf.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libexpat.so.1
+     87090:	
+     87090:	
+     87090:	calling init: /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+     87090:	
+     87090:	opening file=/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]; direct_opencount=1
+     87090:	
+     87090:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: clIcdGetFunctionAddressForPlatformKHR (fatal)
+     87090:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: clIcdSetPlatformDispatchDataKHR (fatal)
+     87090:	
+     87090:	calling fini:  [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libexpat.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libelf.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libdrm.so.2 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libzstd.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libstdc++.so.6 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libffi.so.8 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libedit.so.2 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libxml2.so.16 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libm.so.6 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libz.so.1 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libtinfo.so.6 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libbsd.so.0 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libmd.so.0 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /usr/lib/x86_64-linux-gnu/libc.so.6 [0]
+     87090:	
+     87090:	
+     87090:	calling fini: /lib64/ld-linux-x86-64.so.2 [0]
+     87090:	

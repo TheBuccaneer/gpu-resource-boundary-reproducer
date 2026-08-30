@@ -1,0 +1,20 @@
+clGetPlatformIDs=0 platforms=1
+clGetDeviceIDs=0 devices=1
+CL_DEVICE_NAME=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic) err=0
+CL_DEVICE_VERSION=OpenCL 3.0  err=0
+CL_DEVICE_ADDRESS_BITS=64 err=0
+CL_DEVICE_SVM_CAPABILITIES=0x1 err=0
+SVM_COARSE_GRAIN_BUFFER=1
+SVM_FINE_GRAIN_BUFFER=0
+SVM_FINE_GRAIN_SYSTEM=0
+SVM_ATOMICS=0
+dlopen_libOpenCL=success
+clSVMAlloc=present
+clSVMFree=present
+clSetKernelArgSVMPointer=present
+clEnqueueSVMMap=present
+clEnqueueSVMUnmap=present
+clEnqueueSVMMemcpy=present
+clEnqueueSVMMemFill=present
+clEnqueueSVMFree=present
+B4-C0=PASS

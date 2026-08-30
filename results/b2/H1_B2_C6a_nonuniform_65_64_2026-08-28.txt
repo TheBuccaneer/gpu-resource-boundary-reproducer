@@ -1,0 +1,14 @@
+requested_local=64
+requested_global=65
+clGetPlatformIDs=0 platforms=1
+device_max_work_group_size=1024
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+kernel_max_work_group_size=512 err=0
+kernel_preferred_multiple=64 err=0
+clCreateBuffer=0
+clSetKernelArg=0
+clEnqueueNDRangeKernel=-54

@@ -1,0 +1,307 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+[New Thread 0x7fffe869c6c0 (LWP 20488)]
+[New Thread 0x7fffe7bff6c0 (LWP 20489)]
+[New Thread 0x7fffe73fe6c0 (LWP 20490)]
+[New Thread 0x7fffe6bfd6c0 (LWP 20491)]
+[New Thread 0x7fffe5ffc6c0 (LWP 20492)]
+[New Thread 0x7fffe57fb6c0 (LWP 20493)]
+[New Thread 0x7fffe4ffa6c0 (LWP 20494)]
+[New Thread 0x7fffc7fff6c0 (LWP 20495)]
+[New Thread 0x7fffc77fe6c0 (LWP 20496)]
+[New Thread 0x7fffc6ffd6c0 (LWP 20497)]
+[New Thread 0x7fffc67fc6c0 (LWP 20498)]
+
+Thread 4 "compare_lo:sh0" received signal SIGFPE, Arithmetic exception.
+[Switching to Thread 0x7fffe73fe6c0 (LWP 20490)]
+0x00007ffff6629061 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+
+=== CRASH THREAD ===
+#0  0x00007ffff6629061 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#1  0x00007ffff66294b5 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#2  0x00007ffff662c24a in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#3  0x00007ffff65df5db in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#4  0x00007ffff65e02f2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#5  0x00007ffff56de021 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#6  0x00007ffff56db5bd in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#7  0x00007ffff56dced1 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff56becc8 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff548c7d2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#11 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#12 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+=== ALL THREADS ===
+
+Thread 12 (Thread 0x7fffc67fc6c0 (LWP 20498) "compare_lo:sh1"):
+#0  0x00007ffff6629061 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#1  0x00007ffff66294b5 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#2  0x00007ffff662c24a in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#3  0x00007ffff65df5db in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#4  0x00007ffff65e02f2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#5  0x00007ffff56de021 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#6  0x00007ffff56db5bd in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#7  0x00007ffff56dced1 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff56becc8 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff548c7d2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#11 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#12 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 11 (Thread 0x7fffc6ffd6c0 (LWP 20497) "compare:disk$0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=140736280399088, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x7fffb8000cf0, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x7fffb8000cf0, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x7fffb8000cf0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x7fffb8000ca0, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x7fffb8000ca0) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 10 (Thread 0x7fffc77fe6c0 (LWP 20496) "c:clctxworker0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93825050005248, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x555558c6cf00, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x555558c6cf00, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x555558c6cf00, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x555558c6ceb0, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x555558c6ceb0) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 9 (Thread 0x7fffc7fff6c0 (LWP 20495) "compar:traceq0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824994225272, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x55555573ac78, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x55555573ac78, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x55555573ac78, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x55555573ac28, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x55555573ac28) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 8 (Thread 0x7fffe4ffa6c0 (LWP 20494) "compar:traceq0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993935912, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x5555556f4228, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x5555556f4228, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x5555556f4228, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x5555556f41d8, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x5555556f41d8) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 7 (Thread 0x7fffe57fb6c0 (LWP 20493) "compar:traceq0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993647016, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x5555556ad9a8, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x5555556ad9a8, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x5555556ad9a8, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x5555556ad958, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x5555556ad958) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 6 (Thread 0x7fffe5ffc6c0 (LWP 20492) "compar:traceq0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993293336, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x555555657418, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x555555657418, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x555555657418, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x5555556573c8, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x5555556573c8) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 5 (Thread 0x7fffe6bfd6c0 (LWP 20491) "compar:sh_opt0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993144752, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x555555632fb0, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x555555632fb0, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x555555632fb0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x555555632f60, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x555555632f60) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 4 (Thread 0x7fffe73fe6c0 (LWP 20490) "compare_lo:sh0"):
+#0  0x00007ffff6629061 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#1  0x00007ffff66294b5 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#2  0x00007ffff662c24a in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#3  0x00007ffff65df5db in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#4  0x00007ffff65e02f2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#5  0x00007ffff56de021 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#6  0x00007ffff56db5bd in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#7  0x00007ffff56dced1 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff56becc8 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff548c7d2 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#11 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#12 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 3 (Thread 0x7fffe7bff6c0 (LWP 20489) "compare:disk$0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993155520, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x5555556359c0, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x5555556359c0, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x5555556359c0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x555555635970, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x555555635970) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 2 (Thread 0x7fffe869c6c0 (LWP 20488) "compare_lo:cs0"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca058c in __internal_syscall_cancel (a1=a1@entry=93824993138736, a2=<optimized out>, a3=a3@entry=0, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca0967 in __futex_abstimed_wait_common64 (private=0, futex_word=0x555555631830, expected=0, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x555555631830, expected=0, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x555555631830, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3347 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x5555556317e0, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x5555556317e0) at ./nptl/pthread_cond_wait.c:453
+#7  0x00007ffff54d4b5d in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff548c6fc in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff54d4a9c in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff7ca407a in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#11 0x00007ffff7d3772c in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 1 (Thread 0x7ffff7f82780 (LWP 20485) "compare_local_l"):
+#0  syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+#1  0x00007ffff54839da in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#2  0x00007ffff548c3b0 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#3  0x00007ffff56be835 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#4  0x00007ffff52a6470 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#5  0x00007ffff526c3e5 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#6  0x00007ffff51dc153 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#7  0x00007ffff51df357 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#8  0x00007ffff51db498 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#9  0x00007ffff51cfe69 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#10 0x00007ffff51cfdec in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#11 0x00007ffff5262b31 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#12 0x00007ffff50cb1a7 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#13 0x00007ffff5262a5e in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#14 0x00007ffff51cfda5 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#15 0x00007ffff51cfeee in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#16 0x00007ffff51cfe49 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#17 0x00007ffff51db465 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#18 0x00007ffff51e146f in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#19 0x00007ffff5206408 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#20 0x00007ffff51e1432 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#21 0x00007ffff51e9655 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#22 0x00007ffff522def9 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#23 0x00007ffff518a269 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#24 0x00007ffff522dbe0 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#25 0x00007ffff5281165 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#26 0x00007ffff51e6fb9 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#27 0x00007ffff51e9389 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#28 0x00007ffff5227a31 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#29 0x00007ffff5281e6e in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#30 0x00007ffff51e8f14 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#31 0x00007ffff51e10d4 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#32 0x00007ffff51d4ae9 in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#33 0x00007ffff51d4bee in ?? () from /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+#34 0x00005555555557ae in test_program ()
+#35 0x00005555555554e9 in main ()
+
+=== REGISTERS ===
+rax            0x6c0               1728
+rbx            0x4                 4
+rcx            0x0                 0
+rdx            0x0                 0
+rsi            0x0                 0
+rdi            0x7fffdc008ed0      140736884412112
+rbp            0x7fffe73f76a0      0x7fffe73f76a0
+rsp            0x7fffe73f7650      0x7fffe73f7650
+r8             0x0                 0
+r9             0x7fffdc008ed0      140736884412112
+r10            0x0                 0
+r11            0x0                 0
+r12            0x7fffdc008ed0      140736884412112
+r13            0x7fffdc026080      140736884531328
+r14            0x3                 3
+r15            0x8                 8
+rip            0x7ffff6629061      0x7ffff6629061
+eflags         0x10246             [ PF ZF IF RF ]
+cs             0x33                51
+ss             0x2b                43
+ds             0x0                 0
+es             0x0                 0
+fs             0x0                 0
+gs             0x0                 0
+pl3_ssp        <unavailable>
+fs_base        0x7fffe73fe6c0      140737073112768
+gs_base        0x0                 0
+
+=== INSTRUCTIONS ===
+   0x7ffff6629049:	nopl   0x0(%rax)
+   0x7ffff6629050:	endbr64
+   0x7ffff6629054:	movzwl 0x92(%rdi),%eax
+   0x7ffff662905b:	xor    %edx,%edx
+   0x7ffff662905d:	push   %rbp
+   0x7ffff662905e:	mov    %esi,%r8d
+=> 0x7ffff6629061:	div    %si
+   0x7ffff6629064:	mov    %rsp,%rbp
+   0x7ffff6629067:	movzwl %ax,%ecx
+   0x7ffff662906a:	mov    $0x80,%eax
+   0x7ffff662906f:	cmp    %eax,%ecx
+   0x7ffff6629071:	cmovg  %eax,%ecx
+   0x7ffff6629074:	call   0x7ffff6628f20
+   0x7ffff6629079:	movzwl 0x9a(%rdi),%esi
+   0x7ffff6629080:	xor    %edx,%edx
+   0x7ffff6629082:	pop    %rbp
+
+=== SHARED LIBRARIES ===
+From                To                  Syms Read   Shared Object Library
+0x00007ffff7fc0000  0x00007ffff7fff000  Yes         /lib64/ld-linux-x86-64.so.2
+0x00007ffff7f85000  0x00007ffff7f9c000  Yes (*)     /usr/lib/x86_64-linux-gnu/libOpenCL.so.1
+0x00007ffff7c00000  0x00007ffff7e21000  Yes         /usr/lib/x86_64-linux-gnu/libc.so.6
+0x00007ffff5000000  0x00007ffff7af5000  Yes (*)     /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+0x00007ffff7f64000  0x00007ffff7f82000  Yes (*)     /usr/lib/x86_64-linux-gnu/libz.so.1
+0x00007ffff7ea1000  0x00007ffff7f64000  Yes (*)     /usr/lib/x86_64-linux-gnu/libzstd.so.1
+0x00007ffff7e8a000  0x00007ffff7ea1000  Yes (*)     /usr/lib/x86_64-linux-gnu/libdrm.so.2
+0x00007fffeca00000  0x00007ffff4ed6000  Yes (*)     /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1
+0x00007ffff7e5d000  0x00007ffff7e8a000  Yes (*)     /usr/lib/x86_64-linux-gnu/libexpat.so.1
+0x00007ffff7e3c000  0x00007ffff7e5d000  Yes (*)     /usr/lib/x86_64-linux-gnu/libelf.so.1
+0x00007ffff7e2f000  0x00007ffff7e3c000  Yes (*)     /usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+0x00007fffe9000000  0x00007fffec997000  Yes (*)     /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1
+0x00007fffe8c00000  0x00007fffe8fe2000  Yes (*)     /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1
+0x00007fffe8800000  0x00007fffe8aa0000  Yes (*)     /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+0x00007ffff4eda000  0x00007ffff5000000  Yes         /usr/lib/x86_64-linux-gnu/libm.so.6
+0x00007ffff7bd2000  0x00007ffff7c00000  Yes (*)     /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+0x00007ffff7bc1000  0x00007ffff7bd2000  Yes (*)     /usr/lib/x86_64-linux-gnu/libffi.so.8
+0x00007ffff7b87000  0x00007ffff7bc1000  Yes (*)     /usr/lib/x86_64-linux-gnu/libedit.so.2
+0x00007fffe869d000  0x00007fffe8800000  Yes (*)     /usr/lib/x86_64-linux-gnu/libxml2.so.16
+0x00007ffff7b52000  0x00007ffff7b87000  Yes (*)     /usr/lib/x86_64-linux-gnu/libtinfo.so.6
+0x00007ffff7b3c000  0x00007ffff7b52000  Yes (*)     /usr/lib/x86_64-linux-gnu/libbsd.so.0
+0x00007ffff7b2d000  0x00007ffff7b3c000  Yes (*)     /usr/lib/x86_64-linux-gnu/libmd.so.0
+(*): Shared library is missing debugging information.

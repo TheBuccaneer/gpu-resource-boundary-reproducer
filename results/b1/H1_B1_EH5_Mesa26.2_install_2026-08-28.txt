@@ -1,0 +1,31 @@
+ninja: Entering directory `vendor-src/build-mesa-26.2.0-release'
+[1/23] Generating src/git_sha1.h with a custom command
+[1/2] Installing files
+Installing symlink pointing to libdril_dri.so to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+Installing src/gallium/targets/rusticl/libRusticlOpenCL.so.1.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu
+Installing src/gallium/targets/dri/libgallium-26.2.0.so to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu
+Installing src/glx/libGLX_mesa.so.0.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu
+Installing src/gbm/libgbm.so.1.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu
+Installing src/egl/libEGL_mesa.so.0.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu
+Installing src/gallium/targets/dril/libdril_dri.so to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/dri
+Installing src/gbm/backends/dri/dri_gbm.so to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/gbm
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/include/EGL/eglext_angle.h to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/include/EGL
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/include/EGL/eglmesaext.h to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/include/EGL
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/include/GL/internal/dri_interface.h to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/include/GL/internal
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/src/gbm/main/gbm.h to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/include
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/src/gbm/main/gbm_backend_abi.h to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/include
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/src/util/00-mesa-defaults.conf to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/share/drirc.d
+Installing /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/src/gallium/drivers/radeonsi/00-radeonsi-defaults.conf to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/share/drirc.d
+Installing /home/rock/projects/OpenCL2/vendor-src/build-mesa-26.2.0-release/src/gallium/targets/rusticl/rusticl.icd to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/etc/OpenCL/vendors
+Installing /home/rock/projects/OpenCL2/vendor-src/build-mesa-26.2.0-release/meson-private/dri.pc to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/pkgconfig
+Installing /home/rock/projects/OpenCL2/vendor-src/build-mesa-26.2.0-release/meson-private/gbm.pc to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/pkgconfig
+Installing /home/rock/projects/OpenCL2/vendor-src/build-mesa-26.2.0-release/src/egl/50_mesa.json to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/share/glvnd/egl_vendor.d
+Installing symlink pointing to libRusticlOpenCL.so.1.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+Installing symlink pointing to libRusticlOpenCL.so.1 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libRusticlOpenCL.so
+Installing symlink pointing to libGLX_mesa.so.0.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libGLX_mesa.so.0
+Installing symlink pointing to libGLX_mesa.so.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libGLX_mesa.so
+Installing symlink pointing to libgbm.so.1.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libgbm.so.1
+Installing symlink pointing to libgbm.so.1 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libgbm.so
+Installing symlink pointing to libEGL_mesa.so.0.0.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libEGL_mesa.so.0
+Installing symlink pointing to libEGL_mesa.so.0 to /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libEGL_mesa.so
+Running custom install script '/usr/bin/python3 /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0/bin/install_megadrivers.py --libname-suffix so /home/rock/projects/OpenCL2/vendor-src/build-mesa-26.2.0-release/src/gallium/targets/dril/libdril_dri.so /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/dri radeonsi_dri.so'

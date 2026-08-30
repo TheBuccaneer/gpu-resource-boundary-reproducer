@@ -1,0 +1,17 @@
+experiment=SEC1_GUI_LESS_CONTROL
+trial=5
+boot_id=873a47ee-6ed1-4982-af9c-819a0706b36a
+tag=20260830_113500
+start_wall=2026-08-30T11:35:00+02:00
+kernel=7.0.0-30-generic
+victim=sec1_victim_heartbeat_v2
+trigger=b3_multi_local_probe_32767_32769
+condition=multi-user.target_no_display_manager_no_plasma
+victim_pid=2738
+trigger_call_mono_ns=39672606770
+trigger_return_mono_ns=43249086425
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0
+recovery_class=RING_RESET_ONLY

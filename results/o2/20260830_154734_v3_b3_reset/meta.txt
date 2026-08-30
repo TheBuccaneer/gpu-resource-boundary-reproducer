@@ -1,0 +1,8 @@
+experiment=O2A_V3_B3_RESET
+time=2026-08-30T15:47:34+02:00
+boot_id=7d56418a-9c6c-4ca4-a0c8-f69c9e36eaf9
+enforce_isolation=0
+trigger=./probes/b3_multi_local_probe 32768 32769
+reset_triggered=1
+b3_exit=134
+o2_exit=0

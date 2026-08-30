@@ -1,0 +1,27 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clSetKernelArgDevicePointerEXT_present=1
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBufferWithProperties(raw)=0
+clEnqueueWriteBuffer(raw_init)=0
+CL_MEM_DEVICE_ADDRESS_EXT_query=0
+base_address=0xffff800100600000
+buffer_bytes=4096
+exact_end_address=0xffff800100601000
+distance_from_base=4096
+clCreateBuffer(out)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArgDevicePointerEXT(exact_end)=0
+clSetKernelArg(out)=0
+about_to_dereference_exact_end=1
+clEnqueueNDRangeKernel=0 event=yes
+clWaitForEvents=0
+event_status=0 query_err=0
+clEnqueueReadBuffer(out)=0
+oob_observed_value=0x00000000
+B5-C5=OOB_READ_COMPLETED
+probe_exit=30

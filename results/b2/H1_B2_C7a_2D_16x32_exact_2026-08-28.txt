@@ -1,0 +1,18 @@
+requested_local=16x32
+requested_product=512
+clGetPlatformIDs=0 platforms=1
+device_max_item_sizes=1024,1024,1024
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+CL_KERNEL_WORK_GROUP_SIZE=512 err=0
+clCreateBuffer=0
+clSetKernelArg=0
+clEnqueueNDRangeKernel=0
+clFinish=0
+clEnqueueReadBuffer=0
+observed_local=16x32
+observed_product=512
+B2-C7=PASS

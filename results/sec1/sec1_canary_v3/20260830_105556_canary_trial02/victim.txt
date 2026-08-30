@@ -1,0 +1,75 @@
+RUN_START label=SEC1_CANARY_V3_T02_20260830_105556 interval_ms=200 max_iterations=0 pid=4844 wall_s=1788080156.743834 mono_ns=80816854562
+INIT gen=0 clGetPlatformIDs=0
+INIT gen=0 clGetDeviceIDs=0
+INIT gen=0 clCreateContext=0
+INIT gen=0 clCreateCommandQueueWithProperties=0
+INIT gen=0 clCreateProgramWithSource=0
+INIT gen=0 clBuildProgram=0
+INIT gen=0 clCreateKernel=0
+INIT gen=0 clCreateBuffer=0
+INIT gen=0 clSetKernelArg(out)=0
+HB seq=1 gen=0 mono_ns=80971510597 wall_s=1788080156.898488 elapsed_ms=5.98 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=2 gen=0 mono_ns=81171926402 wall_s=1788080157.098906 elapsed_ms=2.32 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=3 gen=0 mono_ns=81372321603 wall_s=1788080157.299301 elapsed_ms=2.27 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=4 gen=0 mono_ns=81572711846 wall_s=1788080157.499692 elapsed_ms=2.95 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=5 gen=0 mono_ns=81773102507 wall_s=1788080157.700082 elapsed_ms=3.19 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=6 gen=0 mono_ns=81973492121 wall_s=1788080157.900473 elapsed_ms=2.26 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=7 gen=0 mono_ns=82173871049 wall_s=1788080158.100851 elapsed_ms=3.19 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=8 gen=0 mono_ns=82374261780 wall_s=1788080158.301242 elapsed_ms=2.12 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=9 gen=0 mono_ns=82574836335 wall_s=1788080158.501816 elapsed_ms=2.91 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=10 gen=0 mono_ns=82775226648 wall_s=1788080158.702207 elapsed_ms=2.13 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=11 gen=0 mono_ns=82975621081 wall_s=1788080158.902601 elapsed_ms=1.98 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=12 gen=0 mono_ns=83175999869 wall_s=1788080159.103023 elapsed_ms=2.05 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=13 gen=0 mono_ns=83376394581 wall_s=1788080159.303375 elapsed_ms=2.22 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=14 gen=0 mono_ns=83576794694 wall_s=1788080159.503775 elapsed_ms=3.19 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=15 gen=0 mono_ns=83777212126 wall_s=1788080159.704192 elapsed_ms=2.39 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=16 gen=0 mono_ns=83977556420 wall_s=1788080159.904536 elapsed_ms=1972.83 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=17 gen=0 mono_ns=85950437995 wall_s=1788080161.877417 elapsed_ms=0.92 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=18 gen=0 mono_ns=86150549745 wall_s=1788080162.077529 elapsed_ms=1.79 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=19 gen=0 mono_ns=86350662613 wall_s=1788080162.277642 elapsed_ms=1.94 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=20 gen=0 mono_ns=86550777647 wall_s=1788080162.477757 elapsed_ms=2.16 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=21 gen=0 mono_ns=86750932427 wall_s=1788080162.677912 elapsed_ms=2.30 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=22 gen=0 mono_ns=86951079873 wall_s=1788080162.878060 elapsed_ms=2.16 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=23 gen=0 mono_ns=87151210344 wall_s=1788080163.078190 elapsed_ms=1.88 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=24 gen=0 mono_ns=87351337672 wall_s=1788080163.278316 elapsed_ms=1.94 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=25 gen=0 mono_ns=87551434263 wall_s=1788080163.478413 elapsed_ms=1.64 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=26 gen=0 mono_ns=87751860567 wall_s=1788080163.678840 elapsed_ms=2.22 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=27 gen=0 mono_ns=87951956460 wall_s=1788080163.878935 elapsed_ms=1.35 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=28 gen=0 mono_ns=88152159370 wall_s=1788080164.079139 elapsed_ms=1.43 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=29 gen=0 mono_ns=88352265741 wall_s=1788080164.279245 elapsed_ms=1.03 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=30 gen=0 mono_ns=88552407249 wall_s=1788080164.479387 elapsed_ms=1.74 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=31 gen=0 mono_ns=88752551272 wall_s=1788080164.679531 elapsed_ms=1.37 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=32 gen=0 mono_ns=88952698438 wall_s=1788080164.879679 elapsed_ms=1.40 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=33 gen=0 mono_ns=89152797615 wall_s=1788080165.079777 elapsed_ms=2.15 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=34 gen=0 mono_ns=89352964829 wall_s=1788080165.279945 elapsed_ms=2.77 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=35 gen=0 mono_ns=89553127992 wall_s=1788080165.480108 elapsed_ms=2.43 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=36 gen=0 mono_ns=89753281305 wall_s=1788080165.680261 elapsed_ms=1.49 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=37 gen=0 mono_ns=89953436365 wall_s=1788080165.880416 elapsed_ms=1.35 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=38 gen=0 mono_ns=90153997906 wall_s=1788080166.080999 elapsed_ms=1.33 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=39 gen=0 mono_ns=90354136410 wall_s=1788080166.281116 elapsed_ms=1.53 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=40 gen=0 mono_ns=90554279804 wall_s=1788080166.481260 elapsed_ms=1.75 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=41 gen=0 mono_ns=90754424665 wall_s=1788080166.681404 elapsed_ms=1.55 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=42 gen=0 mono_ns=90954578188 wall_s=1788080166.881557 elapsed_ms=1.40 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=43 gen=0 mono_ns=91154724027 wall_s=1788080167.081704 elapsed_ms=1.36 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=44 gen=0 mono_ns=91354868469 wall_s=1788080167.281848 elapsed_ms=1.35 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=45 gen=0 mono_ns=91554967646 wall_s=1788080167.481947 elapsed_ms=0.77 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=46 gen=0 mono_ns=91755048451 wall_s=1788080167.682027 elapsed_ms=0.74 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=47 gen=0 mono_ns=91955136660 wall_s=1788080167.882115 elapsed_ms=0.78 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=48 gen=0 mono_ns=92155222564 wall_s=1788080168.082201 elapsed_ms=0.79 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=49 gen=0 mono_ns=92355307211 wall_s=1788080168.282286 elapsed_ms=0.74 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=50 gen=0 mono_ns=92555383685 wall_s=1788080168.482362 elapsed_ms=0.70 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=51 gen=0 mono_ns=92755473292 wall_s=1788080168.682452 elapsed_ms=0.80 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=52 gen=0 mono_ns=92955574703 wall_s=1788080168.882553 elapsed_ms=0.75 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=53 gen=0 mono_ns=93155654810 wall_s=1788080169.082633 elapsed_ms=0.61 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=54 gen=0 mono_ns=93355741063 wall_s=1788080169.282719 elapsed_ms=0.66 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=55 gen=0 mono_ns=93555863012 wall_s=1788080169.482842 elapsed_ms=0.90 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=56 gen=0 mono_ns=93756310202 wall_s=1788080169.683290 elapsed_ms=3.06 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=57 gen=0 mono_ns=93956733361 wall_s=1788080169.883713 elapsed_ms=2.85 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=58 gen=0 mono_ns=94157155823 wall_s=1788080170.084136 elapsed_ms=3.55 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=59 gen=0 mono_ns=94357574512 wall_s=1788080170.284554 elapsed_ms=2.26 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=60 gen=0 mono_ns=94557996484 wall_s=1788080170.484976 elapsed_ms=3.27 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=61 gen=0 mono_ns=94758420552 wall_s=1788080170.685401 elapsed_ms=2.46 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=62 gen=0 mono_ns=94958841616 wall_s=1788080170.885822 elapsed_ms=3.41 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=63 gen=0 mono_ns=95159262191 wall_s=1788080171.086242 elapsed_ms=2.32 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+HB seq=64 gen=0 mono_ns=95359680391 wall_s=1788080171.286661 elapsed_ms=3.27 canary_err=0 enqueue_err=0 finish_err=0 read_err=0 result_ok=1 status=OK
+RUN_END last_seq=64 reason=STOP_REQUESTED wall_s=1788080171.516279 mono_ns=95589299133

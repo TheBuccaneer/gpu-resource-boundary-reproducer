@@ -1,0 +1,25 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clSetKernelArgDevicePointerEXT_present=1
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBufferWithProperties(raw)=0
+CL_MEM_DEVICE_ADDRESS_EXT_query=0
+base_address=0xffff800100600000
+buffer_bytes=4096
+exact_end_address=0xffff800100601000
+distance_from_base=4096
+natural_alignment_uint=1
+clCreateBuffer(out)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArgDevicePointerEXT(exact_end)=0
+clSetKernelArg(out)=0
+clEnqueueNDRangeKernel=0
+clWaitForEvents=0
+clEnqueueReadBuffer(out)=0
+expected_marker=0x12345678
+observed_marker=0x12345678
+B5-C4=PASS

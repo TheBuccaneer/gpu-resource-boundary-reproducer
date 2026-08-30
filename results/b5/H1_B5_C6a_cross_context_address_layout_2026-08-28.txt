@@ -1,0 +1,41 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+create_ctxA=0
+create_ctxB=0
+contexts_distinct=1
+create_A0=0
+query_A0=0
+create_B0=0
+query_B0=0
+create_A1=0
+query_A1=0
+create_B1=0
+query_B1=0
+create_A2=0
+query_A2=0
+create_B2=0
+query_B2=0
+create_A3=0
+query_A3=0
+create_B3=0
+query_B3=0
+
+=== ADDRESS MAP ===
+A0=0xffff800100600000 B0=0xffff800100601000 equal=0
+A1=0xffff800100602000 B1=0xffff800100603000 equal=0
+A2=0xffff800100604000 B2=0xffff800100605000 equal=0
+A3=0xffff800100606000 B3=0xffff800100607000 equal=0
+
+=== DELTAS ===
+A1_minus_A0=8192
+B1_minus_B0=8192
+A2_minus_A0=16384
+B2_minus_B0=16384
+A3_minus_A0=24576
+B3_minus_B0=24576
+
+all_corresponding_addresses_equal=0
+A0_equals_B0=0
+A1_equals_B1=0
+B5-C6a=PASS

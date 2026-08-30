@@ -1,0 +1,21 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueue(q1)=0
+clCreateCommandQueue(q2)=0
+alloc_A=success addr=0x1ffffffff000
+map_A=0
+unmap_A=0
+finish_A_init=0
+clCreateBuffer(sink)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+set_arg_A=0
+set_arg_sink=0
+set_arg_loops=0 loops=20000000
+enqueue_kernel=0
+enqueue_free_A=0
+clFlush(q1)=0
+free_event_poll_timeout=1

@@ -1,0 +1,7 @@
+watching=/sys/class/drm/card1/device/devcoredump/data
+output=results/b1/H1_B1_EH5_Mesa26.2_DYN_BYTE_65537_devcoredump_2026-08-28.bin
+wait_seconds=60
+devcoredump_detected=2026-08-28T14:09:51+02:00
+capture_start=2026-08-28T14:09:51+02:00
+cat: /sys/class/drm/card1/device/devcoredump/data: Permission denied
+read=FAILED exit=1

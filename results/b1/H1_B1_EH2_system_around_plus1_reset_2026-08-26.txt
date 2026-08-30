@@ -1,0 +1,43 @@
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State Completed
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] AMDGPU device coredump file has been created
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] Check your /sys/class/drm/card1/device/devcoredump/data
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.0 timeout, signaled seq=11229, emitted seq=11230
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0:  Process dynamic_local_b pid 75684 thread dynamic_lo:cs0 pid 75686
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: Starting comp_1.1.0 ring reset
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: Ring comp_1.1.0 reset succeeded
+aug 26 12:49:03 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] device wedged, but recovered through reset
+aug 26 12:49:03 rock-21m5002age systemd-coredump[75701]: Process 75684 (dynamic_local_b) of user 1000 terminated abnormally with signal 6/ABRT, processing...
+aug 26 12:49:03 rock-21m5002age systemd[1]: Started systemd-coredump@5-28674-75701_91280-0.service - Process Core Dump (PID 75701/UID 0).
+aug 26 12:49:03 rock-21m5002age systemd[1]: Started drkonqi-coredump-processor@5-28674-75701_91280-0.service - Pass systemd-coredump journal entries to relevant user for potential DrKonqi handling.
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Udev event detected
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-5 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-6 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-7 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-8 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-9 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-10 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-11 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-12 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-13 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-14 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-15 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-16 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-17 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-18 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-19 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-20 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age org_kde_powerdevil[4212]: [  4319] Device /dev/i2c-21 lacks R/W permissions
+aug 26 12:49:03 rock-21m5002age systemd-coredump[75705]: Resource limits disable core dumping for process 75684 (dynamic_local_b).
+aug 26 12:49:03 rock-21m5002age systemd-coredump[75705]: Process 75684 (dynamic_local_b) of user 1000 terminated abnormally without generating a coredump.
+aug 26 12:49:03 rock-21m5002age systemd[1]: systemd-coredump@5-28674-75701_91280-0.service: Deactivated successfully.
+aug 26 12:49:03 rock-21m5002age systemd[1]: systemd-coredump@5-28674-75701_91280-0.service: Triggering OnSuccess= dependencies.
+aug 26 12:49:03 rock-21m5002age systemd[1]: Starting apport-coredump-hook@5-28674-75701_91280-0.service...
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-processor[75708]: Entry doesn't look like a dump. This may have been a vaccum run. Nothing to process.
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-processor[75708]: "/home/rock/projects/OpenCL2/probes/dynamic_local_byte_boundary_probe" 75684 ""
+aug 26 12:49:03 rock-21m5002age systemd[3621]: Started drkonqi-coredump-launcher@5-16386-75708_91282-0.service - Launch DrKonqi for a systemd-coredump crash (PID 75708/UID 0).
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-launcher[75723]: Unable to find file for pid 75684 expected at "kcrash-metadata/dynamic_local_byte_boundary_probe.4b362a86dafa4939a13d542484ba2b01.75684.ini"
+aug 26 12:49:03 rock-21m5002age drkonqi-coredump-launcher[75723]: KCrash metadata not marked complete. Please file a bug at bugs.kde.org giving as much detail about the crash as possible and maybe include the file ""
+aug 26 12:49:03 rock-21m5002age systemd[1]: drkonqi-coredump-processor@5-28674-75701_91280-0.service: Deactivated successfully.
+aug 26 12:49:03 rock-21m5002age systemd[1]: apport-coredump-hook@5-28674-75701_91280-0.service: Deactivated successfully.
+aug 26 12:49:03 rock-21m5002age systemd[1]: Finished apport-coredump-hook@5-28674-75701_91280-0.service.

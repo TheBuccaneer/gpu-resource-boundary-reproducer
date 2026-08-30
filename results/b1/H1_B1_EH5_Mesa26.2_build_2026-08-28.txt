@@ -1,0 +1,7 @@
+ninja: Entering directory `vendor-src/build-mesa-26.2.0-release'
+[1/24] Generating src/git_sha1.h with a custom command
+[2/9] Compiling C object src/gallium/drivers/radeonsi/libradeonsi.a.p/gfx_si_compute.c.o
+[3/9] Linking static target src/gallium/drivers/radeonsi/libradeonsi.a
+[4/9] Linking target src/gallium/targets/dri/libgallium-26.2.0.so
+[5/9] Generating symbol file src/gallium/targets/dri/libgallium-26.2.0.so.p/libgallium-26.2.0.so.symbols
+[6/6] Linking target src/gallium/targets/rusticl/libRusticlOpenCL.so.1.0.0

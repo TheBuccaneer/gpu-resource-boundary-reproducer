@@ -1,0 +1,5 @@
+experiment=O2_PAIRED_CONTROL
+time=2026-08-30T15:41:13+02:00
+boot_id=7d56418a-9c6c-4ca4-a0c8-f69c9e36eaf9
+enforce_isolation=0
+exit=60

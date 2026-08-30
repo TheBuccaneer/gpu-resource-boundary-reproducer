@@ -1,0 +1,68 @@
+clGetPlatformIDs=0 platforms=1
+clGetDeviceIDs=0
+device=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic)
+compute_units=6
+local_mem=65536
+ctxA clCreateContext=0
+ctxA clCreateCommandQueueWithProperties=0
+ctxA clCreateProgramWithSource=0
+ctxA clBuildProgram=0
+ctxA clCreateKernel(victim)=0
+victim_local_mem=32768
+ctxA clCreateBuffer(sink)=0
+ctxB clCreateContext=0
+ctxB clCreateCommandQueueWithProperties=0
+readerA clCreateProgramWithSource=0
+readerA clBuildProgram=0
+readerA clCreateKernel=0
+readerA clCreateBuffer=0
+readerB clCreateProgramWithSource=0
+readerB clBuildProgram=0
+readerB clCreateKernel=0
+readerB clCreateBuffer=0
+SEC2-PREBUILT-READERS=READY
+ctxA clEnqueueNDRangeKernel(victim)=0
+ctxA clFinish(victim)=0
+ctxA pattern=0xa5c30000 XOR index
+ctxA kept alive during ctxB
+O2 mode=control
+O2-PRE clEnqueueNDRangeKernel=0
+O2-PRE clEnqueueReadBuffer=0
+O2-PRE victim_to_reader_gap_us=9
+O2-PRE exact_matches=786432
+O2-PRE range_matches=786432
+O2-PRE longest_exact_run=8192
+O2-PRECHECK=PASS
+O2-REPRIME clEnqueueNDRangeKernel=0
+O2-REPRIME clFinish=0
+O2-REPRIME=PASS
+reader_context=ctxB
+victim_to_reader_gap_us=4
+ctxR clEnqueueNDRangeKernel(reader)=0
+ctxR clEnqueueReadBuffer=0
+exact_hit group=0 index=0 value=0xa5c30000
+exact_hit group=0 index=1 value=0xa5c30001
+exact_hit group=0 index=2 value=0xa5c30002
+exact_hit group=0 index=3 value=0xa5c30003
+exact_hit group=0 index=4 value=0xa5c30004
+exact_hit group=0 index=5 value=0xa5c30005
+exact_hit group=0 index=6 value=0xa5c30006
+exact_hit group=0 index=7 value=0xa5c30007
+exact_hit group=0 index=8 value=0xa5c30008
+exact_hit group=0 index=9 value=0xa5c30009
+exact_hit group=0 index=10 value=0xa5c3000a
+exact_hit group=0 index=11 value=0xa5c3000b
+exact_hit group=0 index=12 value=0xa5c3000c
+exact_hit group=0 index=13 value=0xa5c3000d
+exact_hit group=0 index=14 value=0xa5c3000e
+exact_hit group=0 index=15 value=0xa5c3000f
+samples=786432
+exact_matches=786432
+range_matches=786432
+longest_exact_run=8192
+O2-POST exact_matches=786432
+O2-POST range_matches=786432
+O2-POST longest_exact_run=8192
+O2-POSTCHECK=OBSERVED
+SEC2-PREBUILT-READER-CONTEXT-SWITCH=OBSERVED
+ctxA released after ctxB

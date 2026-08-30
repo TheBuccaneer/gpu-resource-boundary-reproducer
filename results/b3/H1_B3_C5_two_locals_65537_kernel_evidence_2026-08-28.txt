@@ -1,0 +1,9 @@
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: Dumping IP State Completed
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] AMDGPU device coredump file has been created
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] Check your /sys/class/drm/card1/device/devcoredump/data
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: ring comp_1.1.0 timeout, signaled seq=11082, emitted seq=11083
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0:  Process b3_multi_local_ pid 81560 thread b3_multi_l:cs0 pid 81562
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: Starting comp_1.1.0 ring reset
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: Ring comp_1.1.0 reset succeeded
+aug 28 15:12:48 rock-21m5002age kernel: amdgpu 0000:04:00.0: [drm] device wedged, but recovered through reset

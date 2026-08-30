@@ -1,0 +1,27 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+CL_DEVICE_SVM_CAPABILITIES=0x1 err=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clSVMAlloc=success size=1024
+clEnqueueSVMMap(write)=0
+host_before_first=0x00001000
+host_before_last=0x000010ff
+clEnqueueSVMUnmap(write)=0
+clFinish(after_write_unmap)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArgSVMPointer=0
+clSetKernelArg(n)=0
+clEnqueueNDRangeKernel=0
+clFinish(kernel)=0
+clEnqueueSVMMap(read)=0
+host_after_first=0x00001001
+host_after_last=0x00001100
+mismatches=0
+clEnqueueSVMUnmap(read)=0
+clFinish(final_unmap)=0
+clSVMFree=done
+B4-C1=PASS

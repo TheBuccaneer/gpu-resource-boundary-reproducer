@@ -1,0 +1,30 @@
+=== Rusticl warning: Patched Mesa libclc not detected. Upstream libclc may contain known bugs or breaking changes and isn't guaranteed to work reliably. Please visit https://gitlab.freedesktop.org/karolherbst/mesa-libclc for more information. ===
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clSVMAlloc=success addr=0x1ffffffff000
+clEnqueueSVMMap(write)=0
+expected_sum=524800
+clEnqueueSVMUnmap=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clCreateBuffer(out)=0
+clSetKernelArgSVMPointer=0
+clSetKernelArg(out)=0
+clSetKernelArg(n)=0
+clEnqueueNDRangeKernel=0 event=yes
+clEnqueueSVMFree(callback)=0 event=yes
+clWaitForEvents(free_event)=0
+callback_called=1
+callback_query_err=0
+callback_kernel_status=2
+kernel_status_after_free_event=0 query_err=0
+clWaitForEvents(kernel_event)=0
+kernel_status_final=0 query_err=0
+clEnqueueReadBuffer=0
+actual_sum=524800
+clSVMFree(final)=done
+B4-C3b=ORDERING_INTERESTING

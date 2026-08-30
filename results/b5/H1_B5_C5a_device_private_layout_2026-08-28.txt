@@ -1,0 +1,18 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+create_A=0
+create_B=0
+query_A=0
+query_B=0
+A_base=0xffff800100600000
+A_end=0xffff800100601000
+B_base=0xffff800100601000
+B_end=0xffff800100602000
+B_minus_A=4096
+B_minus_A_end=0
+B_equals_A_end=1
+A_equals_B_end=0
+same_address=0
+B5-C5a=PASS

@@ -1,0 +1,22 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+device_name=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-30-generic)
+device_version=OpenCL 3.0 
+CL_DEVICE_ADDRESS_BITS=64 query_err=0
+extension_cl_ext_buffer_device_address=1
+clSetKernelArgDevicePointerEXT_address=0x78e9909d7500
+clSetKernelArgDevicePointerEXT_present=1
+clCreateContext=0
+clCreateBufferWithProperties(device_private)=0
+CL_MEM_PROPERTIES_size=24 query_err=0
+device_address_query_1=0
+device_address_1=0xffff800100600000
+device_address_size_1=8
+device_address_query_2=0
+device_address_2=0xffff800100600000
+device_address_size_2=8
+device_address_nonzero=1
+device_address_stable=1
+sizeof_cl_mem_device_address_ext=8
+B5-C0=PASS

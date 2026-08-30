@@ -1,0 +1,25 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clSetKernelArgDevicePointerEXT_present=1
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clCreateBufferWithProperties(raw)=0
+clEnqueueWriteBuffer(raw_init)=0
+clCreateBuffer(out)=0
+CL_MEM_DEVICE_ADDRESS_EXT_query=0
+device_address=0xffff800100600000
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArgDevicePointerEXT=0
+clSetKernelArg(out)=0
+clEnqueueNDRangeKernel=0
+clWaitForEvents=0
+clEnqueueReadBuffer(out)=0
+clEnqueueReadBuffer(raw_after)=0
+expected_read=0x11223344
+observed_read=0x11223344
+expected_after=0x55667788
+observed_after=0x55667788
+B5-C1=PASS

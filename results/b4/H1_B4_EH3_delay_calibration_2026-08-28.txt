@@ -1,0 +1,25 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+clSVMAlloc=success addr=0x1ffffffff000
+clEnqueueSVMMap=0
+clEnqueueSVMUnmap=0
+clCreateBuffer(sink)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArgSVMPointer=0
+clSetKernelArg(sink)=0
+clSetKernelArg(loops)=0 loops=20000000
+clEnqueueNDRangeKernel=0
+clWaitForEvents=0
+host_elapsed_ms=325.590
+profiling_start_err=0
+profiling_end_err=0
+gpu_elapsed_ms=323.249
+clEnqueueSVMMap(read)=0
+svm_final=0xa5a5a5a5
+clEnqueueSVMUnmap(read)=0
+B4-EH3-PREP=PASS

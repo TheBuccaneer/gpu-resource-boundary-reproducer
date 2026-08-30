@@ -1,0 +1,19 @@
+experiment=SEC1_FUP1_CANARY_V3
+trial=1
+boot_id=5495907e-543f-4460-a61b-3069d6022460
+tag=20260830_104547
+start_wall=2026-08-30T10:45:47+02:00
+kernel=7.0.0-30-generic
+victim=sec1_victim_heartbeat_v3
+canary_pattern=0xC0DE0000_xor_gid
+trigger=b3_multi_local_probe_32767_32769
+18edee5e3065cbe491c193db55d0b44d6817d5cd4ee5107b38b15062e27eb0a3  src/sec1_victim_heartbeat_v3.c
+c5a30d4035c6e98054605b2103cfd16ee8d9e012f521eb5a59f8b08d4684ad44  probes/sec1_victim_heartbeat_v3
+victim_pid=5327
+trigger_call_mono_ns=117789277311
+trigger_return_mono_ns=121401108736
+attacker_exit=134
+victim_alive=1
+victim_hung_after_sigint=0
+victim_exit=0
+recovery_class=RING_RESET_ONLY

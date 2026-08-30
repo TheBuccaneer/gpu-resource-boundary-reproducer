@@ -1,0 +1,35 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clSetKernelArgDevicePointerEXT_present=1
+create_ctxA=0
+create_ctxB=0
+contexts_distinct=1
+create_qA=0
+create_qB=0
+create_targetB=0
+write_targetB=0
+finish_targetB_init=0
+query_targetB_address=0
+ctxB_target_address=0xffff800100600000
+create_outA=0
+create_programA=0
+build_programA=0
+create_kernelA=0
+set_foreign_device_pointer=0
+set_outA=0
+about_to_cross_context_dereference=1
+enqueue_kernelA=0 event=yes
+wait_kernelA=0
+event_status=0 query_err=0
+read_outA=0
+observed_0=0xc0dec0de expected_ctxB=0xc0dec0de
+observed_1=0x13579bdf expected_ctxB=0x13579bdf
+observed_2=0x2468ace0 expected_ctxB=0x2468ace0
+observed_3=0xfeedface expected_ctxB=0xfeedface
+direct_ctxB_read=0
+ctxB_control_0=0xc0dec0de
+ctxB_control_1=0x13579bdf
+ctxB_control_2=0x2468ace0
+ctxB_control_3=0xfeedface
+B5-C6b=CROSS_CONTEXT_READ_CONFIRMED
