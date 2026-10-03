@@ -1,0 +1,12 @@
+stack=b7fix
+time=2026-10-03T08:25:04+02:00
+boot_id=72624a7e-9d96-4b7d-8228-5cc214bacc5c
+kernel=7.0.0-38-generic
+prefix=/home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-b7fix-local
+rusticl_sha256=8edfdb04646bfb8bbe9e0efddb02a375b988b6566500931a5c40f8522a9ed423
+c0_source_sha256=53275681f7f9665f93203851d50bc12d3dd7e18996c2b655b248df55341a6fec
+c0_binary_sha256=6010111ac88e54e47cc52ab51ab7a04304bf5b322303bc51573b6449ce845548
+c1_source_sha256=acdcdd990256dae7dfebf3fcb70ce933e3a7548ab2b6f5d8bf0da26b1fa6b00e
+c1_binary_sha256=483d0b9a56117692552fe232e47c7ceb945c9f6266dbc628233559e9bb0a3ec6
+c0_exit=4
+c1_exit=4

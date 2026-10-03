@@ -1,0 +1,9 @@
+B7 Rusticl clSetKernelArg context-validation patch
+
+upstream_base=3821bf78426f5515d26047e49164beedb8ecd18d
+upstream_date=2026-10-03T02:16:33Z
+patch_sha256=418b0c8870544f4de777b10ec7938d80437789dc9beb3ee8dadc42065b5a32a5
+
+Purpose:
+Reject Buffer/Image/Sampler kernel arguments whose OpenCL context
+differs from kernel.prog.context with CL_INVALID_CONTEXT.

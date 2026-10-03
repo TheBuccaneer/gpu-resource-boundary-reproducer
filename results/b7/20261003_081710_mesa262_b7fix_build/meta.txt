@@ -1,0 +1,10 @@
+experiment=B7_MESA_26_2_FIX_BUILD
+time=2026-10-03T08:17:10+02:00
+kernel=7.0.0-38-generic
+patch_sha256=418b0c8870544f4de777b10ec7938d80437789dc9beb3ee8dadc42065b5a32a5
+meson=1.10.1
+ninja=1.13.2
+build=vendor-src/build-mesa-26.2.0-b7fix
+prefix=/home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-b7fix-local
+build_exit=0
+install_exit=0

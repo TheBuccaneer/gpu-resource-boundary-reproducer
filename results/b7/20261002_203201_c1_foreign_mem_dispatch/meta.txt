@@ -1,0 +1,7 @@
+experiment=B7_C1_FOREIGN_MEM_DISPATCH
+time=2026-10-02T20:32:01+02:00
+boot_id=9fcfffd2-4739-4e38-a944-47390c4ff17a
+kernel=7.0.0-38-generic
+source_sha256=acdcdd990256dae7dfebf3fcb70ce933e3a7548ab2b6f5d8bf0da26b1fa6b00e
+binary_sha256=483d0b9a56117692552fe232e47c7ceb945c9f6266dbc628233559e9bb0a3ec6
+exit=0

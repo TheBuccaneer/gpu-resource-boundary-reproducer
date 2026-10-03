@@ -1,0 +1,7 @@
+experiment=B7_C2_REVERSE_FOREIGN_MEM
+time=2026-10-02T20:40:43+02:00
+boot_id=9fcfffd2-4739-4e38-a944-47390c4ff17a
+kernel=7.0.0-38-generic
+source_sha256=05545d1d0242214736ffce650e24c732c217888fa17e339b2ca943c30b0e25bb
+binary_sha256=5c23a0f654ac14418cea7d70f7977849ca508b7c5798b8cb6cb7c21a833262a2
+exit=0

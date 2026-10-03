@@ -1,0 +1,13 @@
+stack=baseline
+time=2026-10-03T08:27:40+02:00
+boot_id=72624a7e-9d96-4b7d-8228-5cc214bacc5c
+kernel=7.0.0-38-generic
+prefix=/home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local
+libdrm_prefix=/home/rock/projects/OpenCL2/vendor-src/libdrm-2.4.133-local/lib/x86_64-linux-gnu
+LD_LIBRARY_PATH=/home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu:/home/rock/projects/OpenCL2/vendor-src/libdrm-2.4.133-local/lib/x86_64-linux-gnu
+rusticl_sha256=262fb1e449da668a6a97dd88be69529ce178fd5bd27914ba32eb16155c03e409
+libdrm_sha256=12aab45c6d1e23a3e1b7988b50c31220e77836fa4d5ad1d7998df3a4cd11c790
+libdrm_amdgpu_sha256=3db52cf8007d56c2e51c23c189f7e69aaba66b68faa6e0701c6f83cec317d79d
+precheck=PASS
+c0_exit=30
+c1_exit=0

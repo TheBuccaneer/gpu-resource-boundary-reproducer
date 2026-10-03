@@ -1,0 +1,24 @@
+platform_count err=0 count=1
+device=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+ctxA create=0
+ctxB create=0
+contexts_distinct=1
+qA create=0
+qB create=0
+bufA create=0
+bufB create=0
+bufA_matches_ctxA=1
+bufB_matches_ctxB=1
+progX create=0
+progX build=0
+kernelX create=0
+POS set_bufA=0
+POS enqueue=0
+POS finish=0
+POS read=0 value=0xb7c10001 expected=0xB7C10001
+FOREIGN pre_read=0 value=0xb1b2b3b4 expected=0xB1B2B3B4
+B7-C2 set_foreign=0 spec_expected=-34
+B7-C2 enqueue_foreign=0
+B7-C2 finish_foreign=0
+B7-C2 post_read=0 value=0xb7c10001 marker=0xB7C10001
+B7-C2-CLASS=FOREIGN_ACCESS_OBSERVED

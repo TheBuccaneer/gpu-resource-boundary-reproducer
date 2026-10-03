@@ -1,0 +1,18 @@
+experiment=B7_C1_FOREIGN_MEM_REPRO
+time=2026-10-02T20:35:18+02:00
+boot_id=9fcfffd2-4739-4e38-a944-47390c4ff17a
+kernel=7.0.0-38-generic
+source_sha256=acdcdd990256dae7dfebf3fcb70ce933e3a7548ab2b6f5d8bf0da26b1fa6b00e
+binary_sha256=483d0b9a56117692552fe232e47c7ceb945c9f6266dbc628233559e9bb0a3ec6
+
+  Platform Name                                   rusticl
+  Platform Version                                OpenCL 3.0 
+  Platform Name                                   rusticl
+  Device Name                                     AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+  Driver Version                                  26.0.8-1ubuntu0.3
+    Platform Name                                 rusticl
+    Device Name                                   AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+    Platform Name                                 rusticl
+    Device Name                                   AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+    Platform Name                                 rusticl
+    Device Name                                   AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)

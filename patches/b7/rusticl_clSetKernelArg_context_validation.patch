@@ -1,0 +1,42 @@
+diff --git a/src/gallium/frontends/rusticl/api/kernel.rs b/src/gallium/frontends/rusticl/api/kernel.rs
+index 289d0e6..637228f 100644
+--- a/src/gallium/frontends/rusticl/api/kernel.rs
++++ b/src/gallium/frontends/rusticl/api/kernel.rs
+@@ -452,6 +452,11 @@ fn set_kernel_arg(
+                 } else {
+                     // SAFETY: as above
+                     let buffer = Buffer::arc_from_raw(unsafe { *ptr })?;
++
++                    if buffer.context != k.prog.context {
++                        return Err(CL_INVALID_CONTEXT);
++                    }
++
+                     // We are required to prevent mutable access to immutable memory objects,
+                     // however no explicit error code has been specified yet.
+                     if arg.kind == KernelArgType::MemGlobal
+@@ -472,6 +477,10 @@ fn set_kernel_arg(
+                 // SAFETY: for image args arg_value pointers to a cl_mem object.
+                 let img = Image::arc_from_raw(unsafe { *img })?;
+ 
++                if img.context != k.prog.context {
++                    return Err(CL_INVALID_CONTEXT);
++                }
++
+                 // CL_INVALID_ARG_VALUE if the argument is an image declared with the read_only
+                 // qualifier and arg_value refers to an image object created with cl_mem_flags
+                 // of CL_MEM_WRITE_ONLY or if the image argument is declared with the write_only
+@@ -493,7 +502,13 @@ fn set_kernel_arg(
+             KernelArgType::Sampler if !arg.dead => {
+                 let ptr: *const cl_sampler = arg_value.cast();
+                 // SAFETY: for a sampler arg arg_value points to a cl_sampler object.
+-                KernelArgValue::Sampler(Sampler::arc_from_raw(unsafe { *ptr })?)
++                let sampler = Sampler::arc_from_raw(unsafe { *ptr })?;
++
++                if sampler.context != k.prog.context {
++                    return Err(CL_INVALID_CONTEXT);
++                }
++
++                KernelArgValue::Sampler(sampler)
+             }
+             _ => {
+                 debug_assert!(

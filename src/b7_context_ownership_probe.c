@@ -218,27 +218,27 @@ int main(void)
 
     uint32_t foreign_read = 0;
 
-    err = clEnqueueReadBuffer(qB, bufA, CL_TRUE, 0,
-                              sizeof(foreign_read), &foreign_read,
-                              0, NULL, NULL);
+    cl_int n1 = clEnqueueReadBuffer(qB, bufA, CL_TRUE, 0,
+                                     sizeof(foreign_read), &foreign_read,
+                                     0, NULL, NULL);
     printf("B7-N1 foreign_buffer_read err=%d expected=%d\n",
-           err, CL_INVALID_CONTEXT);
+           n1, CL_INVALID_CONTEXT);
 
-    err = clEnqueueWriteBuffer(qB, bufA, CL_TRUE, 0,
-                               sizeof(initB), &initB,
-                               0, NULL, NULL);
+    cl_int n2 = clEnqueueWriteBuffer(qB, bufA, CL_TRUE, 0,
+                                      sizeof(initB), &initB,
+                                      0, NULL, NULL);
     printf("B7-N2 foreign_buffer_write err=%d expected=%d\n",
-           err, CL_INVALID_CONTEXT);
+           n2, CL_INVALID_CONTEXT);
 
-    err = clEnqueueCopyBuffer(qB, bufA, bufB,
-                              0, 0, sizeof(uint32_t),
-                              0, NULL, NULL);
+    cl_int n3 = clEnqueueCopyBuffer(qB, bufA, bufB,
+                                     0, 0, sizeof(uint32_t),
+                                     0, NULL, NULL);
     printf("B7-N3 mixed_context_copy err=%d expected=%d\n",
-           err, CL_INVALID_CONTEXT);
+           n3, CL_INVALID_CONTEXT);
 
-    err = clSetKernelArg(kernelB, 0, sizeof(bufA), &bufA);
+    cl_int n4 = clSetKernelArg(kernelB, 0, sizeof(bufA), &bufA);
     printf("B7-N4 foreign_mem_kernel_arg err=%d expected=%d\n",
-           err, CL_INVALID_CONTEXT);
+           n4, CL_INVALID_CONTEXT);
 
     /*
      * Restore a valid argument after N4 before testing kernel ownership.
@@ -250,10 +250,10 @@ int main(void)
 
     size_t one = 1;
 
-    err = clEnqueueNDRangeKernel(qA, kernelB, 1, NULL,
-                                 &one, &one, 0, NULL, NULL);
+    cl_int n5 = clEnqueueNDRangeKernel(qA, kernelB, 1, NULL,
+                                        &one, &one, 0, NULL, NULL);
     printf("B7-N5 foreign_kernel_enqueue err=%d expected=%d\n",
-           err, CL_INVALID_CONTEXT);
+           n5, CL_INVALID_CONTEXT);
 
     /*
      * Final positive kernel path verifies that the failed foreign-context
@@ -277,16 +277,37 @@ int main(void)
     printf("POS final_read=%d value=0x%08x expected=0xB7001234\n",
            err, hostB);
 
-    int pass =
+    int metadata_pass =
         memCtxA == ctxA &&
         memCtxB == ctxB &&
         queueCtxA == ctxA &&
         queueCtxB == ctxB &&
         kernelCtxA == ctxA &&
-        kernelCtxB == ctxB &&
+        kernelCtxB == ctxB;
+
+    int ownership_pass =
+        n1 == CL_INVALID_CONTEXT &&
+        n2 == CL_INVALID_CONTEXT &&
+        n3 == CL_INVALID_CONTEXT &&
+        n4 == CL_INVALID_CONTEXT &&
+        n5 == CL_INVALID_CONTEXT;
+
+    int functional_pass =
         hostB == 0xB7001234u;
 
-    printf("B7-C0-METADATA=%s\n", pass ? "PASS" : "FAIL");
+    int pass =
+        metadata_pass &&
+        ownership_pass &&
+        functional_pass;
+
+    printf("B7-C0-METADATA=%s\n",
+           metadata_pass ? "PASS" : "FAIL");
+    printf("B7-C0-OWNERSHIP=%s\n",
+           ownership_pass ? "PASS" : "FAIL");
+    printf("B7-C0-FUNCTIONAL=%s\n",
+           functional_pass ? "PASS" : "FAIL");
+    printf("B7-C0=%s\n",
+           pass ? "PASS" : "FAIL");
 
     clReleaseKernel(kernelB);
     clReleaseKernel(kernelA);

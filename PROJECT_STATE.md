@@ -1,6 +1,6 @@
 # OpenCL2 Project State
 
-Updated: 2026-08-30
+Updated: 2026-10-03
 
 ## H1 platform
 
@@ -136,205 +136,33 @@ implementations / hardware.
 
 N/A capabilities and implementation-specific findings must be revisited there.
 
-## Next regular block
+## B7 — Object / Context Ownership
 
-### B7 — Object / Context Ownership
+**CLOSED ON H1 — FINDING / SOURCE-CONFIRMED / FIX-CONFIRMED**
 
-**NEXT**
+Ordinary foreign-context `cl_mem` was accepted by Rusticl as a kernel
+argument and reached dispatch, modifying the foreign buffer in both tested
+context directions. The installed Mesa 26.0.8 source confirms the omitted
+context check. A controlled Mesa 26.2.0 baseline versus local-patch run
+reproduced acceptance and foreign access on baseline, then rejected the
+argument with `CL_INVALID_CONTEXT` on the fix while positive controls passed.
 
-Use specification-defined ownership/context-validation questions.
+Canonical finding and provenance:
+`notes/H1_B7_CONTEXT_OWNERSHIP_FINDING.md` and
+`results/b7/20261003_082740_mesa262_valid_baseline_vs_b7fix/`.
+The earlier 08:25 run was discarded for a libdrm mismatch. Do not cite it
+as fix evidence. The result establishes a same-process, same-device OpenCL
+context-ownership violation; it does not establish cross-process access.
 
-Do not turn B7 into another B5 raw-device-pointer exploration unless a result
-specifically requires that comparison.
+## Main-line next blocks
+
+B8 representation mismatch, then B9 integer/arithmetic backend, B10
+synchronization/state, and B12 external semaphore/interop as H1 permits.
+B4 historical comparison and any remaining B7 patch/CTS follow-up are
+separate paper-hardening tasks; they do not reopen the closed H1 B7 block.
 
 ## Documentation rule
 
-For each meaningful closed block preserve:
-
-- question / hypothesis
-- platform
-- oracle
-- experiments and controls
-- raw provenance
-- findings
-- discarded hypotheses / confounders
-- strongest supported claims
-- explicit non-claims
-- future-work / reopen criteria
-
-## Immediate next action
-
-Inspect the existing B7 definition and construct the B7 C0 capability /
-baseline gate before running adversarial ownership tests.
-
-## Exact handoff checkpoint — 2026-08-30
-
-B7 has been opened, but no B7 runtime test has been executed yet.
-
-Existing source:
-
-    src/b7_context_ownership_probe.c
-
-Existing binary:
-
-    probes/b7_context_ownership_probe
-
-Current pre-self-check source SHA256:
-
-    bfafa8b08bc2b198ab1e0204a606f90d49f326dbc53155caa81dfec73970c135
-
-Current pre-self-check binary SHA256:
-
-    a9488588444759c5dc36bd42227c707df0c02e35f224717bec5b54eb8990507f
-
-The probe already implements B7 N1-N5 foreign-context tests, but the currently
-built version does not yet include N1-N5 in the final PASS/FAIL return oracle.
-
-Next action:
-
-1. Patch B7 probe so N1-N5 are stored separately as n1...n5.
-2. Require every value to equal CL_INVALID_CONTEXT (-34).
-3. Emit:
-   - B7-C0-METADATA
-   - B7-C0-OWNERSHIP
-   - B7-C0-FUNCTIONAL
-   - B7-C0
-4. Rebuild and record new SHA256 values.
-5. Execute the first B7-C0 runtime test.
-
-Do not reopen O2 before this.
-O2 H1 is closed as sensitivity-limited.
-
-Paper gates to revisit after the structured H1 classes:
-
-- Rusticl/radeonsi local-memory enforcement source audit.
-- Minimal cross-stack B1/B3 comparison, ideally Intel NEO or pocl.
-
-## Exact handoff checkpoint — 2026-08-30
-
-B7 has been opened, but no B7 runtime test has been executed yet.
-
-Existing source:
-
-    src/b7_context_ownership_probe.c
-
-Existing binary:
-
-    probes/b7_context_ownership_probe
-
-Current pre-self-check source SHA256:
-
-    bfafa8b08bc2b198ab1e0204a606f90d49f326dbc53155caa81dfec73970c135
-
-Current pre-self-check binary SHA256:
-
-    a9488588444759c5dc36bd42227c707df0c02e35f224717bec5b54eb8990507f
-
-The probe already implements B7 N1-N5 foreign-context tests, but the currently
-built version does not yet include N1-N5 in the final PASS/FAIL return oracle.
-
-Next action:
-
-1. Patch B7 probe so N1-N5 are stored separately as n1...n5.
-2. Require every value to equal CL_INVALID_CONTEXT (-34).
-3. Emit:
-   - B7-C0-METADATA
-   - B7-C0-OWNERSHIP
-   - B7-C0-FUNCTIONAL
-   - B7-C0
-4. Rebuild and record new SHA256 values.
-5. Execute the first B7-C0 runtime test.
-
-Do not reopen O2 before this.
-O2 H1 is closed as sensitivity-limited.
-
-Paper gates to revisit after the structured H1 classes:
-
-- Rusticl/radeonsi local-memory enforcement source audit.
-- Minimal cross-stack B1/B3 comparison, ideally Intel NEO or pocl.
-
-## Exact handoff checkpoint — 2026-08-30
-
-B7 has been opened, but no B7 runtime test has been executed yet.
-
-Existing source:
-
-    src/b7_context_ownership_probe.c
-
-Existing binary:
-
-    probes/b7_context_ownership_probe
-
-Current pre-self-check source SHA256:
-
-    bfafa8b08bc2b198ab1e0204a606f90d49f326dbc53155caa81dfec73970c135
-
-Current pre-self-check binary SHA256:
-
-    a9488588444759c5dc36bd42227c707df0c02e35f224717bec5b54eb8990507f
-
-The probe already implements B7 N1-N5 foreign-context tests, but the currently
-built version does not yet include N1-N5 in the final PASS/FAIL return oracle.
-
-Next action:
-
-1. Patch B7 probe so N1-N5 are stored separately as n1...n5.
-2. Require every value to equal CL_INVALID_CONTEXT (-34).
-3. Emit:
-   - B7-C0-METADATA
-   - B7-C0-OWNERSHIP
-   - B7-C0-FUNCTIONAL
-   - B7-C0
-4. Rebuild and record new SHA256 values.
-5. Execute the first B7-C0 runtime test.
-
-Do not reopen O2 before this.
-O2 H1 is closed as sensitivity-limited.
-
-Paper gates to revisit after the structured H1 classes:
-
-- Rusticl/radeonsi local-memory enforcement source audit.
-- Minimal cross-stack B1/B3 comparison, ideally Intel NEO or pocl.
-
-## Exact handoff checkpoint — 2026-08-30
-
-B7 has been opened, but no B7 runtime test has been executed yet.
-
-Existing source:
-
-    src/b7_context_ownership_probe.c
-
-Existing binary:
-
-    probes/b7_context_ownership_probe
-
-Current pre-self-check source SHA256:
-
-    bfafa8b08bc2b198ab1e0204a606f90d49f326dbc53155caa81dfec73970c135
-
-Current pre-self-check binary SHA256:
-
-    a9488588444759c5dc36bd42227c707df0c02e35f224717bec5b54eb8990507f
-
-The probe already implements B7 N1-N5 foreign-context tests, but the currently
-built version does not yet include N1-N5 in the final PASS/FAIL return oracle.
-
-Next action:
-
-1. Patch B7 probe so N1-N5 are stored separately as n1...n5.
-2. Require every value to equal CL_INVALID_CONTEXT (-34).
-3. Emit:
-   - B7-C0-METADATA
-   - B7-C0-OWNERSHIP
-   - B7-C0-FUNCTIONAL
-   - B7-C0
-4. Rebuild and record new SHA256 values.
-5. Execute the first B7-C0 runtime test.
-
-Do not reopen O2 before this.
-O2 H1 is closed as sensitivity-limited.
-
-Paper gates to revisit after the structured H1 classes:
-
-- Rusticl/radeonsi local-memory enforcement source audit.
-- Minimal cross-stack B1/B3 comparison, ideally Intel NEO or pocl.
+For each meaningful closed block preserve the question, platform, oracle,
+controls, raw provenance, finding, confounders, supported claims, non-claims,
+and reopen criteria.
