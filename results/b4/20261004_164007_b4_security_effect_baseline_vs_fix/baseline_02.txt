@@ -1,0 +1,51 @@
+=== Rusticl warning: Patched Mesa libclc not detected. Upstream libclc may contain known bugs or breaking changes and isn't guaranteed to work reliably. Please visit https://gitlab.freedesktop.org/karolherbst/mesa-libclc for more information. ===
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+create_q1=0
+create_q2=0
+create_program=0
+build_program=0
+create_old_kernel=0
+create_new_kernel=0
+create_sink=0
+create_out=0
+alloc_A=success addr=0x1ffffffff000
+map_A=0
+unmap_A=0
+finish_A_init=0
+set_old_A=0
+set_old_sink=0
+set_old_loops=0 loops=20000000
+enqueue_old=0
+enqueue_free_callback=0
+flush_q1=0
+callback_called=1
+callback_query_err=0
+callback_old_status=2
+callback_free_done=1
+callback_after_enqueue_ms=0.142
+alloc_B=success addr=0x1ffffffff000 old_addr=0x1ffffffff000 same_addr=1
+map_B_write=0
+unmap_B_write=0
+finish_B_init=0
+old_status_before_B_kernel=2 query_err=0
+set_new_B=0
+set_new_out=0
+enqueue_B_kernel=0
+wait_B_kernel=0
+B_kernel_host_elapsed_ms=307.898
+B_kernel_done_after_old_enqueue_ms=308.254
+old_status_after_B_kernel=0 query_err=0
+read_B_kernel_output=0
+B_device_read=0xa5a5a5a5
+wait_old_kernel=0
+old_kernel_done_after_enqueue_ms=310.637
+wait_free_event=0
+map_B_read=0
+B0_final=0xa5a5a5a5
+B1_final=0xeeeeeeee
+unmap_B_read=0
+B4-C3d2=DEVICE_ISOLATION_INTERESTING
+probe_exit=38

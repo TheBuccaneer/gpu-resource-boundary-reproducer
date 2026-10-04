@@ -1,0 +1,37 @@
+--- vendor-src/mesa-26.2.0/src/gallium/frontends/rusticl/core/queue.rs	2026-08-05 23:14:26.000000000 +0200
++++ vendor-src/mesa-26.2.0-b4fix/src/gallium/frontends/rusticl/core/queue.rs	2026-10-04 16:26:41.632054927 +0200
+@@ -440,17 +440,29 @@
+ 
+                         let new_events = QueueEvents::new(new_events);
+                         for e in new_events {
+-                            // If we hit any deps from another queue, flush so we don't risk a dead
+-                            // lock.
+-                            if e.deps().iter().any(|ev| !e.has_same_queue_as(ev)) {
++                            // clEnqueueSVMFree performs host-side lifetime work.  Unlike ordinary
++                            // same-queue device work, it must not run merely because a dependency
++                            // has been submitted; the dependency must actually have completed.
++                            let completion_sensitive = matches!(
++                                e.0.cmd_type,
++                                CL_COMMAND_SVM_FREE | CL_COMMAND_SVM_FREE_ARM
++                            );
++
++                            // Flush prior device work before a completion-sensitive wait.  Cross-
++                            // queue dependencies retain the existing flush-before-wait behavior.
++                            if completion_sensitive
++                                || e.deps().iter().any(|ev| !e.has_same_queue_as(ev))
++                            {
+                                 let dep_err = flush_events(&mut flushed, &ctx, &tx_q2);
+                                 last_err = cmp::min(last_err, dep_err);
+                             }
+ 
+                             // check if any dependency has an error
+                             for dep in e.deps() {
+-                                // We have to wait on user events or events from other queues.
+-                                let dep_err = if dep.is_user() || !e.has_same_queue_as(dep) {
++                                let dep_err = if completion_sensitive
++                                    || dep.is_user()
++                                    || !e.has_same_queue_as(dep)
++                                {
+                                     dep.wait()
+                                 } else {
+                                     dep.status()

@@ -1,6 +1,6 @@
 # OpenCL2 Project State
 
-Updated: 2026-10-03
+Updated: 2026-10-04
 
 ## H1 platform
 
@@ -55,10 +55,22 @@ Do not conflate these variants.
 
 **CLOSED ON H1 — FINDING**
 
-A valid event-ordered SVM-free sequence can expose premature callback/free
-behavior and same-VA reuse while older GPU work is still relevant.
+Final H1 result: a valid same-queue, event-ordered SVM free can execute
+host-side lifetime work after submission but before completion of the old
+GPU command. B can reuse A's address while that command remains active;
+subsequent GPU use of B deterministically observes the old write. This is an
+intra-context temporal cross-lifetime integrity finding (F8), with no
+cross-context or cross-process impact demonstrated.
 
-Source-level Rusticl mechanism documented separately.
+The unpatched Mesa 26.2 baseline reproduced GPU corruption in 5/5 runs
+with a user callback and independently in 5/5 runs with a NULL callback.
+A local completion-wait patch removed both effects in 5/5 runs each.
+The corrected cross-queue control was clean on the unpatched runtime in
+5/5 runs. The initial cross-queue timeout without `clFlush(q2)` was a
+discarded harness error. No further H1 B4 GPU experiments are planned.
+
+Canonical evidence, raw result paths, source probes and patch:
+`notes/H1_B4_CLASS_GATE.md`.
 
 ### B5 — Raw device pointer / device-address behavior
 

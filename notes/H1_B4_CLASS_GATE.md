@@ -1,6 +1,6 @@
 # H1 B4 Class Gate — SVM Lifetime / Ordering
 
-Date: 2026-08-28
+Date: 2026-08-28; final H1 update: 2026-10-04
 Device: AMD Radeon 660M / Rembrandt
 Implementation: Rusticl / radeonsi / ACO
 OpenCL: 3.0 device, evaluated against current unified OpenCL 3.1.1 specification
@@ -26,11 +26,12 @@ OpenCL clEnqueueSVMFree specifies that events in event_wait_list
 need to complete before clEnqueueSVMFree can be executed.
 
 For a non-NULL pfn_free_func, the implementation calls that callback
-to free the supplied SVM pointers.
+to free the supplied SVM pointers. With a NULL callback, the implementation
+performs the SVM lifetime transition itself.
 
-Observed Rusticl behavior violates this ordering requirement:
-the SVM-free callback executes while the dependency kernel event
-still reports CL_SUBMITTED.
+Observed Rusticl behavior violates this ordering requirement on the
+same-queue path: the SVM-free callback, or the runtime-owned NULL-callback
+free, executes while the dependency kernel event still reports CL_SUBMITTED.
 
 ## Capability baseline
 
@@ -305,6 +306,70 @@ CONTROL PASS
 Result SHA256:
 a04fffbf16d616226f1eb6c413c1a2836fe7764cc6af2e7d2e40cbd3cec6a7e1
 
+## Final Mesa 26.2 causal patch and differential
+
+The local patch `patches/b4/rusticl_svmfree_completion_causal.patch`
+changes Rusticl queue scheduling for `CL_COMMAND_SVM_FREE` and
+`CL_COMMAND_SVM_FREE_ARM`: it flushes preceding device work and waits for
+completion of each dependency before executing the host-side free work.
+Other command types retain their prior dependency handling. Patch SHA256:
+`e80441a7bf5eaded8cc602d7b302ec7b017e835cead51fcdae72c0b83262f36b`.
+This is a local causal test, not evidence of an upstream fix.
+
+In `results/b4/20261004_164007_b4_security_effect_baseline_vs_fix/`,
+the callback-based GPU-overlap probe reproduced the old write into B on
+unpatched Mesa 26.2 in 5/5 processes (`callback_old_status=2`,
+`B_device_read=B0_final=0xa5a5a5a5`, exit 38). With the patched build,
+5/5 processes reported `callback_old_status=0`,
+`B_device_read=B0_final=0xbbbbbbbb`, exit 0. B1 was `0xeeeeeeee` in both
+sets, confirming the new kernel ran. The directory includes raw runs and
+provenance; the patch and source are preserved in this repository.
+
+## Same-queue versus cross-queue control
+
+The corrected cross-queue probe places the old kernel on q1 and the
+callback-based free on q2 with an explicit dependency on the old event.
+It flushes **both** q1 and q2. On the unpatched Mesa 26.2 build, the
+same-queue arm reproduced early free and B corruption in 5/5 runs
+(`callback_old_status=2`, `B_device_read=0xa5a5a5a5`; see
+`results/b4/20261004_165019_same_vs_cross_queue_mechanism/`). The corrected
+cross-queue arm completed its dependency before the callback in 5/5 runs
+(`callback_old_status=0`, `B_device_read=B0_final=0xbbbbbbbb`, exit 0;
+`results/b4/20261004_165436_cross_queue_mechanism_fixed/`). Thus the
+unpatched runtime's cross-queue dependency path provides an independent
+control for the same-queue completion error.
+
+**Discarded harness run:** `results/b4/20261004_165005_same_vs_cross_queue_mechanism/`
+and the cross-queue timeouts in the 16:50:19 run omitted `clFlush(q2)`.
+The q2 free command was not submitted for the intended observation gate.
+Those timeouts are a harness error, not evidence of a Rusticl cross-queue
+failure; they are excluded from the 5/5 cross-queue result. The corrected
+source is `src/b4_svm_cross_queue_dependency_control.c`.
+
+## NULL-callback early reuse and GPU overlap
+
+`clEnqueueSVMFree` was also tested with `pfn_free_func=NULL`, so the
+implementation owns the free operation. In the early-reuse probe
+(`results/b4/20261004_171008_null_callback_baseline_vs_fix/`), all 5/5
+unpatched runs reached the free gate with the old kernel at
+`CL_SUBMITTED`, then allocated B at A's address while the kernel was still
+active. All 5/5 patched runs reached the gate after the old kernel was
+`CL_COMPLETE`. Both arms reported no B corruption in this host-side-only
+probe; early reuse alone did not establish the integrity effect.
+
+The follow-up NULL-callback GPU-overlap probe adds a GPU read/write of B
+on q2 (`results/b4/20261004_173524_null_callback_gpu_overlap_baseline_vs_fix/`).
+All 5/5 unpatched runs had `free_event_status_at_gate=2`,
+`old_status_at_free_gate=2`, `same_addr=1`,
+`B_device_read=B0_final=0xa5a5a5a5`, `B1_final=0xeeeeeeee`, exit 38.
+All 5/5 patched runs still reused the address but the old event was
+`CL_COMPLETE` at the gate (`old_status_at_free_gate=0`),
+`B_device_read=B0_final=0xbbbbbbbb`, `B1_final=0xeeeeeeee`, exit 0.
+Provenance contains probe, baseline library, patched library, and patch
+hashes. The user callback is therefore not necessary for the observed
+cross-lifetime integrity violation: premature runtime-owned SVM lifetime
+termination is sufficient when the successor allocation is used on device.
+
 ## Causal interpretation
 
 Evidence supports the following causal chain:
@@ -313,7 +378,7 @@ K_A is submitted using SVM allocation A
     ->
 clEnqueueSVMFree explicitly depends on K_A
     ->
-Rusticl executes its host-side free callback before K_A completes
+Rusticl executes host-side free work before K_A completes
     ->
 A's OpenCL SVM lifetime terminates prematurely
     ->
@@ -407,5 +472,5 @@ memory-integrity impact, and causal controls.
 Further allocator pressure / artificial BO-recycling escalation is
 not justified without a separate hypothesis.
 
-Next structured class:
-B5 — Raw Device-Pointer Authority
+Final H1 disposition: no further B4 GPU experiments are needed for closure.
+Historical comparison and upstream patch review are separate follow-ups.

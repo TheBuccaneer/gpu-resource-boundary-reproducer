@@ -1,0 +1,9 @@
+=== PROVENANCE ===
+probe=/home/rock/projects/OpenCL2/probes/b4_svm_device_containment_noprofile_probe
+cc1b847d345df43e45cf473dd2fa36c2540ab46c1cc23499ba7bd6a7f007f3e2  /home/rock/projects/OpenCL2/probes/b4_svm_device_containment_noprofile_probe
+--- baseline Rusticl ---
+262fb1e449da668a6a97dd88be69529ce178fd5bd27914ba32eb16155c03e409  /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-release-local/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+--- fixed Rusticl ---
+a6695723036aff345db5a6561c2cf1739bfe4190d52c4c5d593687e9c17582cd  /home/rock/projects/OpenCL2/vendor-src/mesa-26.2.0-b4fix-local/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+--- patch ---
+e80441a7bf5eaded8cc602d7b302ec7b017e835cead51fcdae72c0b83262f36b  patches/b4/rusticl_svmfree_completion_causal.patch

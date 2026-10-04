@@ -1,0 +1,40 @@
+=== Rusticl warning: Patched Mesa libclc not detected. Upstream libclc may contain known bugs or breaking changes and isn't guaranteed to work reliably. Please visit https://gitlab.freedesktop.org/karolherbst/mesa-libclc for more information. ===
+clGetPlatformIDs=0 platforms=1
+clGetPlatformIDs(select)=0
+clGetDeviceIDs=0
+clCreateContext=0
+clCreateCommandQueue(q1)=0
+clCreateCommandQueue(q2)=0
+alloc_A=success addr=0x1ffffffff000
+map_A=0
+unmap_A=0
+finish_A_init=0
+clCreateBuffer(sink)=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+set_arg_A=0
+set_arg_sink=0
+set_arg_loops=0 loops=20000000
+enqueue_kernel=0
+enqueue_free_A=0
+clFlush(q1)=0
+probe_variant=NULL_CALLBACK_SUBMITTED_GATE
+free_event_status_at_gate=2
+kernel_status_at_free_gate=0 query_err=0
+free_gate_after_kernel_enqueue_ms=295.316
+alloc_B=success addr=0x1ffffffff000 same_addr=1
+map_B_write=0
+unmap_B_write=0
+finish_B_init=0
+kernel_status_after_B_init=0 query_err=0
+B_init_after_kernel_enqueue_ms=295.735
+wait_old_kernel=0
+wait_free_event=0
+kernel_done_after_enqueue_ms=295.743
+map_B_read=0
+B0_after_old_kernel=0xbbbbbbbb
+B1_after_old_kernel=0xcccccccc
+unmap_B_read=0
+B4-C3e=NO_CORRUPTION_OBSERVED
+probe_exit=0

@@ -1,0 +1,2 @@
+	libdrm.so.2 => /home/rock/projects/OpenCL2/vendor-src/libdrm-2.4.133-local/lib/x86_64-linux-gnu/libdrm.so.2 (0x00007bd96fcb5000)
+	libdrm_amdgpu.so.1 => /home/rock/projects/OpenCL2/vendor-src/libdrm-2.4.133-local/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1 (0x00007bd96fc56000)
