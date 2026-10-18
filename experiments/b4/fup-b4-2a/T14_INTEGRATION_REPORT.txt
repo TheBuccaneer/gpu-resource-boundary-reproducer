@@ -1,0 +1,15 @@
+FUP-B4-2A/T14 Final Project Integration
+completed_utc=2026-10-18T10:23:11Z
+opencl2_head=be0e6bf37e61d78ba7d537e90ddb471262b40cc5
+canonical_manifest=PASS
+t9_archive_structure=PASS
+t13_archive_structure=PASS
+worktree_links_unchanged=PASS
+system_and_b8_guards=PASS
+build_or_gpu_execution=no
+commit_or_push=no
+original_files_deleted=no
+
+Relocatability: historical Meson/Ninja trees and logs retain absolute H1 paths.
+The compressed evidence archives and source/configuration files are canonical.
+No existing branch reference or tracked B8 file was changed.

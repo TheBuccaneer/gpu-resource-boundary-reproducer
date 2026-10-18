@@ -1,0 +1,392 @@
+diff --git a/src/gallium/frontends/rusticl/api/event.rs b/src/gallium/frontends/rusticl/api/event.rs
+index 65f96b695e5..bead4373886 100644
+--- a/src/gallium/frontends/rusticl/api/event.rs
++++ b/src/gallium/frontends/rusticl/api/event.rs
+@@ -176,7 +176,7 @@ pub fn create_and_queue(
+     block: bool,
+     work: EventSig,
+ ) -> CLResult<()> {
+-    create_and_queue_with_cleanup(q, cmd_type, deps, event, block, work, None)
++    create_and_queue_impl(q, cmd_type, deps, event, block, work, None, None)
+ }
+ 
+ pub fn create_and_queue_with_cleanup(
+@@ -187,12 +187,53 @@ pub fn create_and_queue_with_cleanup(
+     block: bool,
+     work: EventSig,
+     cleanup: Option<CleanupSig>,
++) -> CLResult<()> {
++    create_and_queue_impl(q, cmd_type, deps, event, block, work, cleanup, None)
++}
++
++pub fn create_and_queue_with_terminal_release(
++    q: Arc<Queue>,
++    cmd_type: cl_command_type,
++    deps: Vec<Arc<Event>>,
++    event: *mut cl_event,
++    block: bool,
++    work: EventSig,
++    terminal_release: TerminalReleaseSig,
++) -> CLResult<()> {
++    create_and_queue_impl(
++        q,
++        cmd_type,
++        deps,
++        event,
++        block,
++        work,
++        None,
++        Some(terminal_release),
++    )
++}
++
++fn create_and_queue_impl(
++    q: Arc<Queue>,
++    cmd_type: cl_command_type,
++    deps: Vec<Arc<Event>>,
++    event: *mut cl_event,
++    block: bool,
++    work: EventSig,
++    cleanup: Option<CleanupSig>,
++    terminal_release: Option<TerminalReleaseSig>,
+ ) -> CLResult<()> {
+     if deps.iter().any(|dep| dep.is_error()) {
+         return Err(CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST);
+     }
+ 
+-    let e = Event::new(&q, cmd_type, deps, work, cleanup)?;
++    let e = Event::new(
++        &q,
++        cmd_type,
++        deps,
++        work,
++        cleanup,
++        terminal_release,
++    )?;
+     if !event.is_null() {
+         // SAFETY: we check for null and valid API use is to pass in a valid pointer
+         unsafe {
+diff --git a/src/gallium/frontends/rusticl/api/kernel.rs b/src/gallium/frontends/rusticl/api/kernel.rs
+index 289d0e6d6ca..fd769e542dc 100644
+--- a/src/gallium/frontends/rusticl/api/kernel.rs
++++ b/src/gallium/frontends/rusticl/api/kernel.rs
+@@ -1,7 +1,7 @@
+ // Copyright 2020 Red Hat.
+ // SPDX-License-Identifier: MIT
+ 
+-use crate::api::event::create_and_queue;
++use crate::api::event::create_and_queue_with_terminal_release;
+ use crate::api::icd::*;
+ use crate::api::util::*;
+ use crate::core::device::*;
+@@ -803,19 +803,32 @@ fn enqueue_ndrange_kernel(
+     // If global_work_size is NULL, or the value in any passed dimension is 0 then the kernel
+     // command will trivially succeed after its event dependencies are satisfied and subsequently
+     // update its completion event.
+-    let cb: EventSig = if global_work_size.contains(&0) {
+-        Box::new(|_, _| Ok(()))
+-    } else {
+-        k.launch(
+-            q.device,
+-            work_dim,
+-            local_work_size,
+-            global_work_size,
+-            global_work_offset,
+-        )?
+-    };
++    let (cb, terminal_release): (EventSig, TerminalReleaseSig) =
++        if global_work_size.contains(&0) {
++            (
++                Box::new(|_, _| Ok(())),
++                k.retain_args_until_terminal()?,
++            )
++        } else {
++            let launch = k.launch(
++                q.device,
++                work_dim,
++                local_work_size,
++                global_work_size,
++                global_work_offset,
++            )?;
++            (launch.work, launch.terminal_release)
++        };
+ 
+-    create_and_queue(q, CL_COMMAND_NDRANGE_KERNEL, evs, event, false, cb)
++    create_and_queue_with_terminal_release(
++        q,
++        CL_COMMAND_NDRANGE_KERNEL,
++        evs,
++        event,
++        false,
++        cb,
++        terminal_release,
++    )
+ 
+     //• CL_INVALID_WORK_GROUP_SIZE if local_work_size is specified and is not consistent with the required number of sub-groups for kernel in the program source.
+     //• CL_MISALIGNED_SUB_BUFFER_OFFSET if a sub-buffer object is specified as the value for an argument that is a buffer object and the offset specified when the sub-buffer object is created is not aligned to CL_DEVICE_MEM_BASE_ADDR_ALIGN value for device associated with queue. This error code
+diff --git a/src/gallium/frontends/rusticl/api/queue.rs b/src/gallium/frontends/rusticl/api/queue.rs
+index 0e723d915ea..856481227ab 100644
+--- a/src/gallium/frontends/rusticl/api/queue.rs
++++ b/src/gallium/frontends/rusticl/api/queue.rs
+@@ -206,6 +206,7 @@ fn enqueue_barrier(command_queue: cl_command_queue) -> CLResult<()> {
+         Vec::new(),
+         Box::new(|_, _| Ok(())),
+         None,
++        None,
+     )?;
+     q.queue(e);
+     Ok(())
+diff --git a/src/gallium/frontends/rusticl/core/event.rs b/src/gallium/frontends/rusticl/core/event.rs
+index a08b0cb86a3..a97e18eb66a 100644
+--- a/src/gallium/frontends/rusticl/core/event.rs
++++ b/src/gallium/frontends/rusticl/core/event.rs
+@@ -36,6 +36,7 @@ static_assert!(CL_QUEUED == 3);
+ pub type EventSig =
+     Box<dyn FnOnce(&Context, &mut QueueContextWithState) -> CLResult<()> + Send + Sync>;
+ pub type CleanupSig = Box<dyn FnOnce(&Context) + Send + Sync>;
++pub type TerminalReleaseSig = Box<dyn FnOnce() + Send + Sync>;
+ 
+ const PROFILING_ORDERING: atomic::Ordering = atomic::Ordering::SeqCst;
+ 
+@@ -54,6 +55,7 @@ struct EventMutState {
+ 
+     /// Cleanup callback that gets called right before the event gets put into `CL_COMPLETE` status.
+     cleanup: Option<CleanupSig>,
++    terminal_release: Option<TerminalReleaseSig>,
+ }
+ 
+ trait Profiler: Send + Sync {
+@@ -274,6 +276,7 @@ impl Event {
+         deps: Vec<Arc<Event>>,
+         work: EventSig,
+         cleanup: Option<CleanupSig>,
++        terminal_release: Option<TerminalReleaseSig>,
+     ) -> CLResult<Arc<Event>> {
+         let profiler: Box<dyn Profiler> = if queue.is_profiling_enabled() {
+             if queue.device.screen().caps().query_buffer_object {
+@@ -292,6 +295,7 @@ impl Event {
+                 status: CL_QUEUED as cl_int,
+                 work: Some(work),
+                 cleanup: cleanup,
++                terminal_release: terminal_release,
+                 ..Default::default()
+             }),
+             kind: EventImpl::GPUEvent(GPUEvent {
+@@ -328,6 +332,12 @@ impl Event {
+     fn set_status(&self, mut lock: MutexGuard<EventMutState>, new: cl_int) {
+         lock.status = new;
+ 
++        let (work, terminal_release) = if new <= CL_COMPLETE as cl_int {
++            (lock.work.take(), lock.terminal_release.take())
++        } else {
++            (None, None)
++        };
++
+         // signal on completion or an error
+         if new <= CL_COMPLETE as cl_int {
+             self.cv.notify_all();
+@@ -336,22 +346,19 @@ impl Event {
+         // errors we treat as CL_COMPLETE
+         let cb_max = if new < 0 { CL_COMPLETE } else { new as u32 };
+ 
+-        // there are only callbacks for those
+-        if ![CL_COMPLETE, CL_RUNNING, CL_SUBMITTED].contains(&cb_max) {
+-            return;
+-        }
+-
+         let mut cbs = Vec::new();
+-        // Collect all cbs we need to call first. Technically it is not required to call them in
+-        // order, but let's be nice to applications as it's for free
+-        for idx in (cb_max..=CL_SUBMITTED).rev() {
+-            cbs.extend(
+-                // use mem::take as each callback is only supposed to be called exactly once
+-                mem::take(&mut lock.cbs[idx as usize])
+-                    .into_iter()
+-                    // we need to save the status this cb was registered with
+-                    .map(|cb| (idx as cl_int, cb)),
+-            );
++        if [CL_COMPLETE, CL_RUNNING, CL_SUBMITTED].contains(&cb_max) {
++            // Collect all cbs we need to call first. Technically it is not required to call them in
++            // order, but let's be nice to applications as it's for free
++            for idx in (cb_max..=CL_SUBMITTED).rev() {
++                cbs.extend(
++                    // use mem::take as each callback is only supposed to be called exactly once
++                    mem::take(&mut lock.cbs[idx as usize])
++                        .into_iter()
++                        // we need to save the status this cb was registered with
++                        .map(|cb| (idx as cl_int, cb)),
++                );
++            }
+         }
+ 
+         // applications might want to access the event in the callback, so drop the lock before
+@@ -369,6 +376,11 @@ impl Event {
+             let status = if new < 0 { new } else { idx };
+             cb.call(self, status);
+         }
++
++        drop(work);
++        if let Some(terminal_release) = terminal_release {
++            terminal_release();
++        }
+     }
+ 
+     pub fn set_user_status(&self, status: cl_int) {
+diff --git a/src/gallium/frontends/rusticl/core/kernel.rs b/src/gallium/frontends/rusticl/core/kernel.rs
+index b2fb496861c..c3de10f70fe 100644
+--- a/src/gallium/frontends/rusticl/core/kernel.rs
++++ b/src/gallium/frontends/rusticl/core/kernel.rs
+@@ -67,6 +67,11 @@ pub enum KernelArgValue {
+     Sampler(Arc<Sampler>),
+ }
+ 
++pub struct KernelLaunch {
++    pub work: EventSig,
++    pub terminal_release: TerminalReleaseSig,
++}
++
+ #[repr(u8)]
+ #[derive(Hash, PartialEq, Eq, Clone, Copy)]
+ pub enum KernelArgType {
+@@ -1676,9 +1681,14 @@ impl Kernel {
+         block: &[usize],
+         grid: &[usize],
+         offsets: &[usize],
+-    ) -> CLResult<EventSig> {
++    ) -> CLResult<KernelLaunch> {
+         let args = self.values.clone();
+-        self.launch_with_args(dev, work_dim, block, grid, offsets, args)
++        self.launch_with_args_and_completion(dev, work_dim, block, grid, offsets, args)
++    }
++
++    pub fn retain_args_until_terminal(&self) -> CLResult<TerminalReleaseSig> {
++        let (buffer_arcs, image_arcs) = Self::retain_mem_objects(&self.values)?;
++        Ok(Box::new(move || drop((buffer_arcs, image_arcs))))
+     }
+ 
+     // the painful part is, that host threads are allowed to modify the kernel object once it was
+@@ -1692,24 +1702,21 @@ impl Kernel {
+         offsets: &[usize],
+         arg_values: Vec<Option<KernelArgValue>>,
+     ) -> CLResult<EventSig> {
+-        // Clone all the data we need to execute this kernel
+-        let work_group_size_hint = self.kernel_info.work_group_size_hint;
+-        let args = self.kernel_info.args.clone();
+-        let nir_kernel_builds = Arc::clone(&self.builds[dev]);
+-        let mut bdas = self.bdas.clone();
+-        let svms = self.svms.clone();
++        Ok(self
++            .launch_with_args_and_completion(dev, work_dim, block, grid, offsets, arg_values)?
++            .work)
++    }
+ 
++    fn retain_mem_objects(
++        arg_values: &[Option<KernelArgValue>],
++    ) -> CLResult<(HashMap<usize, Arc<Buffer>>, HashMap<usize, Arc<Image>>)> {
+         let mut buffer_arcs = HashMap::new();
+         let mut image_arcs = HashMap::new();
+ 
+-        // need to preprocess buffer and image arguments so we hold a strong reference until the
+-        // event was processed.
+         for arg in arg_values.iter() {
+             match arg {
+                 Some(KernelArgValue::Buffer { buffer, .. }) => {
+                     buffer_arcs.insert(
+-                        // we use the ptr as the key, and also cast it to usize so we don't need to
+-                        // deal with Send + Sync here.
+                         buffer.as_ptr() as usize,
+                         buffer.upgrade().ok_or(CL_INVALID_KERNEL_ARGS)?,
+                     );
+@@ -1724,6 +1731,29 @@ impl Kernel {
+             }
+         }
+ 
++        Ok((buffer_arcs, image_arcs))
++    }
++
++    fn launch_with_args_and_completion(
++        self: &Arc<Self>,
++        dev: &Device,
++        work_dim: u32,
++        block: &[usize],
++        grid: &[usize],
++        offsets: &[usize],
++        arg_values: Vec<Option<KernelArgValue>>,
++    ) -> CLResult<KernelLaunch> {
++        // Clone all the data we need to execute this kernel
++        let work_group_size_hint = self.kernel_info.work_group_size_hint;
++        let args = self.kernel_info.args.clone();
++        let nir_kernel_builds = Arc::clone(&self.builds[dev]);
++        let mut bdas = self.bdas.clone();
++        let svms = self.svms.clone();
++
++        let (buffer_arcs, image_arcs) = Self::retain_mem_objects(&arg_values)?;
++        let retained_buffer_arcs = buffer_arcs.clone();
++        let retained_image_arcs = image_arcs.clone();
++
+         // operations we want to report errors to the clients
+         let mut block = create_kernel_arr::<u32>(block, 1)?;
+         let mut grid = create_kernel_arr::<usize>(grid, 1)?;
+@@ -1733,7 +1763,7 @@ impl Kernel {
+ 
+         self.optimize_local_size(dev, work_dim, &mut grid, &mut block);
+ 
+-        Ok(Box::new(move |cl_ctx, ctx| {
++        let work: EventSig = Box::new(move |cl_ctx, ctx| {
+             let hw_max_grid = ctx.dev.max_grid_size();
+ 
+             let variant = if offsets == [0; 3]
+@@ -2052,7 +2082,14 @@ impl Kernel {
+             }
+ 
+             Ok(())
+-        }))
++        });
++
++        Ok(KernelLaunch {
++            work: work,
++            terminal_release: Box::new(move || {
++                drop((retained_buffer_arcs, retained_image_arcs))
++            }),
++        })
+     }
+ 
+     pub fn arg_values(&self) -> &[Option<KernelArgValue>] {
+diff --git a/src/gallium/frontends/rusticl/core/queue.rs b/src/gallium/frontends/rusticl/core/queue.rs
+index 1a77b6bca31..3b2b1274441 100644
+--- a/src/gallium/frontends/rusticl/core/queue.rs
++++ b/src/gallium/frontends/rusticl/core/queue.rs
+@@ -351,7 +351,13 @@ fn flush_events(
+         } else {
+             // We drain the original vector so we don't start allocating from scratch.
+             let evs = evs.drain(..).collect();
+-            send.send((fence, evs)).unwrap();
++            if let Err(err) = send.send((fence, evs)) {
++                err.0
++                    .1
++                    .iter()
++                    .for_each(|e| e.set_user_status(CL_OUT_OF_RESOURCES));
++                return CL_OUT_OF_RESOURCES;
++            }
+         }
+     }
+ 
+@@ -547,11 +553,13 @@ impl Queue {
+         if let Some(last) = events.last() {
+             state.last = Arc::downgrade(last);
+ 
+-            // This should never ever error, but if it does return an error
+-            state
+-                .chan_in
+-                .send(events)
+-                .map_err(|_| CL_OUT_OF_HOST_MEMORY)?;
++            if let Err(err) = state.chan_in.send(events) {
++                drop(state);
++                err.0
++                    .iter()
++                    .for_each(|e| e.set_user_status(CL_OUT_OF_HOST_MEMORY));
++                return Err(CL_OUT_OF_HOST_MEMORY);
++            }
+         }
+ 
+         let last = wait.then(|| state.last.clone());
