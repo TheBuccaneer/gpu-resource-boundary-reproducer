@@ -1,0 +1,38 @@
+-- The C compiler identification is GNU 15.2.0
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test COMPILER_SUPPORTS_Wmisleadingindentation
+-- Performing Test COMPILER_SUPPORTS_Wmisleadingindentation - Success
+-- Performing Test COMPILER_SUPPORTS_Wunusedfunction
+-- Performing Test COMPILER_SUPPORTS_Wunusedfunction - Success
+-- Performing Test COMPILER_SUPPORTS_Wunusedvariable
+-- Performing Test COMPILER_SUPPORTS_Wunusedvariable - Success
+-- Performing Test COMPILER_SUPPORTS_Wnoerrorcpp
+-- Performing Test COMPILER_SUPPORTS_Wnoerrorcpp - Success
+-- Performing Test COMPILER_SUPPORTS_Wnounknownpragmas
+-- Performing Test COMPILER_SUPPORTS_Wnounknownpragmas - Success
+-- Performing Test COMPILER_SUPPORTS_Wnoerrorasmoperandwidths
+-- Performing Test COMPILER_SUPPORTS_Wnoerrorasmoperandwidths - Failed
+-- Performing Test COMPILER_SUPPORTS_Wnostrictaliasing
+-- Performing Test COMPILER_SUPPORTS_Wnostrictaliasing - Success
+-- Performing Test COMPILER_SUPPORTS_froundingmath
+-- Performing Test COMPILER_SUPPORTS_froundingmath - Success
+Using SPIR-V tools from '/usr/bin'
+-- COMPILER_ASSEMBLY_SCRIPT="<REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/compiler/../spirv_new/spirv_asm/assemble_spirv.py"
+-- Performing Test COMPILER_SUPPORTS_ffpcontractoff
+-- Performing Test COMPILER_SUPPORTS_ffpcontractoff - Success
+-- Using python3: /usr/bin/python3
+-- Using spirv-as: /usr/bin/spirv-as
+-- Using spirv-val: /usr/bin/spirv-val
+-- Configuring done (2.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /tmp/b10_cts_build

@@ -1,0 +1,10 @@
+# H2 — NVIDIA RTX 3090: short differential roadmap
+
+Planning only. No H2 capability or experimental result is claimed, and no experiment is authorized by this document.
+
+1. **C0 inventory:** record OS/kernel, NVIDIA driver and loaded OpenCL ICD/library hashes, actual platform/device versions, queue/event features, local-memory/workgroup limits, SVM, Source/IL support and IL versions, buffer-device-address extensions, mutable command buffers, external semaphore/memory handle types and GL interop prerequisites. An RTX 3090 does not itself imply multiple OpenCL devices or interchangeable external handle types. Pin the applicable extension/specification versions and CTS checkout.
+2. **Valid controls:** under a separate GO, establish small buffer/kernel/read, geometry, event and representation baselines only where capabilities exist. Retain API status, completion, data and process provenance separately.
+3. **Selected differentials:** B2 geometry, B10 context/event validation and B12 object-metadata queries have concise oracles. Gate B4 SVM and B5 raw-pointer characterization on actual supported APIs; keep out-of-contract characterization separate from conformance. B7 ownership can be compared first at setter validation before any foreign dispatch. B8 requires semantically paired supported inputs and pre-dispatch guards.
+4. **Higher-impact families:** carry B1/B3 resource accounting, availability/containment and any reviewed lifetime cases only into an independently approved bounded plan after valid controls. Do not port H1 timeout/OOM triggers mechanically or assume AMD-specific backend arithmetic applies to NVIDIA. B9's mechanism is vendor/backend-specific unless a separate invariant and admissible input are identified.
+
+Prioritize RQ2: same contract and observation model, with implementation-specific limits and capability exclusions. Report unsupported tests as N.A./deferred, not PASS. Reserve any adversarial GPU work, multi-client campaign and local driver changes for later explicit approval.

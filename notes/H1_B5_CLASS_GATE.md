@@ -1,5 +1,7 @@
 # H1 B5 Class Gate — Raw Device-Pointer Authority
 
+> Consolidation interpretation, 2026-10-30: this historical report records same-process raw-pointer behavior outside defined extension usage. Its F7/security wording is observational; no formal protection-domain breach or OpenCL conformance violation is established. Current classification: CLOSED H1 / characterization.
+
 Date: 2026-08-28
 
 ## Outcome

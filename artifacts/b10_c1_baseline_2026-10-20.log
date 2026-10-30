@@ -1,0 +1,42 @@
+clGetPlatformIDs(count)=0
+clGetPlatformIDs(select)=0
+CL_PLATFORM_NAME=0
+CL_PLATFORM_NAME_value=rusticl
+CL_PLATFORM_VERSION=0
+CL_PLATFORM_VERSION_value=OpenCL 3.0 
+clGetDeviceIDs(GPU)=0
+CL_DEVICE_NAME=0
+CL_DEVICE_NAME_value=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+CL_DEVICE_VERSION=0
+CL_DEVICE_VERSION_value=OpenCL 3.0 
+CL_DRIVER_VERSION=0
+CL_DRIVER_VERSION_value=26.0.8-1ubuntu0.3
+loaded_icd=/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+CL_DEVICE_QUEUE_ON_HOST_PROPERTIES=0
+host_queue_properties=0x3
+clCreateContext=0
+clCreateCommandQueueWithProperties=0
+CL_QUEUE_PROPERTIES=0
+active_queue_properties=0x0
+clCreateBuffer=0
+clCreateProgramWithSource=0
+clBuildProgram=0
+clCreateKernel=0
+clSetKernelArg(buffer)=0
+clEnqueueWriteBuffer=0
+clEnqueueNDRangeKernel=0
+clEnqueueReadBuffer=0
+clFlush=0
+clWaitForEvents(read)=0
+clFinish=0
+clGetEventInfo(status)=0
+write_event_status=0
+clGetEventInfo(status)=0
+kernel_event_status=0
+clGetEventInfo(status)=0
+read_event_status=0
+word[0]=0xa5a5a5a5 expected=0xa5a5a5a5
+word[1]=0x0000002b expected=0x0000002b
+word[2]=0x5a5a5a5a expected=0x5a5a5a5a
+word[3]=0x12345678 expected=0x12345678
+C1_RESULT=PASS

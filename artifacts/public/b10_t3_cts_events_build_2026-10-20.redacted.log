@@ -1,0 +1,71 @@
+[1/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/main.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/main.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[2/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_events.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_events.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[3/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_event_dependencies.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_event_dependencies.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[4/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_waitlists.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_waitlists.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[5/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_userevents.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_userevents.cpp:20:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[6/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_userevents_multithreaded.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_userevents_multithreaded.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[7/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/action_classes.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/action_classes.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/action_classes.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[8/9] Building CXX object test_conformance/events/CMakeFiles/test_events.dir/test_callbacks.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/events/test_callbacks.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[9/9] Linking CXX executable test_conformance/events/test_events
+build_exit=0

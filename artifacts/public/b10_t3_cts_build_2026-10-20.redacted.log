@@ -1,0 +1,507 @@
+[1/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/alloc.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/alloc.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[2/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/typeWrappers.cpp.o
+In file included from /usr/include/CL/cl_platform.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/mt19937.h:55,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/typeWrappers.h:25,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/typeWrappers.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[3/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/mt19937.cpp.o
+In file included from /usr/include/CL/cl_platform.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/mt19937.h:55,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/mt19937.cpp:49:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[4/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/rounding_mode.cpp.o
+[5/65] Building C object test_common/CMakeFiles/harness.dir/harness/msvc9.c.o
+[6/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/crc32.cpp.o
+[7/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/errorHelpers.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.cpp:23:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[8/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/featureHelpers.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/featureHelpers.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/featureHelpers.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[9/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/genericThread.cpp.o
+[10/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/conversions.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/conversions.h:21,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/conversions.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[11/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/kernelHelpers.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/kernelHelpers.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/kernelHelpers.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[12/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/imageHelpers.cpp.o
+<REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/imageHelpers.cpp:1112:2: warning: #warning Implementations will likely wish to pick a max allowable sampling error policy here that is better than the spec [-Wcpp]
+ 1112 | #warning Implementations will likely wish to pick a max allowable sampling error policy here that is better than the spec
+      |  ^~~~~~~
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/imageHelpers.h:34,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/imageHelpers.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[13/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/deviceInfo.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/deviceInfo.h:21,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/deviceInfo.cpp:21:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[14/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/os_helpers.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/os_helpers.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[15/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/parseParameters.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/parseParameters.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[16/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/propertyHelpers.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/propertyHelpers.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/propertyHelpers.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[17/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/ThreadPool.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/ThreadPool.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/ThreadPool.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[18/65] Building CXX object test_common/CMakeFiles/harness.dir/harness/testHarness.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[19/65] Building C object test_common/CMakeFiles/harness.dir/miniz/miniz.c.o
+[20/65] Linking CXX static library test_common/libharness.a
+[20/65] Generating spirv_capability_deps.def...
+[22/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/main.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/main.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[23/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_platform.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_platform.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[24/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_queue.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_queue.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[25/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_context.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_context.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[26/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_enqueue_marker.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_enqueue_marker.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[27/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_enqueue_map_image.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_enqueue_map_image.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[28/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/negative_device.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/negative_device.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[29/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_api_consistency.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_api_consistency.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[30/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_bool.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_bool.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[31/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_retain.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_retain.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[32/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_retain_program.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_retain_program.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[33/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_create_kernels.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_create_kernels.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[34/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_queries.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_queries.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[35/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_local_memory_size.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_local_memory_size.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[36/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_private_memory_size.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_private_memory_size.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[37/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernels.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernels.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[38/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_arg_changes.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_arg_changes.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[39/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_arg_multi_setup.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_arg_multi_setup.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[40/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_api_min_max.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_api_min_max.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[41/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_binary.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_binary.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[42/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_native_kernel.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_native_kernel.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[43/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_attributes.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/errorHelpers.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_attributes.cpp:21:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[44/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_mem_objects.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_mem_objects.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[45/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_create_context_from_type.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_create_context_from_type.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[46/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_device_min_data_type_align_size_alignment.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_device_min_data_type_align_size_alignment.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[47/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_platform.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_platform.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[48/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_null_buffer_arg.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from /usr/include/CL/opencl.h:24,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_null_buffer_arg.cpp:21:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[49/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_kernel_arg_info.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_kernel_arg_info.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[50/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_mem_object_info.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_mem_object_info.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[51/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_min_image_formats.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_min_image_formats.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[52/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_queue.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_queue.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[53/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_queue_hint.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_queue_hint.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[54/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_queue_properties.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_queue_properties.cpp:18:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[55/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_sub_group_dispatch.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_sub_group_dispatch.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[56/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_clone_kernel.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_clone_kernel.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[57/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_zero_sized_enqueue.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_zero_sized_enqueue.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[58/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_context_destructor_callback.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_context_destructor_callback.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[59/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_mem_object_properties_queries.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_mem_object_properties_queries.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[60/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_queue_properties_queries.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_queue_properties_queries.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[61/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_pipe_properties_queries.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_pipe_properties_queries.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[62/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_device_command_queue.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_device_command_queue.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[63/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_wg_suggested_local_work_size.cpp.o
+In file included from /usr/include/CL/cl_platform.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/mt19937.h:55,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/typeWrappers.h:25,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_wg_suggested_local_work_size.cpp:17:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[64/65] Building CXX object test_conformance/api/CMakeFiles/test_api.dir/test_spirv_queries.cpp.o
+In file included from /usr/include/CL/cl.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/clImageHelper.h:22,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_common/harness/testHarness.h:19,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/testBase.h:20,
+                 from <REPO>/vendor-src/upstream-audit/OpenCL-CTS/test_conformance/api/test_spirv_queries.cpp:16:
+/usr/include/CL/cl_version.h:32:144: note: ‘#pragma message: cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)’
+   32 | #pragma message("cl_version: CL_TARGET_OPENCL_VERSION is not a valid value (100, 110, 120, 200, 210, 220, 300). Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                                                                ^
+[65/65] Linking CXX executable test_conformance/api/test_api

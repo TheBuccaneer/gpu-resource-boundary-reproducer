@@ -1,0 +1,19 @@
+clGetPlatformIDs=0
+clGetDeviceIDs(GPU)=0
+device=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+version=OpenCL 3.0 
+loaded_icd=/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+clCreateContext(own)=0
+clCreateContext(foreign)=0
+clCreateCommandQueueWithProperties=0
+clCreateBuffer=0
+clCreateUserEvent(own)=0
+clCreateUserEvent(foreign)=0
+clSetUserEventStatus(own, complete)=0
+valid_fill_enqueue=0
+valid_fill_wait=0
+valid_fill_status_query=0 status=0
+valid_read=0 data=4b10a55a,4b10a55a,4b10a55a,4b10a55a
+foreign_event_fill_enqueue=-34 expected=-34 output_event=null
+result=PASS_CONTEXT_BOUNDARY
+wrapper_exit=0

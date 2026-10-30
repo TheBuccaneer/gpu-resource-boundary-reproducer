@@ -1,0 +1,244 @@
+      8851:	find library=libOpenCL.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libOpenCL.so.1
+      8851:	
+      8851:	find library=libc.so.6 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libc.so.6
+      8851:	
+      8851:	
+      8851:	calling init: /lib64/ld-linux-x86-64.so.2
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libc.so.6
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1
+      8851:	
+      8851:	
+      8851:	initialize program: clinfo
+      8851:	
+      8851:	
+      8851:	transferring control: clinfo
+      8851:	
+      8851:	find library=libRusticlOpenCL.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+      8851:	
+      8851:	find library=libz.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libz.so.1
+      8851:	
+      8851:	find library=libzstd.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libzstd.so.1
+      8851:	
+      8851:	find library=libdrm.so.2 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libdrm.so.2
+      8851:	
+      8851:	find library=libLLVM.so.21.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1
+      8851:	
+      8851:	find library=libexpat.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libexpat.so.1
+      8851:	
+      8851:	find library=libelf.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libelf.so.1
+      8851:	
+      8851:	find library=libdrm_amdgpu.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+      8851:	
+      8851:	find library=libclang-cpp.so.21.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1
+      8851:	
+      8851:	find library=libLLVMSPIRVLib.so.21.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1
+      8851:	
+      8851:	find library=libstdc++.so.6 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+      8851:	
+      8851:	find library=libm.so.6 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libm.so.6
+      8851:	
+      8851:	find library=libgcc_s.so.1 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+      8851:	
+      8851:	find library=libffi.so.8 [0]; searching
+      8851:	 search path=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v3:/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v2:/usr/lib/x86_64-linux-gnu/../lib		(RUNPATH from file /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1)
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v3/libffi.so.8
+      8851:	    (no such file)
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/glibc-hwcaps/x86-64-v2/libffi.so.8
+      8851:	    (no such file)
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/../lib/libffi.so.8
+      8851:	    (no such file)
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libffi.so.8
+      8851:	
+      8851:	find library=libedit.so.2 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libedit.so.2
+      8851:	
+      8851:	find library=libxml2.so.16 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libxml2.so.16
+      8851:	
+      8851:	find library=libtinfo.so.6 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+      8851:	
+      8851:	find library=libbsd.so.0 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libbsd.so.0
+      8851:	
+      8851:	find library=libmd.so.0 [0]; searching
+      8851:	 search cache=/etc/ld.so.cache
+      8851:	  trying file=/usr/lib/x86_64-linux-gnu/libmd.so.0
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libmd.so.0
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libbsd.so.0
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libtinfo.so.6
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libz.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libm.so.6
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libxml2.so.16
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libedit.so.2
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libffi.so.8
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libzstd.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libdrm.so.2
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libelf.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libexpat.so.1
+      8851:	
+      8851:	
+      8851:	calling init: /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1
+      8851:	
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: clIcdGetFunctionAddressForPlatformKHR (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: clIcdSetPlatformDispatchDataKHR (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: glXGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: eglGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: glXGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: eglGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: glXGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: eglGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: glXGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: eglGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: glXGetProcAddress (fatal)
+      8851:	/usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1: error: symbol lookup error: undefined symbol: eglGetProcAddress (fatal)
+      8851:	
+      8851:	calling fini:  [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libexpat.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libelf.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libdrm_amdgpu.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libdrm.so.2 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libclang-cpp.so.21.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libLLVMSPIRVLib.so.21.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libLLVM.so.21.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libzstd.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libstdc++.so.6 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libffi.so.8 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libedit.so.2 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libxml2.so.16 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libm.so.6 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libz.so.1 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libtinfo.so.6 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libbsd.so.0 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libmd.so.0 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /usr/lib/x86_64-linux-gnu/libc.so.6 [0]
+      8851:	
+      8851:	
+      8851:	calling fini: /lib64/ld-linux-x86-64.so.2 [0]
+      8851:	

@@ -1,0 +1,29 @@
+clGetPlatformIDs=0 platforms=1
+clGetPlatformInfo_name=0 value=rusticl
+clGetDeviceIDs=0 gpu_devices=1
+device_name_status=0 value=AMD Radeon 660M (radeonsi, rembrandt, ACO, DRM 3.64, 7.0.0-38-generic)
+driver_version_status=0 value=26.0.8-1ubuntu0.3
+device_extensions_status=0
+extension_semaphore=1 external_semaphore=1 sync_fd=1
+export_device_handle_size_status=0 bytes=4
+export_device_handle_values_status=0 value[0]=0x2058
+extension_functions=create:1 info:1 release:1
+provenance_map=7f9815000000-7f98150c5000 r--p 00000000 103:02 10749923                  /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+provenance_map=7f98150c5000-7f9816905000 r-xp 000c5000 103:02 10749923                  /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+provenance_map=7f9816905000-7f9817859000 r--p 01905000 103:02 10749923                  /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+provenance_map=7f9817859000-7f9817911000 r--p 02859000 103:02 10749923                  /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+provenance_map=7f9817911000-7f9817936000 rw-p 02911000 103:02 10749923                  /usr/lib/x86_64-linux-gnu/libRusticlOpenCL.so.1.0.0
+provenance_map=7f9817ffa000-7f9818000000 r--p 00000000 103:02 10777671                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0
+provenance_map=7f9818000000-7f981800a000 r-xp 00006000 103:02 10777671                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0
+provenance_map=7f981800a000-7f981800f000 r--p 00010000 103:02 10777671                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0
+provenance_map=7f981800f000-7f9818010000 r--p 00014000 103:02 10777671                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0
+provenance_map=7f9818010000-7f9818011000 rw-p 00015000 103:02 10777671                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0
+clCreateContext=0 object=1
+clCreateSemaphoreWithPropertiesKHR=0 object=1
+query_export_types_size_status=0 bytes=0
+query_export_types_value_status=0 bytes=0 value=0xdeadbeef expected=0x2058
+query_exportable_status=0 bytes=4 value=1
+oracle=F1_CANDIDATE
+clReleaseSemaphoreKHR=0
+clReleaseContext=0
+exit=10
