@@ -1,0 +1,7 @@
+{
+  "started_by": "/home/rock/Documents/ChatGPT/23 FullPaper OpenCL/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/inventory.py",
+  "finished_utc": "2026-10-31T10:10:17.047185+00:00",
+  "script_sha256": "0044bd15065349a7995605b71dc056c1f8437a30c7436d9a39f36f032bea482e",
+  "query_sha256": "0f13176b2368005da769058ad5f3624307477e7892856f9ffd278afa24e8df2b",
+  "scope": "enumeration/info only; no context/program/queue/device allocation/dispatch"
+}

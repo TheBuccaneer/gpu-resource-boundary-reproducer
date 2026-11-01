@@ -1,0 +1,38 @@
+[
+  {
+    "argv": [
+      "gcc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-c",
+      "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/c1/reproducers/h2_c1.c",
+      "-o",
+      "/tmp/tmpaigr2afi/h2_c1.c.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "source_sha256": "19da8a43a7fc2046da95b8f21ac2999e047c4ce8f86d03b8e0d364bef87799bb",
+    "scope": "CPU host object only; no OpenCL linking/loading/execution"
+  },
+  {
+    "argv": [
+      "gcc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-c",
+      "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/c1/reproducers/h2_b12_query.c",
+      "-o",
+      "/tmp/tmpaigr2afi/h2_b12_query.c.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "source_sha256": "a2e484de14f6a592c8811fba59c0f19cc71a7928e4f1f1a431170987d7a83f5e",
+    "scope": "CPU host object only; no OpenCL linking/loading/execution"
+  }
+]

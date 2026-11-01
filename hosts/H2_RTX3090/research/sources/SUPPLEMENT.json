@@ -1,0 +1,26 @@
+[
+  {
+    "file": "mesa_zink_screen_26_2.c",
+    "url": "https://gitlab.freedesktop.org/mesa/mesa/-/raw/mesa-26.2.0/src/gallium/drivers/zink/zink_screen.c",
+    "retrieved_utc": "2026-10-31T10:14:11.193268+00:00",
+    "sha256": "71183857797a9b11bc07dbae0614b002662db663fee64f70fbbba3aec3ffe3c0"
+  },
+  {
+    "file": "mesa_nouveau_compute_26_2.c",
+    "url": "https://gitlab.freedesktop.org/mesa/mesa/-/raw/mesa-26.2.0/src/gallium/drivers/nouveau/nvc0/nvc0_compute.c",
+    "retrieved_utc": "2026-10-31T10:14:11.194184+00:00",
+    "sha256": "10cca3f4ecc02e66a79babe3926a44efaafdb9b897c8fc73a0a32be0aeb04445"
+  },
+  {
+    "file": "cl_semaphore.asciidoc",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Docs/main/extensions/cl_khr_semaphore.asciidoc",
+    "retrieved_utc": "2026-10-31T10:14:11.194793+00:00",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "file": "opencl_extensions_tree.json",
+    "url": "https://api.github.com/repos/KhronosGroup/OpenCL-Docs/git/trees/main?recursive=1",
+    "retrieved_utc": "2026-10-31T10:14:11.195330+00:00",
+    "sha256": "4c74d144bf0d08ca5d7444f83c702a499edaa7bbb1dfbb41db158d8509190d92"
+  }
+]

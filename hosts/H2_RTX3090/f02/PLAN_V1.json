@@ -1,0 +1,77 @@
+{
+  "plan_id": "F02-CLONE-SNAPSHOT-REVERSE",
+  "plan_version": 1,
+  "log_schema_version": 1,
+  "spec_commit": "0027b7f1a5e97b1bf5256888757479e012a5cb59",
+  "cases": [
+    {
+      "id": "F02-CLONE-SNAPSHOT-REVERSE",
+      "repeat_processes": 1,
+      "kernel_dispatches": 3,
+      "reset_writes": 1,
+      "workitems": 64,
+      "local_size": 1,
+      "readbacks": 7,
+      "total_words": 1120,
+      "completion_sequences": 11,
+      "all_API_expected": 0
+    }
+  ],
+  "buffers": {
+    "A1": 1,
+    "A3": 3,
+    "O0": 10,
+    "O1": 11,
+    "O2": 12
+  },
+  "canaries": {
+    "words": 160,
+    "active_start": 16,
+    "active_count": 64,
+    "guard_words": 96,
+    "nonce_u32": 1408788826,
+    "salt_u32": 3467527431,
+    "formula": "u32(0x9e3779b9*(i+1)) XOR u32(tag*0x01020304) XOR nonce"
+  },
+  "ordered_phases": [
+    "original=A1/O0",
+    "clone original, no clone setters ever",
+    "dispatch clone1; complete; read O0:first",
+    "reset O0 all160; complete; read O0:reset",
+    "only original=A3/O1",
+    "dispatch clone2; complete; read O0:second",
+    "dispatch original; complete; read O1:final",
+    "read A1,A3,O2; successful ordered cleanup"
+  ],
+  "readback_order": [
+    "O0:first",
+    "O0:reset",
+    "O0:second",
+    "O1:final",
+    "A1",
+    "A3",
+    "O2"
+  ],
+  "normative_contract": {
+    "pin": "runtime_layer 11295-11349",
+    "clone": "exact copy/latest arguments applied as distinct kernel instance; live shared buffer storage not copied",
+    "reverse_independence": "deduced from own kernel instance and copied argument values; no shared-memory data copying claimed",
+    "expected": "all valid API/cleanup calls CL_SUCCESS; events CL_COMPLETE",
+    "undefined_behavior_excluded": [
+      "no foreign/released objects",
+      "no OOB",
+      "no concurrent setters",
+      "buffers live through all completion/readbacks"
+    ]
+  },
+  "limits": {
+    "wall_seconds": 60,
+    "CPU_seconds": 45,
+    "observed_RSS_bytes": 2147483648,
+    "output_bytes": 16777216,
+    "event_seconds": 5,
+    "hard_GPU_preemption_guaranteed": false
+  },
+  "interpretation": "Observed binding/data anomaly is candidate only, no OS/tenant boundary claim; independent review and separate fresh confirmation GO required",
+  "approval_required_before_runtime": true
+}

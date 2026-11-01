@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "status": "prepared_not_executed",
+  "spec_commit": "0027b7f1a5e97b1bf5256888757479e012a5cb59",
+  "cts_commit": "406533a0b437f49d2e542bd293789adc7900cbed",
+  "kernel_build_options": "-cl-std=CL1.2",
+  "shared_protocol": "H2_C1_WORK_PLAN.md",
+  "cases": [
+    {
+      "id": "BL-KERNEL",
+      "approval_package": "C",
+      "contract": "Source build CL1.2; valid NDRange, completion and in-bounds data",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-BUFFER; B2-VALID-L1/16/32",
+      "negative_control": "offline oracle flips one output and one guard word; B7-INDEX is a separate API-negative control",
+      "steps": "one 16KiB buffer, G=64,L=32, base kernel, flush, bounded completion, read all",
+      "measurement": "build log, kernel limits, statuses, event profiling, full 4096-word output+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run BL-KERNEL",
+      "runtime_executed": false
+    },
+    {
+      "id": "BL-BUFFER",
+      "approval_package": "C",
+      "contract": "Valid FillBuffer→CopyBuffer dependency and bounded readback",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-KERNEL; B10-IO",
+      "negative_control": "offline oracle mutation and B10-WAITLIST-NULL in separate process",
+      "steps": "two 16KiB buffers; fill first 64 words of source, explicitly dependent copy, read destination",
+      "measurement": "statuses, source/copy event profiling, 64 expected pattern words and 4032 guard words",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run BL-BUFFER",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-VALID-L1",
+      "approval_package": "D",
+      "contract": "clEnqueueNDRangeKernel: legal explicit uniform workgroup",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-KERNEL; the other valid L sizes",
+      "negative_control": "B2-REQ-MISMATCH and B2-NONDIVISIBLE",
+      "steps": "base kernel G=64,L=1, no local memory args; require kernel max≥32",
+      "measurement": "API, kernel max/compile WG, completion/profiling, complete data+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-VALID-L1",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-VALID-L16",
+      "approval_package": "D",
+      "contract": "clEnqueueNDRangeKernel: legal explicit uniform workgroup",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-KERNEL; the other valid L sizes",
+      "negative_control": "B2-REQ-MISMATCH and B2-NONDIVISIBLE",
+      "steps": "base kernel G=64,L=16, no local memory args; require kernel max≥32",
+      "measurement": "API, kernel max/compile WG, completion/profiling, complete data+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-VALID-L16",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-VALID-L32",
+      "approval_package": "D",
+      "contract": "clEnqueueNDRangeKernel: legal explicit uniform workgroup",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-KERNEL; the other valid L sizes",
+      "negative_control": "B2-REQ-MISMATCH and B2-NONDIVISIBLE",
+      "steps": "base kernel G=64,L=32, no local memory args; require kernel max≥32",
+      "measurement": "API, kernel max/compile WG, completion/profiling, complete data+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-VALID-L32",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-DIM0",
+      "approval_package": "D",
+      "contract": "clEnqueueNDRangeKernel: work_dim must be 1…3",
+      "expected_return": [
+        -53
+      ],
+      "positive_control": "B2-VALID-L32",
+      "negative_control": "the other DIM variant; exactly one invalid work_dim per process",
+      "steps": "four allocated size_t slots G=[64,1,1,1],L=[32,1,1,1], work_dim=0; expect no event",
+      "measurement": "API error and event remains null; no readback/dispatch-followup after error",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-DIM0",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-DIM4",
+      "approval_package": "D",
+      "contract": "clEnqueueNDRangeKernel: work_dim must be 1…3",
+      "expected_return": [
+        -53
+      ],
+      "positive_control": "B2-VALID-L32",
+      "negative_control": "the other DIM variant; exactly one invalid work_dim per process",
+      "steps": "four allocated size_t slots G=[64,1,1,1],L=[32,1,1,1], work_dim=4; expect no event",
+      "measurement": "API error and event remains null; no readback/dispatch-followup after error",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-DIM4",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-REQ-VALID",
+      "approval_package": "D",
+      "contract": "reqd_work_group_size(32,1,1) with matching explicit LWS",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-KERNEL; B2-VALID-L32",
+      "negative_control": "B2-REQ-MISMATCH differs only in LWS=16 instead of32",
+      "steps": "req32 kernel from same program, G=64,L=32; compile-WG=[32,1,1]; bounded completion and full readback",
+      "measurement": "source/build options, compile-WG/kernel max, API/event/profiling, complete data+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-REQ-VALID",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-REQ-MISMATCH",
+      "approval_package": "D",
+      "contract": "Explicit LWS must match reqd_work_group_size(32,1,1)",
+      "expected_return": [
+        -54
+      ],
+      "positive_control": "B2-REQ-VALID uses identical kernel and G64 with matching L32; compile metadata [32,1,1]",
+      "negative_control": "B2-NONDIVISIBLE isolates a different rule in a separate case",
+      "steps": "req32 kernel, G=64,L=16; all device/product limits satisfied",
+      "measurement": "build log/compile-WG/kernel max, -54, null event",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-REQ-MISMATCH",
+      "runtime_executed": false
+    },
+    {
+      "id": "B2-NONDIVISIBLE",
+      "approval_package": "D",
+      "contract": "Uniform CL1.2 workgroup requires G divisible by explicit L",
+      "expected_return": [
+        -54
+      ],
+      "positive_control": "B2-VALID-L32 (G64/L32)",
+      "negative_control": "B2-REQ-MISMATCH separately",
+      "steps": "base kernel without reqd-WG, CL1.2, G=65,L=32; guard i<64",
+      "measurement": "-54, null event; program options and non-required compile-WG",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B2-NONDIVISIBLE",
+      "runtime_executed": false
+    },
+    {
+      "id": "B7-OWN",
+      "approval_package": "B",
+      "contract": "Kernel object arguments and memory object share context",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "own/context metadata in both contexts; BL-KERNEL after separate GPU approval",
+      "negative_control": "B7-FOREIGN-AB/BA; INDEX; SIZE",
+      "steps": "two same-device contexts; own buffer setter with correct sizeof(cl_mem), no queue",
+      "measurement": "program/memory context identity and setter success; no data-integrity claim",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B7-OWN",
+      "runtime_executed": false
+    },
+    {
+      "id": "B7-FOREIGN-AB",
+      "approval_package": "B",
+      "contract": "clSetKernelArg: foreign object context is CL_INVALID_CONTEXT",
+      "expected_return": [
+        -34
+      ],
+      "positive_control": "B7-OWN; own setter in same process before changed condition",
+      "negative_control": "B7-INDEX/SIZE establish other clean validation paths",
+      "steps": "owner=A, foreign buffer from B; both live/valid; correct index and size; no queue or enqueue exists",
+      "measurement": "context metadata, setter status; immediate stop on unexpected success; no foreign-data read/write",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B7-FOREIGN-AB",
+      "runtime_executed": false
+    },
+    {
+      "id": "B7-FOREIGN-BA",
+      "approval_package": "B",
+      "contract": "clSetKernelArg: foreign object context is CL_INVALID_CONTEXT",
+      "expected_return": [
+        -34
+      ],
+      "positive_control": "B7-OWN; own setter in same process before changed condition",
+      "negative_control": "B7-INDEX/SIZE establish other clean validation paths",
+      "steps": "owner=B, foreign buffer from A; both live/valid; correct index and size; no queue or enqueue exists",
+      "measurement": "context metadata, setter status; immediate stop on unexpected success; no foreign-data read/write",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B7-FOREIGN-BA",
+      "runtime_executed": false
+    },
+    {
+      "id": "B7-INDEX",
+      "approval_package": "B",
+      "contract": "clSetKernelArg: index beyond sole argument is invalid",
+      "expected_return": [
+        -49
+      ],
+      "positive_control": "B7-OWN/own setter first",
+      "negative_control": "B7-SIZE changes only argument size",
+      "steps": "base has one argument; set index1 using valid own buffer and correct size; no enqueue",
+      "measurement": "-49 and valid object/context metadata",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B7-INDEX",
+      "runtime_executed": false
+    },
+    {
+      "id": "B7-SIZE",
+      "approval_package": "B",
+      "contract": "clSetKernelArg: cl_mem argument size must equal sizeof(cl_mem)",
+      "expected_return": [
+        -51
+      ],
+      "positive_control": "B7-OWN/own setter first",
+      "negative_control": "B7-INDEX changes only index",
+      "steps": "index0, valid own cl_mem pointer; size=sizeof(cl_mem)-1; no enqueue",
+      "measurement": "-51; actual sizeof(cl_mem) retained from build ABI",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B7-SIZE",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-IO",
+      "approval_package": "E",
+      "contract": "In-order command queue preserves ordering",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-BUFFER with explicit waitlist",
+      "negative_control": "B10-WAITLIST-NULL/ZERO separately",
+      "steps": "same In-Order queue fill→copy without explicit waitlist; bounded completion and read",
+      "measurement": "queue flags, all data+guards, source/copy event profiling",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-IO",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-XQUEUE",
+      "approval_package": "E",
+      "contract": "Cross-queue dependencies require same context, explicit event, producer submission",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-BUFFER; B10-IO",
+      "negative_control": "B10-FOREIGN-EVENT changes only event context",
+      "steps": "q1 fill, flush q1; q2 copy waits fill-event, flush q2; bounded copy-complete, read q1",
+      "measurement": "both queue identities/flags, waitlist, API and terminal states, profiling/data",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-XQUEUE",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-OOO",
+      "approval_package": "F",
+      "contract": "Out-of-order queue correctness follows explicit dependency graph",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-BUFFER; B10-IO and B10-XQUEUE",
+      "negative_control": "B10-WAITLIST-NULL/ZERO; never use intentionally missing dependency as deterministic negative",
+      "steps": "require advertised OOO; create OOO+profiling, fill→copy explicit waitlist, wait before blocking read",
+      "measurement": "requested/actual queue flags, dependency edges, completion/profiling, data+guards",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-OOO",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-USER",
+      "approval_package": "E",
+      "contract": "Unresolved user event blocks dependent command; COMPLETE releases it",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "BL-BUFFER; same-context user event metadata",
+      "negative_control": "B10-USER-INVALID and B10-USER-DOUBLE separately",
+      "steps": "fill waits pending user event; flush; observe fill not COMPLETE; signal user COMPLETE before release; bounded completion then read",
+      "measurement": "status before release, API status, fill profiling, all data+guards; no timing-based race claim",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-USER",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-MARKER-VALID",
+      "approval_package": "E",
+      "contract": "Marker accepts one complete same-context user event",
+      "expected_return": [
+        0
+      ],
+      "positive_control": "B10-IO and already completed own user event",
+      "negative_control": "B10-FOREIGN-EVENT changes only event context; WAITLIST-NULL/ZERO change only list consistency",
+      "steps": "own user event COMPLETE; marker(qA,1,&uA,&event), flush and bounded completion",
+      "measurement": "own queue/event context, API0, terminal marker event and profiling; no claimed memory writes",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-MARKER-VALID",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-FOREIGN-EVENT",
+      "approval_package": "E",
+      "contract": "Marker waitlist events and queue must share context",
+      "expected_return": [
+        -34
+      ],
+      "positive_control": "B10-MARKER-VALID: same marker API, valid own complete user event and consistent count/list",
+      "negative_control": "B10-WAITLIST-NULL/ZERO separates structural waitlist errors",
+      "steps": "create user event in second context and complete it before marker(qA,1,&uB,&event)",
+      "measurement": "queue/event contexts; -34 and no event; no risk of an intentionally unresolved foreign wait",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-FOREIGN-EVENT",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-WAITLIST-NULL",
+      "approval_package": "E",
+      "contract": "Marker count>0 requires non-NULL waitlist",
+      "expected_return": [
+        -57
+      ],
+      "positive_control": "B10-MARKER-VALID: same marker API, valid own complete user event and consistent count/list",
+      "negative_control": "B10-WAITLIST-ZERO tests inverse mismatch",
+      "steps": "marker(q,1,NULL,&event), all other inputs valid",
+      "measurement": "-57 and event remains null",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-WAITLIST-NULL",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-WAITLIST-ZERO",
+      "approval_package": "E",
+      "contract": "Non-NULL marker waitlist requires positive count",
+      "expected_return": [
+        -57
+      ],
+      "positive_control": "B10-MARKER-VALID: same marker API, valid own complete user event and consistent count/list",
+      "negative_control": "B10-WAITLIST-NULL tests inverse mismatch",
+      "steps": "create/complete own user event; marker(q,0,&u,&event)",
+      "measurement": "-57 and no command event; release completed user event",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-WAITLIST-ZERO",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-USER-ERROR",
+      "approval_package": "F",
+      "contract": "WaitForEvents reports negative terminal user-event status",
+      "expected_return": [
+        -14
+      ],
+      "positive_control": "same-process extra user event set COMPLETE and WaitForEvents returns0, before negative status arm",
+      "negative_control": "B10-USER-INVALID differs by illegal setter status",
+      "steps": "create user event, set status -1 (setter success), WaitForEvents on this already-terminal event",
+      "measurement": "setter0 and wait-14; -1 is intentional host input, no GPU failure classification",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-USER-ERROR",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-USER-DOUBLE",
+      "approval_package": "F",
+      "contract": "User event execution status may be set only once",
+      "expected_return": [
+        -59
+      ],
+      "positive_control": "first COMPLETE setter returns0",
+      "negative_control": "B10-USER-INVALID changes value rather than double-setting",
+      "steps": "create event; COMPLETE success; COMPLETE again -59; no command waiting",
+      "measurement": "first and second setter statuses; already terminal event cleanup",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-USER-DOUBLE",
+      "runtime_executed": false
+    },
+    {
+      "id": "B10-USER-INVALID",
+      "approval_package": "F",
+      "contract": "SetUserEventStatus accepts COMPLETE or a negative status",
+      "expected_return": [
+        -30
+      ],
+      "positive_control": "subsequent COMPLETE succeeds and resolves event",
+      "negative_control": "B10-USER-DOUBLE changes call history rather than invalid value",
+      "steps": "fresh user event, set CL_RUNNING (3) -30, then COMPLETE success; no GPU dependencies",
+      "measurement": "both statuses; resolved-before-release invariant",
+      "repeat_processes": 5,
+      "stop_rule": "H2_C1_WORK_PLAN common stop rules; any unexpected status ends process/campaign; never repeat through a failure",
+      "reproducer": "reproducers/h2_c1.c --approved-run B10-USER-INVALID",
+      "runtime_executed": false
+    }
+  ],
+  "b12_query": {
+    "id": "B12-Q",
+    "approval_package": "A",
+    "repeat_processes": 5,
+    "reproducer": "reproducers/h2_b12_query.c --approved-query-run",
+    "positive_control": "valid platform/device name and opaque-FD import list queries",
+    "negative_control": "object selector 0x203d in platform/device namespace; one-byte output buffers for nonempty names",
+    "expected": "valid six extension list size queries return0 (empty export allowed); four deliberate invalid controls return-30",
+    "measurement": "scope, selector, phase, raw status/size/hex and library maps; error sizes not interpreted",
+    "stop_rule": "independent query mismatches collected only within one bounded process; no context/object/dispatch; stop further runs pending review",
+    "runtime_executed": false
+  }
+}

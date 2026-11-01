@@ -1,0 +1,14 @@
+{
+  "OCL_ICD_VENDORS": null,
+  "OCL_ICD_FILENAMES": null,
+  "OPENCL_VENDOR_PATH": null,
+  "LD_LIBRARY_PATH": "/usr/local/cuda/lib64",
+  "LD_PRELOAD": null,
+  "RUSTICL_ENABLE": null,
+  "MESA_LOADER_DRIVER_OVERRIDE": null,
+  "VK_ICD_FILENAMES": null,
+  "VK_DRIVER_FILES": null,
+  "CUDA_VISIBLE_DEVICES": null,
+  "POCL_DEVICES": null,
+  "PATH": "/home/rock/.local/bin:/home/rock/bin:/home/rock/.codex/tmp/arg0-linux/codex-arg03lHh2t:/home/rock/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/home/rock/.local/bin:/home/rock/bin:/home/rock/bin:/usr/local/cuda/bin:/home/rock/.local/bin:/home/rock/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/rock/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/usr/lib/chatgpt/resources"
+}

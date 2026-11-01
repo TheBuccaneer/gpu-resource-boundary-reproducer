@@ -1,0 +1,26 @@
+[
+  {
+    "file": "clspv_DEPS",
+    "url": "https://raw.githubusercontent.com/google/clspv/7ee3a40e652b3649d175758f72d7af98b9450a68/DEPS",
+    "retrieved_utc": "2026-10-31T10:42:49.982461+00:00",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "file": "clspv_fetch_sources.py",
+    "url": "https://raw.githubusercontent.com/google/clspv/7ee3a40e652b3649d175758f72d7af98b9450a68/utils/fetch_sources.py",
+    "retrieved_utc": "2026-10-31T10:42:50.221695+00:00",
+    "sha256": "21692929beae4da8ade85513e10dbcda9cd449393991289317ec3cb2ac97e4f6"
+  },
+  {
+    "file": "pocl_llvm.cmake",
+    "url": "https://raw.githubusercontent.com/pocl/pocl/4549718771fcdae72516599230587ad019ef7066/cmake/LLVM.cmake",
+    "retrieved_utc": "2026-10-31T10:42:50.532814+00:00",
+    "sha256": "596440748f81ece32b90b52c6d734ea94910c14a65a8dded8dc92d9b1ddbb093"
+  },
+  {
+    "file": "cts_test_platform.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/test_platform.cpp",
+    "retrieved_utc": "2026-10-31T10:42:50.834748+00:00",
+    "sha256": "f0c212d968d75ccc9dd24178b6b2f4397c540415fad557bc58f624dacd525d67"
+  }
+]

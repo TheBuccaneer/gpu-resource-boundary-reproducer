@@ -1,0 +1,360 @@
+[
+  {
+    "label": "uname",
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "start_utc": "2026-10-31T10:14:35.657244+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "start_utc": "2026-10-31T10:14:35.660606+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "cpu",
+    "argv": [
+      "lscpu"
+    ],
+    "start_utc": "2026-10-31T10:14:35.663756+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "cpu_topology",
+    "argv": [
+      "lscpu",
+      "-e=CPU,NODE,SOCKET,CORE,ONLINE"
+    ],
+    "start_utc": "2026-10-31T10:14:35.689645+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "memory",
+    "argv": [
+      "free",
+      "-b"
+    ],
+    "start_utc": "2026-10-31T10:14:35.714315+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "virtualization",
+    "argv": [
+      "systemd-detect-virt"
+    ],
+    "start_utc": "2026-10-31T10:14:35.716959+00:00",
+    "returncode": 1
+  },
+  {
+    "label": "pci",
+    "argv": [
+      "lspci",
+      "-Dnnk"
+    ],
+    "start_utc": "2026-10-31T10:14:35.720224+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "pcie_detail",
+    "argv": [
+      "lspci",
+      "-Dvv"
+    ],
+    "start_utc": "2026-10-31T10:14:35.742168+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "modules",
+    "argv": [
+      "lsmod"
+    ],
+    "start_utc": "2026-10-31T10:14:35.779992+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_version",
+    "argv": [
+      "cat",
+      "/proc/driver/nvidia/version"
+    ],
+    "start_utc": "2026-10-31T10:14:35.784631+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_gpus",
+    "argv": [
+      "nvidia-smi",
+      "--query-gpu=index,name,pci.bus_id,driver_version,memory.total,compute_cap",
+      "--format=csv"
+    ],
+    "start_utc": "2026-10-31T10:14:35.787780+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_detail",
+    "argv": [
+      "nvidia-smi",
+      "-q"
+    ],
+    "start_utc": "2026-10-31T10:14:35.827566+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_topology",
+    "argv": [
+      "nvidia-smi",
+      "topo",
+      "-m"
+    ],
+    "start_utc": "2026-10-31T10:14:36.000883+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "ldconfig",
+    "argv": [
+      "ldconfig",
+      "-p"
+    ],
+    "start_utc": "2026-10-31T10:14:36.090193+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clinfo_version",
+    "argv": [
+      "clinfo",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.091939+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clinfo_list",
+    "argv": [
+      "clinfo",
+      "--list"
+    ],
+    "start_utc": "2026-10-31T10:14:36.093312+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "opencl_query",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/query_opencl.py"
+    ],
+    "start_utc": "2026-10-31T10:14:36.329646+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "packages",
+    "argv": [
+      "dpkg-query",
+      "-W",
+      "-f=${binary:Package}\t${Version}\t${db:Status-Abbrev}\n"
+    ],
+    "start_utc": "2026-10-31T10:14:36.568286+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "pkgconfig",
+    "argv": [
+      "pkg-config",
+      "--modversion",
+      "OpenCL",
+      "vulkan",
+      "libdrm"
+    ],
+    "start_utc": "2026-10-31T10:14:36.594804+00:00",
+    "returncode": 1
+  },
+  {
+    "label": "gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.603272+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clang",
+    "argv": [
+      "clang",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.605124+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "llvm",
+    "argv": [
+      "llvm-config",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.623089+00:00",
+    "returncode": null
+  },
+  {
+    "label": "llvm20",
+    "argv": [
+      "llvm-config-20",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.623647+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "llvm21",
+    "argv": [
+      "llvm-config-21",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.626359+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "llvm_targets",
+    "argv": [
+      "llvm-config-21",
+      "--targets-built"
+    ],
+    "start_utc": "2026-10-31T10:14:36.628668+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.631329+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "rust",
+    "argv": [
+      "rustc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.632672+00:00",
+    "returncode": null
+  },
+  {
+    "label": "cargo",
+    "argv": [
+      "cargo",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.633054+00:00",
+    "returncode": null
+  },
+  {
+    "label": "cmake",
+    "argv": [
+      "cmake",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.633426+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "meson",
+    "argv": [
+      "meson",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.643380+00:00",
+    "returncode": null
+  },
+  {
+    "label": "ninja",
+    "argv": [
+      "ninja",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.643841+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.645682+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvcc",
+    "argv": [
+      "nvcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.646989+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "ninja_version",
+    "argv": [
+      "ninja",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.649463+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvcc_alt",
+    "argv": [
+      "/usr/local/cuda/bin/nvcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:14:36.651961+00:00",
+    "returncode": null
+  },
+  {
+    "label": "nvidia_modinfo",
+    "argv": [
+      "modinfo",
+      "nvidia"
+    ],
+    "start_utc": "2026-10-31T10:14:36.652313+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nouveau_modinfo",
+    "argv": [
+      "modinfo",
+      "nouveau"
+    ],
+    "start_utc": "2026-10-31T10:14:36.680473+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "vulkan_query_build",
+    "argv": [
+      "gcc",
+      "-Wall",
+      "-Wextra",
+      "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/query_vulkan.c",
+      "-lvulkan",
+      "-o",
+      "/tmp/h2-c0-tjf96pv4/query_vulkan"
+    ],
+    "start_utc": "2026-10-31T10:14:36.694688+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "vulkan_query",
+    "argv": [
+      "/tmp/h2-c0-tjf96pv4/query_vulkan"
+    ],
+    "start_utc": "2026-10-31T10:14:36.767399+00:00",
+    "returncode": 0
+  }
+]

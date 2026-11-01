@@ -1,0 +1,304 @@
+[
+  {
+    "label": "uname",
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "start_utc": "2026-10-31T10:10:13.447018+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "start_utc": "2026-10-31T10:10:13.450449+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "cpu",
+    "argv": [
+      "lscpu"
+    ],
+    "start_utc": "2026-10-31T10:10:13.453789+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "cpu_topology",
+    "argv": [
+      "lscpu",
+      "-e=CPU,NODE,SOCKET,CORE,ONLINE"
+    ],
+    "start_utc": "2026-10-31T10:10:13.477838+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "memory",
+    "argv": [
+      "free",
+      "-b"
+    ],
+    "start_utc": "2026-10-31T10:10:13.501701+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "virtualization",
+    "argv": [
+      "systemd-detect-virt"
+    ],
+    "start_utc": "2026-10-31T10:10:13.504210+00:00",
+    "returncode": 1
+  },
+  {
+    "label": "pci",
+    "argv": [
+      "lspci",
+      "-Dnnk"
+    ],
+    "start_utc": "2026-10-31T10:10:13.507499+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "pcie_gpu",
+    "argv": [
+      "lspci",
+      "-Dvv",
+      "-s",
+      "01:00.0"
+    ],
+    "start_utc": "2026-10-31T10:10:13.529742+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "modules",
+    "argv": [
+      "lsmod"
+    ],
+    "start_utc": "2026-10-31T10:10:13.538938+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_version",
+    "argv": [
+      "cat",
+      "/proc/driver/nvidia/version"
+    ],
+    "start_utc": "2026-10-31T10:10:13.543963+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_gpus",
+    "argv": [
+      "nvidia-smi",
+      "--query-gpu=index,name,pci.bus_id,driver_version,memory.total,compute_cap",
+      "--format=csv"
+    ],
+    "start_utc": "2026-10-31T10:10:13.546890+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_detail",
+    "argv": [
+      "nvidia-smi",
+      "-q"
+    ],
+    "start_utc": "2026-10-31T10:10:13.581155+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvidia_topology",
+    "argv": [
+      "nvidia-smi",
+      "topo",
+      "-m"
+    ],
+    "start_utc": "2026-10-31T10:10:13.789795+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "ldconfig",
+    "argv": [
+      "ldconfig",
+      "-p"
+    ],
+    "start_utc": "2026-10-31T10:10:13.880604+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clinfo_version",
+    "argv": [
+      "clinfo",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:13.887141+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clinfo_list",
+    "argv": [
+      "clinfo",
+      "--list"
+    ],
+    "start_utc": "2026-10-31T10:10:13.888423+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "opencl_query",
+    "argv": [
+      "/usr/bin/python3",
+      "/home/rock/Documents/ChatGPT/23 FullPaper OpenCL/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/query_opencl.py"
+    ],
+    "start_utc": "2026-10-31T10:10:14.285106+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "packages",
+    "argv": [
+      "dpkg-query",
+      "-W",
+      "-f=${binary:Package}\t${Version}\t${db:Status-Abbrev}\n"
+    ],
+    "start_utc": "2026-10-31T10:10:14.514412+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "pkgconfig",
+    "argv": [
+      "pkg-config",
+      "--modversion",
+      "OpenCL",
+      "vulkan",
+      "libdrm"
+    ],
+    "start_utc": "2026-10-31T10:10:14.541963+00:00",
+    "returncode": 1
+  },
+  {
+    "label": "gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.578080+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "clang",
+    "argv": [
+      "clang",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.584281+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "llvm",
+    "argv": [
+      "llvm-config",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.679987+00:00",
+    "returncode": null
+  },
+  {
+    "label": "python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.680604+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "rust",
+    "argv": [
+      "rustc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.682092+00:00",
+    "returncode": null
+  },
+  {
+    "label": "cargo",
+    "argv": [
+      "cargo",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.682546+00:00",
+    "returncode": null
+  },
+  {
+    "label": "cmake",
+    "argv": [
+      "cmake",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.682963+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "meson",
+    "argv": [
+      "meson",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.725401+00:00",
+    "returncode": null
+  },
+  {
+    "label": "ninja",
+    "argv": [
+      "ninja",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.725881+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.729043+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvcc",
+    "argv": [
+      "nvcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.731519+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nvcc_alt",
+    "argv": [
+      "/usr/local/cuda/bin/nvcc",
+      "--version"
+    ],
+    "start_utc": "2026-10-31T10:10:14.738643+00:00",
+    "returncode": null
+  },
+  {
+    "label": "nvidia_modinfo",
+    "argv": [
+      "modinfo",
+      "nvidia"
+    ],
+    "start_utc": "2026-10-31T10:10:14.739021+00:00",
+    "returncode": 0
+  },
+  {
+    "label": "nouveau_modinfo",
+    "argv": [
+      "modinfo",
+      "nouveau"
+    ],
+    "start_utc": "2026-10-31T10:10:14.766206+00:00",
+    "returncode": 0
+  }
+]

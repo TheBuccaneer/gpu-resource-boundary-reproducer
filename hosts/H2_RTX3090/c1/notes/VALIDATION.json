@@ -1,0 +1,16 @@
+{
+  "verified_utc": "2026-10-31T10:56:21.988983+00:00",
+  "host_static_compilation": "2/2 pass with -Wall -Wextra -Werror -c",
+  "oracle_cpu_self_check": "PASS: CPU-only oracle controls detect payload, boundary-guard, last-guard and length mutations.",
+  "python_ast": "pass",
+  "C1_cases_prepared": 26,
+  "B12_targeted_query_prepared": true,
+  "OpenCL_driver_calls_executed": 0,
+  "gpu_experiments": 0,
+  "inventory_reruns": 0,
+  "runtime_installations": 0,
+  "h1_expected_unchanged_files": 729,
+  "source_C0_expected_unchanged_files": 256,
+  "input_zip_sha256": "3aacc0512a5af7bf972d65a2dfdbb0184d181053b79af8c487f1c3eacf3935c1",
+  "remaining_limit": "C1 host code and supervisor have not been functionally exercised with OpenCL; only plan/static/offline checks performed."
+}

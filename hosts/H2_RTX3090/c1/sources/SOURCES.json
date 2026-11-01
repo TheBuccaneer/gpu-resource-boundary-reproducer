@@ -1,0 +1,32 @@
+[
+  {
+    "file": "opencl_platform_layer.asciidoc",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Docs/0027b7f1a5e97b1bf5256888757479e012a5cb59/api/opencl_platform_layer.asciidoc",
+    "retrieved_utc": "2026-10-31T10:36:46.356347+00:00",
+    "sha256": "ad1b16562849d0e0d88644a892103810cedee1312c5068bab5ebf71087308a07"
+  },
+  {
+    "file": "opencl_runtime_layer.asciidoc",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Docs/0027b7f1a5e97b1bf5256888757479e012a5cb59/api/opencl_runtime_layer.asciidoc",
+    "retrieved_utc": "2026-10-31T10:36:46.357171+00:00",
+    "sha256": "effa15a9c3829831bbe9b5a90e51dabd69384229c5925f0ada10a15d200304d7"
+  },
+  {
+    "file": "cts_tree.json",
+    "url": "https://api.github.com/repos/KhronosGroup/OpenCL-CTS/git/trees/406533a0b437f49d2e542bd293789adc7900cbed?recursive=1",
+    "retrieved_utc": "2026-10-31T10:36:46.357768+00:00",
+    "sha256": "1f066723d88e18ef4ee1e58792147f9c608d6ec464f686344a31385557013631"
+  },
+  {
+    "file": "headers_cl_ext.h",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Headers/v2025.07.22/CL/cl_ext.h",
+    "retrieved_utc": "2026-10-31T10:36:46.358343+00:00",
+    "sha256": "dc271aa56b1a55759733c4fd8abdd895d695151fdf1ad8b2991b53ee1b7f3216"
+  },
+  {
+    "file": "headers_cl.h",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Headers/v2025.07.22/CL/cl.h",
+    "retrieved_utc": "2026-10-31T10:36:46.358998+00:00",
+    "sha256": "0e695976bc3014c8376efc6436ef4dafce25deb74ddd7b1c8c07924444f293fc"
+  }
+]

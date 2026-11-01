@@ -1,0 +1,5 @@
+ARGV: ["/usr/bin/x86_64-linux-gnu-gcc-15", "-std=c11", "-O2", "-Wall", "-Wextra", "-Werror", "-Wpedantic", "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/s01/h2_s01.c", "-lOpenCL", "-ldl", "-o", "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/s01/pilot/h2_s01_api_pilot"]
+EXIT: 0
+STDOUT:
+
+STDERR:

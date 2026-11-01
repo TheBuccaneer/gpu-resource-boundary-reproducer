@@ -1,0 +1,82 @@
+{
+  "cts_commit": "406533a0b437f49d2e542bd293789adc7900cbed",
+  "scope_files": [
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/CMakeLists.txt",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/main.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/semaphore_base.h",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_cross_queue.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_getinfo.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_release_retain.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_wait_signal.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_payload.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_queries.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_external_semaphore/CMakeLists.txt",
+    "sources/cts/test_conformance/extensions/cl_khr_external_semaphore/main.cpp",
+    "sources/cts/test_conformance/extensions/cl_khr_external_semaphore/test_external_semaphore.cpp",
+    "sources/cts_test_platform.cpp",
+    "sources/cts/test_conformance/api/negative_platform.cpp",
+    "sources/cts/test_conformance/api/negative_device.cpp"
+  ],
+  "results": [
+    {
+      "symbol": "CL_PLATFORM_SEMAPHORE_TYPES_KHR",
+      "matches": []
+    },
+    {
+      "symbol": "CL_DEVICE_SEMAPHORE_TYPES_KHR",
+      "matches": []
+    },
+    {
+      "symbol": "CL_PLATFORM_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR",
+      "matches": []
+    },
+    {
+      "symbol": "CL_DEVICE_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR",
+      "matches": [
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_external_semaphore/test_external_semaphore.cpp",
+          "line": 222,
+          "text": "device, CL_DEVICE_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        }
+      ]
+    },
+    {
+      "symbol": "CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR",
+      "matches": [
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+          "line": 472,
+          "text": "(cl_semaphore_properties_khr)CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        },
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+          "line": 577,
+          "text": "CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        },
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+          "line": 596,
+          "text": "// a handle as well as CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR."
+        },
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+          "line": 625,
+          "text": "(cl_semaphore_properties_khr)CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        },
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+          "line": 659,
+          "text": "(cl_semaphore_properties_khr)CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        },
+        {
+          "file": "sources/cts/test_conformance/extensions/cl_khr_external_semaphore/test_external_semaphore.cpp",
+          "line": 258,
+          "text": "(cl_semaphore_properties_khr)CL_SEMAPHORE_EXPORT_HANDLE_TYPES_KHR,"
+        }
+      ]
+    }
+  ],
+  "claim": "limited named-file search, not a repository-wide absence claim"
+}

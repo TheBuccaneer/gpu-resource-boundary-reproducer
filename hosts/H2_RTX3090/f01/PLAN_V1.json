@@ -1,0 +1,135 @@
+{
+  "plan_id": "H2-F01",
+  "plan_version": 1,
+  "log_schema_version": 1,
+  "spec_commit": "0027b7f1a5e97b1bf5256888757479e012a5cb59",
+  "cts_commit": "406533a0b437f49d2e542bd293789adc7900cbed",
+  "cases": [
+    {
+      "id": "H2-F01",
+      "approval_package": "F01_SEPARATE_SINGLE_TRIAL",
+      "repeat_processes": 1,
+      "runtime_executed": false,
+      "kernel_dispatches": 1,
+      "workitems": 64,
+      "local_size": 1,
+      "foreign_setter_calls": 1,
+      "accepted_rejection_classes": {
+        "-34": "reject_invalid_context",
+        "-38": "reject_invalid_mem_object"
+      },
+      "stop_before_queue_statuses": [
+        "CL_SUCCESS",
+        "CL_OUT_OF_RESOURCES",
+        "CL_OUT_OF_HOST_MEMORY",
+        "any other status"
+      ],
+      "readback_roles": [
+        "CO",
+        "CI",
+        "AO",
+        "A1",
+        "B1",
+        "AS"
+      ],
+      "readbacks": 6,
+      "words_per_readback": 160,
+      "total_words": 960,
+      "completion_sequences": 7,
+      "new_live_trial_reservations_during_preparation": 0
+    }
+  ],
+  "buffers": {
+    "A1": {
+      "context": "A",
+      "tag": 1,
+      "role": "boundary input"
+    },
+    "AO": {
+      "context": "A",
+      "tag": 10,
+      "role": "boundary output"
+    },
+    "B1": {
+      "context": "B",
+      "tag": 2,
+      "role": "foreign input and unchanged negative control"
+    },
+    "AS": {
+      "context": "A",
+      "tag": 30,
+      "role": "never passed to kernel, unchanged sentinel"
+    },
+    "CI": {
+      "context": "A",
+      "tag": 3,
+      "role": "fresh valid control input"
+    },
+    "CO": {
+      "context": "A",
+      "tag": 11,
+      "role": "fresh valid control output"
+    }
+  },
+  "canaries": {
+    "words": 160,
+    "active_start": 16,
+    "active_count": 64,
+    "output_guard_words": 96,
+    "nonce_u32": "0xf010ca5e",
+    "initial_formula": "u32(0x9e3779b9*(i+1)) XOR u32(tag*0x01020304) XOR nonce",
+    "boundary_salt": "0x37a1b5c9",
+    "control_salt": "0x68b2d7e1"
+  },
+  "fresh_control": {
+    "kind": "independent own input/output argument pair in same kernel invocation",
+    "arguments": [
+      2,
+      3
+    ],
+    "dispatch_budget": 0,
+    "separate_process_or_pretransition_execution": false,
+    "readback_before_boundary_data": true
+  },
+  "ordered_phases": [
+    "explicit CLI and real/CPU origin gate",
+    "bounded pinned-device selection",
+    "two live distinct same-device contexts",
+    "program and kernel in A with queried owner",
+    "six complete initialized buffers with queried contexts and application generations",
+    "valid setters A1/AO and CI/CO",
+    "exactly one B1 setter at arg0, bytes8",
+    "record raw status and distinct rejection class; other statuses stop before any queue",
+    "create QA in A, QB in B",
+    "one 64-workitem kernel in QA, normal completion, wait/release",
+    "CO and CI full readbacks/positive control",
+    "AO, A1, B1, AS full readbacks/negative controls",
+    "ordered successful cleanup and terminal record"
+  ],
+  "normative_contract": {
+    "foreign_context": "runtime_layer 11005-11006,11033-11045; -34/-38 status overlap kept separate",
+    "nonresource_error_state": "runtime_layer 11086-11094; -34/-38 share state-preservation contract",
+    "completion": "runtime_layer 12405-12440; normal completion required"
+  },
+  "scientific_labels": [
+    "API-code interpretation unresolved",
+    "preserved observable state only after complete valid data/provenance",
+    "foreign-data signature is a candidate requiring separate review",
+    "no OS-process/tenant isolation tested"
+  ],
+  "limits": {
+    "wall_seconds": 60,
+    "CPU_seconds": 45,
+    "observed_RSS_bytes": 2147483648,
+    "output_bytes": 16777216,
+    "event_seconds": 5,
+    "hard_GPU_preemption_guaranteed": false
+  },
+  "not_in_scope": [
+    "S01 oracle rewrites",
+    "F02",
+    "F03",
+    "automatic execution",
+    "automatic retry"
+  ]
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "id": "behind_bars",
+    "url": "https://www.usenix.org/system/files/usenixsecurity26-gu-cheng.pdf",
+    "retrieved_utc": "2026-10-31T11:20:02.943819+00:00",
+    "sha256": "0d237c6e11703d1eb98363ca9135c28703dacc16ac5b5a5d37ff2bed5d6e6971",
+    "bytes": 3442220,
+    "text_extract_status": 0
+  },
+  {
+    "id": "geforge",
+    "url": "https://gddr.fail/files/GeForge.pdf",
+    "retrieved_utc": "2026-10-31T11:20:02.944711+00:00",
+    "sha256": "0ede351ba71dbee9ec3c1f6f0929ef810d32cb2aebb9021b74138fe50eb251c6",
+    "bytes": 953289,
+    "text_extract_status": 0
+  },
+  {
+    "id": "gpubreach",
+    "url": "https://gururaj-s.github.io/assets/files/GPUBreach.pdf",
+    "retrieved_utc": "2026-10-31T11:20:02.945316+00:00",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "id": "page404",
+    "url": "https://arxiv.org/pdf/2610.20962",
+    "retrieved_utc": "2026-10-31T11:20:02.945926+00:00",
+    "sha256": "bce9ffbf8d14a6e363986da8863185aeef8de6fffddcca33f91841b9d52218eb",
+    "bytes": 1649579,
+    "text_extract_status": 0
+  },
+  {
+    "id": "clfuzz",
+    "url": "https://chao-peng.github.io/publication/gpgpu20/gpgpu20.pdf",
+    "retrieved_utc": "2026-10-31T11:20:02.946667+00:00",
+    "sha256": "d02838091057dfaff9d40d14e9443362a48ab26efe48d37f4ff4085caf4d00e5",
+    "bytes": 647021,
+    "text_extract_status": 0
+  }
+]

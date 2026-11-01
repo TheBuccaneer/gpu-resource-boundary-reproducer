@@ -1,0 +1,7173 @@
+{
+  "schema_version": 1,
+  "status": "implemented_not_runtime_executed",
+  "spec_commit": "0027b7f1a5e97b1bf5256888757479e012a5cb59",
+  "cts_commit": "406533a0b437f49d2e542bd293789adc7900cbed",
+  "kernel_build_options": "-cl-std=CL1.2",
+  "cases": [
+    {
+      "id": "S01-OWN-API",
+      "approval_package": "S01_API",
+      "expected_transition_status": 0,
+      "clone": false,
+      "kernel_dispatches": 0,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": false,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own repeated setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": false
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-FOREIGN-API",
+      "approval_package": "S01_API",
+      "expected_transition_status": -34,
+      "clone": false,
+      "kernel_dispatches": 0,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": false,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m2"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "transition foreign context setter",
+          "status": -34,
+          "expected": -34,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": false
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-INDEX-API",
+      "approval_package": "S01_API",
+      "expected_transition_status": -49,
+      "clone": false,
+      "kernel_dispatches": 0,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": false,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 2,
+          "arg_size": 8
+        },
+        {
+          "api": "transition invalid index",
+          "status": -49,
+          "expected": -49,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": false
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-SIZE-API",
+      "approval_package": "S01_API",
+      "expected_transition_status": -51,
+      "clone": false,
+      "kernel_dispatches": 0,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": false,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 7
+        },
+        {
+          "api": "transition invalid size",
+          "status": -51,
+          "expected": -51,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": false
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-OWN-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": 0,
+      "clone": false,
+      "kernel_dispatches": 1,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own repeated setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-ROLLBACK-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": -34,
+      "clone": false,
+      "kernel_dispatches": 1,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m2"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "transition foreign context setter",
+          "status": -34,
+          "expected": -34,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-INDEX-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": -49,
+      "clone": false,
+      "kernel_dispatches": 1,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 2,
+          "arg_size": 8
+        },
+        {
+          "api": "transition invalid index",
+          "status": -49,
+          "expected": -49,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-SIZE-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": -51,
+      "clone": false,
+      "kernel_dispatches": 1,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": false,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 7
+        },
+        {
+          "api": "transition invalid size",
+          "status": -51,
+          "expected": -51,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-CLONE-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": -34,
+      "clone": true,
+      "kernel_dispatches": 4,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": true,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m2"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "transition foreign context setter",
+          "status": -34,
+          "expected": -34,
+          "classification": "expected"
+        },
+        {
+          "api": "clCloneKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct clone",
+          "pass": true
+        },
+        {
+          "operation": "clone",
+          "a": "@copy",
+          "b": "$kernel"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m11"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "clone output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$copy"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m3"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "clone rebind input",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m12"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "clone rebind output",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$copy"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 3,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "reset",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueWriteBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 3,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$copy",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(copy)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 1
+    },
+    {
+      "id": "S01-CLONE-API",
+      "approval_package": "S01_API",
+      "expected_transition_status": 0,
+      "clone": true,
+      "kernel_dispatches": 0,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": false,
+          "clone_arm": true,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own repeated setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCloneKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct clone",
+          "pass": true
+        },
+        {
+          "operation": "clone",
+          "a": "@copy",
+          "b": "$kernel"
+        },
+        {
+          "operation": "release",
+          "a": "$copy",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(copy)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": false
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 0
+    },
+    {
+      "id": "S01-CLONE-CONTROL-DATA",
+      "approval_package": "S01_DATA_SEPARATE_APPROVAL",
+      "expected_transition_status": 0,
+      "clone": true,
+      "kernel_dispatches": 4,
+      "positive_control": "S01-OWN-API / S01-OWN-DATA; S01-CLONE-API / S01-CLONE-CONTROL-DATA",
+      "negative_control": "S01-FOREIGN-API, S01-INDEX-API, S01-SIZE-API; host data mutation oracle",
+      "runtime_executed": false,
+      "repeat_processes": 5,
+      "measurement": "statuses/expectations, context ledger, full 160-word arrays, payload and guards, build log, supervisor provenance",
+      "stop_rule": "First unexpected status/data/control mismatch stops; resource -5/-6 exits78 (inconclusive), setup/capability skip77, other mismatch20. No retry.",
+      "ordered_protocol": [
+        {
+          "api": "clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(version),version,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "parse platform API version",
+          "pass": true
+        },
+        {
+          "platform_version": "OpenCL 3.0 CUDA 13.0.0",
+          "data_arm": true,
+          "clone_arm": true,
+          "protocol": "version"
+        },
+        {
+          "api": "clGetDeviceInfo(d,CL_DEVICE_COMPILER_AVAILABLE,sizeof(compiler),&compiler,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateContext(A)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "A exists",
+          "pass": true
+        },
+        {
+          "api": "clCreateContext(B)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct live same-device contexts",
+          "pass": true
+        },
+        {
+          "operation": "contexts",
+          "a": "@ctxA",
+          "b": "@ctxB"
+        },
+        {
+          "api": "clCreateProgramWithSource",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "program exists",
+          "pass": true
+        },
+        {
+          "operation": "program",
+          "a": "@program",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clGetProgramBuildInfo(p,d,CL_PROGRAM_BUILD_LOG,sizeof(log)-1,log,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clBuildProgram(-cl-std=CL1.2)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCreateKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel exists",
+          "pass": true
+        },
+        {
+          "api": "clGetKernelInfo(k,CL_KERNEL_CONTEXT,sizeof(owner),&owner,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "kernel owned by A",
+          "pass": true
+        },
+        {
+          "operation": "kernel",
+          "a": "@kernel",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m1",
+          "context": "$ctxA",
+          "tag": 1,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m2",
+          "context": "$ctxB",
+          "tag": 2,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m3",
+          "context": "$ctxA",
+          "tag": 3,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m10",
+          "context": "$ctxA",
+          "tag": 10,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m11",
+          "context": "$ctxA",
+          "tag": 11,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "api": "clCreateBuffer",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer nonnull",
+          "pass": true
+        },
+        {
+          "api": "clGetMemObjectInfo(m,CL_MEM_CONTEXT,sizeof(actual),&actual,NULL)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "buffer context matches ledger",
+          "pass": true
+        },
+        {
+          "object": "@m12",
+          "context": "$ctxA",
+          "tag": 12,
+          "bytes": 640,
+          "host_refs": 1
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own input setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m10"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "own output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$kernel",
+          "b": "$m1"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "own repeated setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clCloneKernel",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "distinct clone",
+          "pass": true
+        },
+        {
+          "operation": "clone",
+          "a": "@copy",
+          "b": "$kernel"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qa",
+          "b": "$ctxA"
+        },
+        {
+          "api": "clCreateCommandQueueWithProperties",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "check": "queue nonnull",
+          "pass": true
+        },
+        {
+          "operation": "queue",
+          "a": "@qb",
+          "b": "$ctxB"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m11"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "clone output setter",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$copy"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m11"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m11",
+          "storage_tag": 11,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m3"
+        },
+        {
+          "arg_index": 0,
+          "arg_size": 8
+        },
+        {
+          "api": "clone rebind input",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "setarg",
+          "a": "$copy",
+          "b": "$m12"
+        },
+        {
+          "arg_index": 1,
+          "arg_size": 8
+        },
+        {
+          "api": "clone rebind output",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$copy"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 3,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "reset",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueWriteBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "dispatch",
+          "a": "$qa",
+          "b": "$kernel"
+        },
+        {
+          "api": "clEnqueueNDRangeKernel(q,k,1,NULL,&g,&l,0,NULL,&e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "api": "clReleaseEvent(e)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m10"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m10",
+          "storage_tag": 10,
+          "expected_input_tag": 1,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m12"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m12",
+          "storage_tag": 12,
+          "expected_input_tag": 3,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m1"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m1",
+          "storage_tag": 1,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qa",
+          "b": "$m3"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m3",
+          "storage_tag": 3,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "read",
+          "a": "$qb",
+          "b": "$m2"
+        },
+        {
+          "api": "clEnqueueReadBuffer(q,m,CL_FALSE,0,sizeof(data),data,0,NULL,&ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "api": "clFlush(q)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "protocol": "completion"
+        },
+        {
+          "object": "$m2",
+          "storage_tag": 2,
+          "expected_input_tag": 0,
+          "protocol": "data"
+        },
+        {
+          "check": "entire output payload and guards match host reference",
+          "pass": true
+        },
+        {
+          "api": "clReleaseEvent(ev)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qb",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qb)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$qa",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseCommandQueue(qa)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$copy",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(copy)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$kernel",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseKernel(k)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$program",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseProgram(p)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m10",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m11",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m12",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(out[i])",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m3",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(other)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m2",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(foreign)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$m1",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseMemObject(input)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxB",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(b)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "operation": "release",
+          "a": "$ctxA",
+          "b": "(nil)"
+        },
+        {
+          "api": "clReleaseContext(a)",
+          "status": 0,
+          "expected": 0,
+          "classification": "expected"
+        },
+        {
+          "outcome": "expected_observations_complete",
+          "argument_state_observed_by_data": true
+        }
+      ],
+      "log_schema_version": 2,
+      "reset_writes": 1
+    }
+  ],
+  "log_schema_version": 2
+}

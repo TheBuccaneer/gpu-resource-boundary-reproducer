@@ -1,0 +1,30 @@
+[
+  {
+    "id": "nvidia_mig",
+    "url": "https://docs.nvidia.com/datacenter/tesla/mig-user-guide/supported-gpus.html",
+    "retrieved_utc": "2026-10-31T11:20:05.384507+00:00",
+    "sha256": "aca0c85b62876e71a889cd5eae4e21fce1d1976b72c000af349e233c87eb1590",
+    "bytes": 25166
+  },
+  {
+    "id": "nvidia_rtx3090",
+    "url": "https://www.nvidia.com/en-eu/geforce/graphics-cards/30-series/rtx-3090/",
+    "retrieved_utc": "2026-10-31T11:20:05.600120+00:00",
+    "sha256": "2e092932946003ba475e415a07ab3fb52001f158e128ae4b384dca008874cef2",
+    "bytes": 890851
+  },
+  {
+    "id": "gputhor_site",
+    "url": "https://gputhor.com/",
+    "retrieved_utc": "2026-10-31T11:20:05.906928+00:00",
+    "sha256": "ecff630c0aec28a35d3aadac56172cd9d4837e0186c83944eeefde45919c8d39",
+    "bytes": 41488
+  },
+  {
+    "id": "stepstone_program",
+    "url": "https://sp2026.ieee-security.org/program.html",
+    "retrieved_utc": "2026-10-31T11:20:06.226474+00:00",
+    "sha256": "6457e97dea32dcda6fa7d0e1e6c85972e60da1eaf46ed086a223fa7c56c9664a",
+    "bytes": 263022
+  }
+]

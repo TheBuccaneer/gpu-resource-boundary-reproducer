@@ -1,0 +1,13 @@
+{
+  "verified_utc": "2026-10-31T11:54:33.571676+00:00",
+  "audit_unittests_returncode": 0,
+  "audit_test_methods": 8,
+  "pure_C_assertions": 22,
+  "host_compilation_passed": 2,
+  "oracle_returncode": 0,
+  "OpenCL_calls_executed": 0,
+  "gpu_experiments": 0,
+  "inventory_reruns": 0,
+  "runtime_installs": 0,
+  "scope": "CPU fixtures, host object compilation, pure data oracles, static syntax and evidence integrity only"
+}

@@ -1,0 +1,15 @@
+{
+  "verified_utc": "2026-10-31T14:13:46.556642+00:00",
+  "path": "/home/rock/.local/state/opencl2/trials-v1/ledger.sqlite3",
+  "ledger_id": "10859f6a-779a-4dbe-99ca-73a355ade12b",
+  "schema_version": 1,
+  "schema_matches_R3": true,
+  "integrity": "ok",
+  "trial_count": 0,
+  "journal_mode": "delete",
+  "sha256_before": "5a78d1bc41171fa8d60b57941464c17a2a0b355344b41c39794875e5cde91bd2",
+  "sha256_after": "5a78d1bc41171fa8d60b57941464c17a2a0b355344b41c39794875e5cde91bd2",
+  "matches_R3_empty_provisioning_hash": true,
+  "sqlite_open_mode": "ro; query_only ON",
+  "reservation_calls": 0
+}

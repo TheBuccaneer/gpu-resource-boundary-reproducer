@@ -1,0 +1,7 @@
+{
+  "path": "/home/rock/.local/state/opencl2/trials-v1/ledger.sqlite3",
+  "ledger_id": "10859f6a-779a-4dbe-99ca-73a355ade12b",
+  "schema_version": 1,
+  "empty_initial_file_sha256": "5a78d1bc41171fa8d60b57941464c17a2a0b355344b41c39794875e5cde91bd2",
+  "note": "Explicit one-time R3 preparation, no approvals or trial reservations issued. Live host ledger is outside repository and ZIP; never replace it with this note."
+}

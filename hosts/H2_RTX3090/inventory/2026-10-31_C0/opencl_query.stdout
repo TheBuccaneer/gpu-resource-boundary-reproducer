@@ -1,0 +1,699 @@
+{
+  "loader": "libOpenCL.so.1",
+  "platform_enumeration_status": 0,
+  "platform_count": 1,
+  "platforms": [
+    {
+      "info": {
+        "PROFILE": {
+          "selector": "0x900",
+          "status": 0,
+          "size": 13,
+          "raw_hex": "46554c4c5f50524f46494c4500",
+          "value": "FULL_PROFILE"
+        },
+        "VERSION": {
+          "selector": "0x901",
+          "status": 0,
+          "size": 25,
+          "raw_hex": "4f70656e434c20332e3020435544412031332e302e31303000",
+          "value": "OpenCL 3.0 CUDA 13.0.100"
+        },
+        "NAME": {
+          "selector": "0x902",
+          "status": 0,
+          "size": 12,
+          "raw_hex": "4e5649444941204355444100",
+          "value": "NVIDIA CUDA"
+        },
+        "VENDOR": {
+          "selector": "0x903",
+          "status": 0,
+          "size": 19,
+          "raw_hex": "4e564944494120436f72706f726174696f6e00",
+          "value": "NVIDIA Corporation"
+        },
+        "EXTENSIONS": {
+          "selector": "0x904",
+          "status": 0,
+          "size": 570,
+          "raw_hex": "636c5f6b68725f676c6f62616c5f696e7433325f626173655f61746f6d69637320636c5f6b68725f676c6f62616c5f696e7433325f657874656e6465645f61746f6d69637320636c5f6b68725f6c6f63616c5f696e7433325f626173655f61746f6d69637320636c5f6b68725f6c6f63616c5f696e7433325f657874656e6465645f61746f6d69637320636c5f6b68725f6670363420636c5f6b68725f33645f696d6167655f77726974657320636c5f6b68725f627974655f6164647265737361626c655f73746f726520636c5f6b68725f69636420636c5f6b68725f676c5f73686172696e6720636c5f6e765f636f6d70696c65725f6f7074696f6e7320636c5f6e765f6465766963655f6174747269627574655f717565727920636c5f6e765f707261676d615f756e726f6c6c20636c5f6e765f636f70795f6f70747320636c5f6e765f6372656174655f62756666657220636c5f6b68725f696e7436345f626173655f61746f6d69637320636c5f6b68725f696e7436345f657874656e6465645f61746f6d69637320636c5f6b68725f6465766963655f7575696420636c5f6b68725f7063695f6275735f696e666f20636c5f6b68725f65787465726e616c5f73656d6170686f726520636c5f6b68725f65787465726e616c5f6d656d6f727920636c5f6b68725f65787465726e616c5f73656d6170686f72655f6f70617175655f666420636c5f6b68725f65787465726e616c5f6d656d6f72795f6f70617175655f666420636c5f6b68725f73656d6170686f726500",
+          "value": "cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_fp64 cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll cl_nv_copy_opts cl_nv_create_buffer cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_device_uuid cl_khr_pci_bus_info cl_khr_external_semaphore cl_khr_external_memory cl_khr_external_semaphore_opaque_fd cl_khr_external_memory_opaque_fd cl_khr_semaphore"
+        },
+        "EXTENSIONS_WITH_VERSION": {
+          "selector": "0x907",
+          "status": 0,
+          "size": 1564,
+          "raw_hex": "00004000636c5f6b68725f676c6f62616c5f696e7433325f626173655f61746f6d696373000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f676c6f62616c5f696e7433325f657874656e6465645f61746f6d6963730000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6c6f63616c5f696e7433325f626173655f61746f6d69637300000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6c6f63616c5f696e7433325f657874656e6465645f61746f6d696373000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f66703634000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f33645f696d6167655f77726974657300000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f627974655f6164647265737361626c655f73746f7265000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f69636400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f676c5f73686172696e67000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f636f6d70696c65725f6f7074696f6e7300000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f6465766963655f6174747269627574655f717565727900000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f707261676d615f756e726f6c6c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f636f70795f6f7074730000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f6372656174655f62756666657200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f696e7436345f626173655f61746f6d69637300000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f696e7436345f657874656e6465645f61746f6d696373000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6465766963655f757569640000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f7063695f6275735f696e666f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f73656d6170686f726500000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f6d656d6f727900000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f73656d6170686f72655f6f70617175655f6664000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f6d656d6f72795f6f70617175655f6664000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f73656d6170686f7265000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "value": [
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_global_int32_base_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_global_int32_extended_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_local_int32_base_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_local_int32_extended_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_fp64"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_3d_image_writes"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_byte_addressable_store"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_icd"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_gl_sharing"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_nv_compiler_options"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_nv_device_attribute_query"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_nv_pragma_unroll"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_nv_copy_opts"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_nv_create_buffer"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_int64_base_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_int64_extended_atomics"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_device_uuid"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_pci_bus_info"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_external_semaphore"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_external_memory"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_external_semaphore_opaque_fd"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_external_memory_opaque_fd"
+            },
+            {
+              "version": "1.0.0",
+              "name": "cl_khr_semaphore"
+            }
+          ]
+        }
+      },
+      "devices": [
+        {
+          "TYPE": {
+            "selector": "0x1000",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0400000000000000",
+            "value": 4
+          },
+          "VENDOR_ID": {
+            "selector": "0x1001",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "de100000",
+            "value": 4318
+          },
+          "MAX_COMPUTE_UNITS": {
+            "selector": "0x1002",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "52000000",
+            "value": 82
+          },
+          "MAX_WORK_ITEM_DIMENSIONS": {
+            "selector": "0x1003",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "03000000",
+            "value": 3
+          },
+          "MAX_WORK_GROUP_SIZE": {
+            "selector": "0x1004",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0004000000000000",
+            "value": 1024
+          },
+          "MAX_WORK_ITEM_SIZES": {
+            "selector": "0x1005",
+            "status": 0,
+            "size": 24,
+            "raw_hex": "000400000000000000040000000000004000000000000000",
+            "value": [
+              1024,
+              1024,
+              64
+            ]
+          },
+          "MAX_MEM_ALLOC_SIZE": {
+            "selector": "0x1010",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0000977801000000",
+            "value": 6318129152
+          },
+          "IMAGE_SUPPORT": {
+            "selector": "0x1016",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "MEM_BASE_ADDR_ALIGN": {
+            "selector": "0x1019",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00100000",
+            "value": 4096
+          },
+          "GLOBAL_MEM_SIZE": {
+            "selector": "0x101f",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "00005ce205000000",
+            "value": 25272516608
+          },
+          "MAX_CONSTANT_BUFFER_SIZE": {
+            "selector": "0x1020",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0000010000000000",
+            "value": 65536
+          },
+          "LOCAL_MEM_TYPE": {
+            "selector": "0x1022",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "LOCAL_MEM_SIZE": {
+            "selector": "0x1023",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "00c0000000000000",
+            "value": 49152
+          },
+          "PROFILING_TIMER_RESOLUTION": {
+            "selector": "0x1025",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "e803000000000000",
+            "value": 1000
+          },
+          "AVAILABLE": {
+            "selector": "0x1027",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "COMPILER_AVAILABLE": {
+            "selector": "0x1028",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "EXECUTION_CAPABILITIES": {
+            "selector": "0x1029",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0100000000000000",
+            "value": 1
+          },
+          "QUEUE_ON_HOST_PROPERTIES": {
+            "selector": "0x102a",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0300000000000000",
+            "value": 3
+          },
+          "NAME": {
+            "selector": "0x102b",
+            "status": 0,
+            "size": 24,
+            "raw_hex": "4e5649444941204765466f72636520525458203330393000",
+            "value": "NVIDIA GeForce RTX 3090"
+          },
+          "VENDOR": {
+            "selector": "0x102c",
+            "status": 0,
+            "size": 19,
+            "raw_hex": "4e564944494120436f72706f726174696f6e00",
+            "value": "NVIDIA Corporation"
+          },
+          "DRIVER_VERSION": {
+            "selector": "0x102d",
+            "status": 0,
+            "size": 11,
+            "raw_hex": "3538302e3137382e303400",
+            "value": "580.178.04"
+          },
+          "PROFILE": {
+            "selector": "0x102e",
+            "status": 0,
+            "size": 13,
+            "raw_hex": "46554c4c5f50524f46494c4500",
+            "value": "FULL_PROFILE"
+          },
+          "VERSION": {
+            "selector": "0x102f",
+            "status": 0,
+            "size": 16,
+            "raw_hex": "4f70656e434c20332e30204355444100",
+            "value": "OpenCL 3.0 CUDA"
+          },
+          "EXTENSIONS": {
+            "selector": "0x1030",
+            "status": 0,
+            "size": 570,
+            "raw_hex": "636c5f6b68725f676c6f62616c5f696e7433325f626173655f61746f6d69637320636c5f6b68725f676c6f62616c5f696e7433325f657874656e6465645f61746f6d69637320636c5f6b68725f6c6f63616c5f696e7433325f626173655f61746f6d69637320636c5f6b68725f6c6f63616c5f696e7433325f657874656e6465645f61746f6d69637320636c5f6b68725f6670363420636c5f6b68725f33645f696d6167655f77726974657320636c5f6b68725f627974655f6164647265737361626c655f73746f726520636c5f6b68725f69636420636c5f6b68725f676c5f73686172696e6720636c5f6e765f636f6d70696c65725f6f7074696f6e7320636c5f6e765f6465766963655f6174747269627574655f717565727920636c5f6e765f707261676d615f756e726f6c6c20636c5f6e765f636f70795f6f70747320636c5f6e765f6372656174655f62756666657220636c5f6b68725f696e7436345f626173655f61746f6d69637320636c5f6b68725f696e7436345f657874656e6465645f61746f6d69637320636c5f6b68725f6465766963655f7575696420636c5f6b68725f7063695f6275735f696e666f20636c5f6b68725f65787465726e616c5f73656d6170686f726520636c5f6b68725f65787465726e616c5f6d656d6f727920636c5f6b68725f65787465726e616c5f73656d6170686f72655f6f70617175655f666420636c5f6b68725f65787465726e616c5f6d656d6f72795f6f70617175655f666420636c5f6b68725f73656d6170686f726500",
+            "value": "cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_fp64 cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll cl_nv_copy_opts cl_nv_create_buffer cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_device_uuid cl_khr_pci_bus_info cl_khr_external_semaphore cl_khr_external_memory cl_khr_external_semaphore_opaque_fd cl_khr_external_memory_opaque_fd cl_khr_semaphore"
+          },
+          "HOST_UNIFIED_MEMORY": {
+            "selector": "0x1035",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "OPENCL_C_VERSION": {
+            "selector": "0x103d",
+            "status": 0,
+            "size": 14,
+            "raw_hex": "4f70656e434c204320312e322000",
+            "value": "OpenCL C 1.2 "
+          },
+          "LINKER_AVAILABLE": {
+            "selector": "0x103e",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "PARTITION_MAX_SUB_DEVICES": {
+            "selector": "0x1043",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "01000000",
+            "value": 1
+          },
+          "PARTITION_PROPERTIES": {
+            "selector": "0x1044",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0000000000000000",
+            "value": [
+              0
+            ]
+          },
+          "PARTITION_AFFINITY_DOMAIN": {
+            "selector": "0x1045",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0000000000000000",
+            "value": 0
+          },
+          "QUEUE_ON_DEVICE_PROPERTIES": {
+            "selector": "0x104e",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0000000000000000",
+            "value": 0
+          },
+          "MAX_ON_DEVICE_QUEUES": {
+            "selector": "0x1051",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "MAX_ON_DEVICE_EVENTS": {
+            "selector": "0x1052",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "SVM_CAPABILITIES": {
+            "selector": "0x1053",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "0100000000000000",
+            "value": 1
+          },
+          "IL_VERSION": {
+            "selector": "0x105b",
+            "status": 0,
+            "size": 1,
+            "raw_hex": "00",
+            "value": ""
+          },
+          "NUMERIC_VERSION": {
+            "selector": "0x105e",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "0000c000",
+            "value": 12582912
+          },
+          "EXTENSIONS_WITH_VERSION": {
+            "selector": "0x1060",
+            "status": 0,
+            "size": 1564,
+            "raw_hex": "00004000636c5f6b68725f676c6f62616c5f696e7433325f626173655f61746f6d696373000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f676c6f62616c5f696e7433325f657874656e6465645f61746f6d6963730000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6c6f63616c5f696e7433325f626173655f61746f6d69637300000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6c6f63616c5f696e7433325f657874656e6465645f61746f6d696373000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f66703634000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f33645f696d6167655f77726974657300000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f627974655f6164647265737361626c655f73746f7265000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f69636400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f676c5f73686172696e67000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f636f6d70696c65725f6f7074696f6e7300000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f6465766963655f6174747269627574655f717565727900000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f707261676d615f756e726f6c6c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f636f70795f6f7074730000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6e765f6372656174655f62756666657200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f696e7436345f626173655f61746f6d69637300000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f696e7436345f657874656e6465645f61746f6d696373000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f6465766963655f757569640000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f7063695f6275735f696e666f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f73656d6170686f726500000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f6d656d6f727900000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f73656d6170686f72655f6f70617175655f6664000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f65787465726e616c5f6d656d6f72795f6f70617175655f6664000000000000000000000000000000000000000000000000000000000000000000004000636c5f6b68725f73656d6170686f7265000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "value": [
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_global_int32_base_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_global_int32_extended_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_local_int32_base_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_local_int32_extended_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_fp64"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_3d_image_writes"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_byte_addressable_store"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_icd"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_gl_sharing"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_nv_compiler_options"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_nv_device_attribute_query"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_nv_pragma_unroll"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_nv_copy_opts"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_nv_create_buffer"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_int64_base_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_int64_extended_atomics"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_device_uuid"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_pci_bus_info"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_external_semaphore"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_external_memory"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_external_semaphore_opaque_fd"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_external_memory_opaque_fd"
+              },
+              {
+                "version": "1.0.0",
+                "name": "cl_khr_semaphore"
+              }
+            ]
+          },
+          "ILS_WITH_VERSION": {
+            "selector": "0x1061",
+            "status": -30,
+            "size": 0,
+            "raw_hex": ""
+          },
+          "ATOMIC_MEMORY_CAPABILITIES": {
+            "selector": "0x1063",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "1100000000000000",
+            "value": 17
+          },
+          "ATOMIC_FENCE_CAPABILITIES": {
+            "selector": "0x1064",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "1300000000000000",
+            "value": 19
+          },
+          "NON_UNIFORM_WORK_GROUP_SUPPORT": {
+            "selector": "0x1065",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "OPENCL_C_ALL_VERSIONS": {
+            "selector": "0x1066",
+            "status": 0,
+            "size": 272,
+            "raw_hex": "000040004f70656e434c20430000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001040004f70656e434c20430000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002040004f70656e434c204300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0004f70656e434c20430000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "value": [
+              {
+                "version": "1.0.0",
+                "name": "OpenCL C"
+              },
+              {
+                "version": "1.1.0",
+                "name": "OpenCL C"
+              },
+              {
+                "version": "1.2.0",
+                "name": "OpenCL C"
+              },
+              {
+                "version": "3.0.0",
+                "name": "OpenCL C"
+              }
+            ]
+          },
+          "PREFERRED_WORK_GROUP_SIZE_MULTIPLE": {
+            "selector": "0x1067",
+            "status": 0,
+            "size": 8,
+            "raw_hex": "2000000000000000",
+            "value": 32
+          },
+          "GENERIC_ADDRESS_SPACE_SUPPORT": {
+            "selector": "0x1069",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "OPENCL_C_FEATURES": {
+            "selector": "0x106f",
+            "status": 0,
+            "size": 272,
+            "raw_hex": "0000c0005f5f6f70656e636c5f635f66703634000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0005f5f6f70656e636c5f635f696d6167657300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0005f5f6f70656e636c5f635f696e7436340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0005f5f6f70656e636c5f635f33645f696d6167655f7772697465730000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "value": [
+              {
+                "version": "3.0.0",
+                "name": "__opencl_c_fp64"
+              },
+              {
+                "version": "3.0.0",
+                "name": "__opencl_c_images"
+              },
+              {
+                "version": "3.0.0",
+                "name": "__opencl_c_int64"
+              },
+              {
+                "version": "3.0.0",
+                "name": "__opencl_c_3d_image_writes"
+              }
+            ]
+          },
+          "DEVICE_ENQUEUE_CAPABILITIES": {
+            "selector": "0x1070",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "00000000",
+            "value": 0
+          },
+          "LATEST_CONFORMANCE_VERSION_PASSED": {
+            "selector": "0x1072",
+            "status": 0,
+            "size": 15,
+            "raw_hex": "76323032352d30342d30342d303000",
+            "value": "v2025-04-04-00"
+          },
+          "PCI_BUS_INFO_KHR": {
+            "selector": "0x410f",
+            "status": 0,
+            "size": 16,
+            "raw_hex": "00000000010000000000000000000000",
+            "value": [
+              0,
+              1,
+              0,
+              0
+            ]
+          },
+          "EXTERNAL_MEMORY_IMPORT_HANDLE_TYPES_KHR": {
+            "selector": "0x204f",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "60200000",
+            "value": [
+              8288
+            ]
+          },
+          "SEMAPHORE_TYPES_KHR": {
+            "selector": "0x204c",
+            "status": -30,
+            "size": 0
+          },
+          "SEMAPHORE_IMPORT_HANDLE_TYPES_KHR": {
+            "selector": "0x204d",
+            "status": 0,
+            "size": 4,
+            "raw_hex": "55200000",
+            "value": [
+              8277
+            ]
+          },
+          "SEMAPHORE_EXPORT_HANDLE_TYPES_KHR": {
+            "selector": "0x204e",
+            "status": -30,
+            "size": 0,
+            "raw_hex": ""
+          },
+          "COMMAND_BUFFER_CAPABILITIES_KHR": {
+            "selector": "0x12a9",
+            "status": -30,
+            "size": 0
+          },
+          "COMMAND_BUFFER_REQUIRED_QUEUE_PROPERTIES_KHR": {
+            "selector": "0x12aa",
+            "status": -30,
+            "size": 0
+          },
+          "MUTABLE_DISPATCH_CAPABILITIES_KHR": {
+            "selector": "0x12b0",
+            "status": -30,
+            "size": 0
+          }
+        }
+      ],
+      "device_enumeration_status": 0,
+      "extension_entrypoints": {
+        "clCreateProgramWithILKHR": false,
+        "clGetMemObjectDeviceAddressEXT": false,
+        "clCreateCommandBufferKHR": false,
+        "clUpdateMutableCommandsKHR": false,
+        "clCreateSemaphoreWithPropertiesKHR": true,
+        "clGetSemaphoreInfoKHR": true,
+        "clGetSemaphoreHandleForTypeKHR": true,
+        "clCreateBufferWithProperties": false,
+        "clEnqueueAcquireExternalMemObjectsKHR": true
+      }
+    }
+  ],
+  "loaded_library_maps": [
+    "759326e00000-759326f66000 r--p 00000000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "759326f66000-759327eea000 r-xp 00166000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "759327eea000-75932c895000 r--p 010ea000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "75932c895000-75932c896000 ---p 05a95000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "75932c896000-75932c9cb000 r--p 05a95000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "75932c9cb000-75932c9d4000 rw-p 05bca000 103:02 40373680                  /usr/lib/x86_64-linux-gnu/libcuda.so.580.178.04",
+    "75932cc00000-75932cd5b000 r--p 00000000 103:02 40373688                  /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.580.178.04",
+    "75932cd5b000-75932dcff000 r-xp 0015b000 103:02 40373688                  /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.580.178.04",
+    "75932dcff000-759332076000 r--p 010ff000 103:02 40373688                  /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.580.178.04",
+    "759332076000-7593321ab000 r--p 05475000 103:02 40373688                  /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.580.178.04",
+    "7593321ab000-7593321b4000 rw-p 055aa000 103:02 40373688                  /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.580.178.04",
+    "7593325bb000-7593325cb000 -w-s 00000000 00:07 1269                       /dev/nvidia0",
+    "759333228000-75933322e000 r--p 00000000 103:02 40380723                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0",
+    "75933322e000-759333238000 r-xp 00006000 103:02 40380723                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0",
+    "759333238000-75933323d000 r--p 00010000 103:02 40380723                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0",
+    "75933323d000-75933323e000 r--p 00014000 103:02 40380723                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0",
+    "75933323e000-75933323f000 rw-p 00015000 103:02 40380723                  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0",
+    "7593334f1000-7593334f2000 r--s 00000000 00:07 1267                       /dev/nvidiactl"
+  ]
+}

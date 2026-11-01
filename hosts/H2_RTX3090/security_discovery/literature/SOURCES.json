@@ -1,0 +1,92 @@
+[
+  {
+    "id": "stepstone",
+    "url": "https://www.cs.ucr.edu/~zhiyunq/pub/oakland26_gpu_fuzzing.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.154185+00:00",
+    "sha256": "ecf9cc0d2a97eeb7f4582186a675b83b5afaad4e46041dd12fa12f674c7c84a4",
+    "bytes": 414470,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/stepstone.pdf"
+  },
+  {
+    "id": "webglitch",
+    "url": "https://www.doc.ic.ac.uk/~afd/papers/2025/ECOOP-WebGlitch.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.155078+00:00",
+    "sha256": "b83813ea0d113f945a43bab02e5691513448cd489c79573e2c95f0463c896fc3",
+    "bytes": 1192905,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/webglitch.pdf"
+  },
+  {
+    "id": "cusafe",
+    "url": "https://www.usenix.org/system/files/conference/usenixsecurity26/sec26_prepub_lu.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.155664+00:00",
+    "sha256": "508ea4db519ad0ff6b198867a391c2f81ec4961e29bc8658d0a9fe3e30e15840",
+    "bytes": 1093928,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/cusafe.pdf"
+  },
+  {
+    "id": "gpu_memory_exploitation",
+    "url": "https://www.usenix.org/system/files/usenixsecurity24-guo-yanan.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.156214+00:00",
+    "sha256": "7266fe45f3a875d3557a179f6a4a9055401f7e9a94112c812c43df120796cb50",
+    "bytes": 677653,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/gpu_memory_exploitation.pdf"
+  },
+  {
+    "id": "not_so_refreshing",
+    "url": "https://www.usenix.org/system/files/usenixsecurity25-nazaraliyev.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.156917+00:00",
+    "sha256": "570e1ec6126cd50a87c746c556d858becaf7d01fb3e88260e761fdafdbe6e71e",
+    "bytes": 4669306,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/not_so_refreshing.pdf"
+  },
+  {
+    "id": "gpuhammer",
+    "url": "https://www.usenix.org/system/files/usenixsecurity25-lin-shaopeng.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.157424+00:00",
+    "sha256": "9562634f2cfcc23796dfcfb5eb47cd8d9035355d081f4e4bf5610933e8007cc5",
+    "bytes": 2246051,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/gpuhammer.pdf"
+  },
+  {
+    "id": "gddrhammer",
+    "url": "https://gddr.fail/files/gddrhammer.pdf",
+    "retrieved_utc": "2026-10-31T11:13:53.707590+00:00",
+    "sha256": "1723b4055b9bf4cc9e9e41aa2609c539e8a9b0535f5b1d5e446fe431388e2841",
+    "bytes": 786702,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/gddrhammer.pdf"
+  },
+  {
+    "id": "leftoverlocals",
+    "url": "https://tyler-utah.github.io/files/leftoverlocals2024.pdf",
+    "retrieved_utc": "2026-10-31T11:13:54.190871+00:00",
+    "sha256": "c6b9be8f8d8bf48e990392e3b92d49303e6c5675008a5f061de426b223be2d33",
+    "bytes": 1554853,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/leftoverlocals.pdf"
+  },
+  {
+    "id": "cufuzz_gpu_native",
+    "url": "https://arxiv.org/pdf/2603.12485",
+    "retrieved_utc": "2026-10-31T11:13:54.699919+00:00",
+    "sha256": "a4e6213d971e8cc6496e22452830867a695fea42e790319529429680120ac323",
+    "bytes": 11930958,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/cufuzz_gpu_native.pdf"
+  },
+  {
+    "id": "gputhor",
+    "url": "https://arxiv.org/pdf/2609.16546",
+    "retrieved_utc": "2026-10-31T11:13:54.867167+00:00",
+    "sha256": "55a231f2a7805bd94885cb09d380c76ce528f20ecd24adc829396ccc49df2f3e",
+    "bytes": 956332,
+    "text_extract_status": 0,
+    "local_pdf": "/tmp/opencl2_security_literature/gputhor.pdf"
+  }
+]

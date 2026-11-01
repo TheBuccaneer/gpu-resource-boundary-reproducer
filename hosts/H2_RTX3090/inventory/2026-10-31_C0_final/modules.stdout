@@ -1,0 +1,103 @@
+Module                  Size  Used by
+ccm                    20480  9
+rfcomm                110592  4
+snd_seq_dummy          12288  0
+snd_hrtimer            12288  1
+qrtr                   53248  2
+nvidia_uvm           2183168  0
+cmac                   12288  2
+algif_hash             20480  1
+algif_skcipher         12288  1
+af_alg                 32768  6 algif_hash,algif_skcipher
+bnep                   32768  2
+binfmt_misc            24576  1
+intel_rapl_msr         20480  0
+intel_rapl_common      57344  1 intel_rapl_msr
+edac_mce_amd           28672  0
+iwlmvm                868352  0
+nvidia_drm            143360  93
+nls_iso8859_1          12288  1
+nvidia_modeset       1867776  40 nvidia_drm
+mac80211             1937408  1 iwlmvm
+snd_hda_codec_nvhdmi    16384  1
+btusb                  81920  0
+snd_hda_codec_hdmi     65536  1 snd_hda_codec_nvhdmi
+btmtk                  40960  1 btusb
+kvm_amd               262144  0
+btrtl                  36864  1 btusb
+libarc4                12288  1 mac80211
+snd_hda_intel          65536  1
+btbcm                  24576  1 btusb
+snd_hda_codec         212992  3 snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec_nvhdmi
+btintel                77824  1 btusb
+snd_usb_audio         622592  3
+kvm                  1531904  1 kvm_amd
+jc42                   12288  0
+snd_hda_core          151552  3 snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec
+snd_seq_midi           24576  0
+snd_usbmidi_lib        57344  1 snd_usb_audio
+nvidia              14721024  716 nvidia_uvm,nvidia_modeset
+iwlwifi               655360  1 iwlmvm
+snd_intel_dspcfg       45056  1 snd_hda_intel
+snd_seq_midi_event     16384  1 snd_seq_midi
+irqbypass              16384  1 kvm
+snd_ump                49152  1 snd_usb_audio
+snd_intel_sdw_acpi     16384  1 snd_intel_dspcfg
+joydev                 32768  0
+input_leds             12288  0
+bluetooth            1150976  34 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+ee1004                 16384  0
+mc                     90112  1 snd_usb_audio
+snd_rawmidi            57344  3 snd_seq_midi,snd_usbmidi_lib,snd_ump
+wmi_bmof               12288  0
+rapl                   20480  0
+snd_hwdep              24576  2 snd_usb_audio,snd_hda_codec
+cfg80211             1564672  3 iwlmvm,iwlwifi,mac80211
+snd_seq               126976  9 snd_seq_midi,snd_seq_midi_event,snd_seq_dummy
+drm_ttm_helper         20480  1 nvidia_drm
+snd_pcm               212992  5 snd_hda_codec_hdmi,snd_hda_intel,snd_usb_audio,snd_hda_codec,snd_hda_core
+mxm_wmi                12288  0
+snd_seq_device         16384  4 snd_seq,snd_seq_midi,snd_ump,snd_rawmidi
+ttm                   139264  1 drm_ttm_helper
+video                  77824  1 nvidia_modeset
+snd_timer              53248  3 snd_seq,snd_hrtimer,snd_pcm
+snd                   147456  22 snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_usb_audio,snd_usbmidi_lib,snd_hda_codec,snd_timer,snd_ump,snd_pcm,snd_rawmidi
+i2c_piix4              36864  0
+ccp                   192512  1 kvm_amd
+soundcore              16384  1 snd
+i2c_smbus              20480  1 i2c_piix4
+k10temp                16384  0
+mac_hid                12288  0
+sch_fq_codel           28672  4
+lp                     32768  0
+ppdev                  24576  0
+parport                81920  2 lp,ppdev
+msr                    12288  0
+efi_pstore             12288  0
+dmi_sysfs              28672  0
+autofs4                61440  2
+btrfs                2322432  0
+libblake2b             20480  1 btrfs
+xor                    24576  1 btrfs
+raid6_pq              126976  1 btrfs
+hid_generic            12288  0
+nvme                   69632  2
+usbhid                 86016  0
+uas                    32768  0
+hid                   286720  2 usbhid,hid_generic
+usb_storage            86016  1 uas
+nvme_core             241664  3 nvme
+r8169                 155648  0
+igb                   348160  0
+nvme_keyring           20480  1 nvme_core
+i2c_algo_bit           16384  1 igb
+realtek                57344  1
+nvme_auth              28672  1 nvme_core
+ahci                   57344  0
+dca                    20480  1 igb
+hkdf                   12288  1 nvme_auth
+phylink                94208  1 r8169
+libahci                57344  1 ahci
+ghash_clmulni_intel    12288  0
+wmi                    36864  3 video,wmi_bmof,mxm_wmi
+aesni_intel            98304  4

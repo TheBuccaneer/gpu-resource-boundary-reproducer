@@ -1,0 +1,341 @@
+[
+  {
+    "id": "L01",
+    "title": "StepStone: LLM-Based GPU Kernel Driver Fuzzing via User-Space Libraries",
+    "authors": "Zou, Pu et al.",
+    "venue_status_at_cutoff": "IEEE S&P 2026",
+    "primary_url": "https://www.cs.ucr.edu/~zhiyunq/pub/oakland26_gpu_fuzzing.pdf",
+    "local_reading_key": "stepstone",
+    "question": "Wie erreicht Library-Fuzzing tiefere GPU-Kerneltreiberpfade als IOCTL-Beschreibungen allein?",
+    "method": "LLMs extrahieren API-Typen, Abhängigkeiten und Wertebereiche für Syzkaller; Bibliotheken vermitteln Aufrufe zum Kernel. OpenCL 3.0 gehört ausdrücklich zum untersuchten NVIDIA-/AMD-Stack.",
+    "threat_model": "Unprivilegierte GPU-Nutzer; instrumentierte NVIDIA-/AMD-/Mali-Treiber. Die Evaluation nutzt u. a. RTX6000 Ada und NVIDIA560.35.03, nicht unseren580.178.04-Host.",
+    "reported_result": "Berichtet11 neue NVIDIA-Treiberbugs und höhere Coverage; darunter UAF/OOB, aber nicht11 unabhängig bewiesene Schutzdomänenbrüche.",
+    "limitations": "Geänderte Kernelmodule/KCOV/KASAN und lange Kampagnen sind hier nicht freigegeben. Bibliotheksbeschreibung und LLM-Ausgabe sind fehlerbehaftet.",
+    "opencl2_inference": "Library-Einstieg und strukturierte Abhängigkeiten übernehmen. Keine „erste OpenCL-API-Fuzzing“-Neuheit beanspruchen; H2 liefert ohne solche Instrumentierung keine gleichwertige Kernelcoverage.",
+    "inspected_pdf_pages": [
+      1,
+      10,
+      12,
+      14
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L02",
+    "title": "WebGlitch: A Randomised Testing Tool for the WebGPU API",
+    "authors": "Wong und Donaldson",
+    "venue_status_at_cutoff": "ECOOP 2025, Experience Paper; DOI10.4230/LIPIcs.ECOOP.2025.39",
+    "primary_url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ECOOP.2025.39",
+    "local_reading_key": "webglitch",
+    "question": "Wie lässt sich komplexer GPU-API-Zustand wirksam automatisch erzeugen und vergleichen?",
+    "method": "Rekursiver Aufbau zulässiger Objektzustände, deklarative Modelle, Crash-/Sanitizer-/Differentialorakel. Ein Modus erzeugt auch ungültige Aufrufe.",
+    "threat_model": "WebGPU-Implementierungen in Browsern/JavaScript-Runtimes und darunterliegende Shadercompiler; robuste Verarbeitung nicht vertrauenswürdiger Programme.",
+    "reported_result": "Paper berichtet24 neue Bugs,15 damals behoben. Beispiele betreffen auch Gerätezuordnung, ungültige Zustände und Lebenszyklen.",
+    "limitations": "WebGPU-Objekt- und Fehlersemantik ist nicht OpenCL. Weder Zustandsmodellierung noch Invalid-Call-Ownership-Tests sind durch OpenCL2 neu erfunden.",
+    "opencl2_inference": "Modell und Reduktion adaptieren; als mögliche Erweiterung explizite Fehler-Nachzustände, Ressourcenlebenszeiten und getrennte Sicherheitsdomänen mit messbaren Datenorakeln evaluieren.",
+    "inspected_pdf_pages": [
+      1,
+      8,
+      9,
+      13,
+      14,
+      24
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L03",
+    "title": "CuSafe: Capturing Memory Corruption on NVIDIA GPUs",
+    "authors": "Lu et al.",
+    "venue_status_at_cutoff": "USENIX Security 2026",
+    "primary_url": "https://www.usenix.org/conference/usenixsecurity26/presentation/lu-hongyi",
+    "local_reading_key": "cusafe",
+    "question": "Wie erkennt man räumliche und zeitliche GPU-Speicherfehler auf verfügbarer NVIDIA-Hardware praktikabel?",
+    "method": "Compiler-/Runtime-Sanitizer mit Pointertags, In-band-Bounds, Stack-Epochen und Adressrandomisierung; genaue Allokationsidentität statt Adresse allein.",
+    "threat_model": "Fehlerhafte GPU-Anwendungsprogramme; instrumentierte CUDA-/LLVM-Kette. Die gelesene Vorabfassung evaluiert RTX5090/LLVM21.",
+    "reported_result": "Berichtet Abdeckung von33 synthetischen Fehlerfällen und Benchmarks mit44 Programmen; durchschnittlich13% Laufzeitmehrkosten.",
+    "limitations": "Ein Sanitizer für Anwendungsmemory ist kein automatisches Oracle für eine OpenCL-ICD-/Prozessgrenzverletzung; die endliche Testsuite ist kein universeller Sicherheitsbeweis.",
+    "opencl2_inference": "Epochen und Bounds als Denkmodell nutzen. Keine Installation behaupten; H2-Canaries brauchen selbst gültige Programme und eigenständige Lifetime-Verträge.",
+    "inspected_pdf_pages": [
+      1,
+      5,
+      7,
+      10,
+      12
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L04",
+    "title": "LeftoverLocals: Listening to LLM Responses Through Leaked GPU Local Memory",
+    "authors": "Sorensen und Khlaaf",
+    "venue_status_at_cutoff": "2024 Forschungsbericht / arXiv2401.16603; Herstellerkoordination",
+    "primary_url": "https://blog.trailofbits.com/2024/01/16/leftoverlocals-listening-to-llm-responses-through-leaked-gpu-local-memory/",
+    "local_reading_key": "leftoverlocals",
+    "question": "Können lokale GPU-Speicherreste private Daten anderer Prozesse preisgeben?",
+    "method": "Writer-/Listener-Paare, Canaries und LLM-Demonstration; Listener liest absichtlich nicht initialisierten lokalen Speicher.",
+    "threat_model": "Ko-residente, getrennte Prozesse/Container mit GPU-Zugang; keine legitime Übergabe der Opferdaten.",
+    "reported_result": "Lecks auf getesteten AMD-/Apple-/Qualcomm-Konfigurationen; NVIDIA bestätigte damals keine Betroffenheit. Nicht nur irgendein nichtnulles Wort gilt als Fremdprozessbeleg.",
+    "limitations": "OpenCL-C-UB und Compilerverhalten sind Confounder. Historische Herstellerantwort ersetzt keine aktuelle H2-Messung und begründet weder heutige Betroffenheit noch Fehlerfreiheit.",
+    "opencl2_inference": "Remanenz ist vorbekannt; H1-SEC2 nicht wiederholen. Für H2 nur gezieltes Herkunfts-/Schutzdomänenexperiment mit privater Opfernonce und eigener Evidenz sinnvoll.",
+    "inspected_pdf_pages": [
+      1,
+      4,
+      9
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L05",
+    "title": "GPU Memory Exploitation for Fun and Profit",
+    "authors": "Guo, Zhang und Yang",
+    "venue_status_at_cutoff": "USENIX Security 2024",
+    "primary_url": "https://www.usenix.org/conference/usenixsecurity24/presentation/guo-yanan",
+    "local_reading_key": "gpu_memory_exploitation",
+    "question": "Welche Folgen haben Buffer-Overflows innerhalb moderner GPU-Anwendungen?",
+    "method": "Analyse von CUDA-Speicherräumen und Kontrollfluss; zeigt Daten-/Codeangriffe und Auswirkungen auf ML-Anwendungen.",
+    "threat_model": "Angreifer liefert Eingaben an eine verwundbare GPU-Anwendung; ein Anwendungsfehler ist der Ausgangspunkt.",
+    "reported_result": "Speicherkorruption kann Modellzustand und GPU-Kontrollfluss beeinflussen; die Untersuchung umfasst mehrere NVIDIA-Generationen.",
+    "limitations": "Daraus folgt kein allgemeines Lesen fremder Betriebssystemprozesse durch einen ansonsten zulässigen OpenCL-Client.",
+    "opencl2_inference": "Impact-Orakel stärker als API-Codes wählen. Eine absichtlich OOB lesende eigene Kerneldatei wäre keine neue Runtime-Isolationslücke.",
+    "inspected_pdf_pages": [
+      2,
+      5,
+      8,
+      11,
+      16
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L06",
+    "title": "Not so Refreshing: Attacking GPUs using RFM Rowhammer Mitigation",
+    "authors": "Nazaraliyev et al.",
+    "venue_status_at_cutoff": "USENIX Security 2025",
+    "primary_url": "https://www.usenix.org/conference/usenixsecurity25/presentation/nazaraliyev",
+    "local_reading_key": "not_so_refreshing",
+    "question": "Können Refresh-Schutzmechanismen selbst Timing-Information oder Availability-Störungen erzeugen?",
+    "method": "Adress-/Bankanalyse und Timingexperimente mit RFM-Interferenz; covert/side channels sowie Slowdown.",
+    "threat_model": "Unprivilegierter Spy und Opfer teilen GPU-/Speicherressourcen; zusätzlich SoC-Szenarien.",
+    "reported_result": "Paper berichtet Fingerprinting, verdeckte Kommunikation und im Mittel mehr als4,8-fachen Slowdown.",
+    "limitations": "RFM-Timing ist nicht gleich Bitflip. Gerätespezifische Speicher-/Controllerannahmen und Ko-Lokation sind erforderlich; kein unmittelbarer3090-Nachweis.",
+    "opencl2_inference": "Normale Konkurrenz nicht als Fehlereindämmungsbug ausgeben. Hohe Aktivierungs-/Störungslast ist StufeC; Timingkanäle haben zunächst geringere Priorität als klarer Daten-/Lifetime-Impact.",
+    "inspected_pdf_pages": [
+      2,
+      4,
+      5,
+      9,
+      12
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L07",
+    "title": "GPUHammer: Rowhammer Attacks on GPU Memories are Practical",
+    "authors": "Lin, Qu und Saileshwar",
+    "venue_status_at_cutoff": "USENIX Security 2025",
+    "primary_url": "https://www.usenix.org/conference/usenixsecurity25/presentation/lin-shaopeng",
+    "local_reading_key": "gpuhammer",
+    "question": "Ist Rowhammer auf diskretem GPU-Speicher praktisch möglich?",
+    "method": "GDDR-Bankcharakterisierung und GPU-spezifische Speicherzugriffe; kontrollierte Modellmanipulation als Effekt.",
+    "threat_model": "Unprivilegierter CUDA-Nutzer in zeitgeteilter Umgebung; RTX A6000 mit GDDR6.",
+    "reported_result": "Berichtet Bitflips auf dem getesteten A6000 und daraus folgende ML-Integritätsverluste.",
+    "limitations": "Andere Speichertypen, Controller und Maßnahmen brauchen eigenen Nachweis. Die3090 verwendet GDDR6X; keine Gleichsetzung mit A6000.",
+    "opencl2_inference": "Wichtige Abgrenzung eines bekannten Hardwareangriffs. Kein geeignetes Standardexperiment für unsere normativ begründete OpenCL-Runtime-Studie.",
+    "inspected_pdf_pages": [
+      2,
+      5,
+      8,
+      14
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L08",
+    "title": "GDDRHammer: Greatly Disturbing DRAM Rows — Cross-Component Rowhammer Attacks from Modern GPUs",
+    "authors": "Hu et al.",
+    "venue_status_at_cutoff": "IEEE S&P 2026",
+    "primary_url": "https://gddr.fail/files/gddrhammer.pdf",
+    "local_reading_key": "gddrhammer",
+    "question": "Wie verbreitet und wie folgenschwer sind GPU-Rowhammer-Effekte jenseits eines einzelnen Geräts?",
+    "method": "Charakterisierung von25 Karten, stärkere Zugriffsmuster sowie Analyse von Allocator-/Seitentabellenbeziehungen.",
+    "threat_model": "Unprivilegierter GPU-Client mit hinreichend verwundbarem Speicher; Hosteffekt an zusätzliche DMA-/IOMMU-Annahmen gebunden.",
+    "reported_result": "Berichtet wesentlich mehr Flips und einen GPU-zu-CPU-Speicherzugriff; nicht automatisch identisch mit jedem behaupteten Root-Shell-Szenario.",
+    "limitations": "Keine Übertragung der untersuchten Controller-/Speicherprofile auf jede Ampere-Karte. Quellenbezeichnungen von Ada-Speicher sind nicht unsere3090-Hardwaremessung.",
+    "opencl2_inference": "Explizite Übersetzung von Speicherprimitive zu Schutzdomäneneffekt als wissenschaftlicher Maßstab. Kein Auftrag für Seitentabellenmanipulation oder Hammering auf H2.",
+    "inspected_pdf_pages": [
+      1,
+      3,
+      9,
+      18
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L09",
+    "title": "GeForge: Hammering GDDR Memory to Forge GPU Page Tables for Fun and Profit",
+    "authors": "Wan et al.",
+    "venue_status_at_cutoff": "IEEE S&P 2026",
+    "primary_url": "https://gddr.fail/files/GeForge.pdf",
+    "local_reading_key": "geforge",
+    "question": "Kann aus GPU-Bitflips eine praktisch verwertbare Übersetzungs- und Hostgrenzverletzung entstehen?",
+    "method": "Analyse von Allokations-/Adressübersetzungszuständen und datenabhängige Fehlerausnutzung; End-to-End-Effekt.",
+    "threat_model": "Unprivilegierter CUDA-Nutzer; für den gezeigten direkten Hostzugriff ist ausgeschaltete oder nicht wirksame IOMMU-Isolation relevant.",
+    "reported_result": "Berichtet breite GPU-Speicherautorität und systemweiten Impact unter den genannten Voraussetzungen.",
+    "limitations": "Ein solcher Hostkonfigurationswechsel ist kein zulässiger Trick, um OpenCL2 stärkere Ergebnisse zu verschaffen. GDDR6-Resultate sind kein3090-Beleg.",
+    "opencl2_inference": "Nur als verwandte Grenzverletzung und zur Prüfung unserer Bedrohungsmodellannahmen verwenden; keine Reproduktion eingeplant.",
+    "inspected_pdf_pages": [
+      1,
+      3,
+      4,
+      13
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L10",
+    "title": "GPUBreach: Privilege Escalation Attacks on GPUs using Rowhammer",
+    "authors": "Lin et al.",
+    "venue_status_at_cutoff": "IEEE S&P 2026",
+    "primary_url": "https://gpubreach.ca/",
+    "local_reading_key": "gpubreach",
+    "question": "Ist ein GPU-Hardwarefehler auch bei aktiver IOMMU bis zum Host relevant?",
+    "method": "Kombiniert GPU-Speicherkorruption mit Fehlern in vertrauenswürdigem Treiberzustand.",
+    "threat_model": "Unprivilegierter Nutzer; GDDR6-A6000 und gezielt analysierte Host-/Driverpfade, keine bloße GPU-Anwendungs-OOB.",
+    "reported_result": "Berichtet GPU-/Prozesswirkungen und Hosteskalation trotz aktiver IOMMU.",
+    "limitations": "Der kombinierte Mechanismus und seine Voraussetzungen dürfen nicht als allgemeine Eigenschaft unserer580-Treiberversion interpretiert werden.",
+    "opencl2_inference": "Impact muss an einer klaren Grenze kausal gezeigt werden. Unser Ansatz priorisiert zulässige Runtime-Zustandsübergänge statt eine schon bekannte Hardwareprimitive nachzustellen.",
+    "inspected_pdf_pages": [
+      1,
+      4,
+      11,
+      12
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L11",
+    "title": "GPUThor: Amplifying Rowhammer Attacks via Non-Uniform Patterns to Exploit ECC-Protected GPUs",
+    "authors": "Lin, Qu, Rajeev und Saileshwar",
+    "venue_status_at_cutoff": "2026 Preprint; CCS2026 für15.–19.11. angekündigt",
+    "primary_url": "https://gputhor.com/",
+    "local_reading_key": "gputhor",
+    "question": "Reicht ECC als pauschaler Schutz gegen GPU-Rowhammer?",
+    "method": "Untersucht stärkere nichtuniforme Zugriffsmuster und ECC-Fehlerwirkungen auf GDDR6-Workstationkarten.",
+    "threat_model": "Unprivilegierte GPU-Arbeit gegen bestimmte Ampere-A4000/A4500/A5000/A6000; separate Hardwarebedingungen.",
+    "reported_result": "Berichtet auch Mehrbitfehler auf ECC-Geräten. Aktuelle Muster erzeugten auf den untersuchten GDDR6X-Konfigurationen keine Flips.",
+    "limitations": "Ein begrenztes negatives Hardwareergebnis ist keine Immunitätsaussage. Am31.10. liegt der Konferenztermin noch voraus; Artefaktfreigabe ist erst für15.11. angekündigt.",
+    "opencl2_inference": "Verhindert den veralteten Schluss „ECC löst alles“. Für3090 weiterhin niedrige Relevanz ohne spezifischen GDDR6X-Nachweis; StufeC und nicht Teil der nächsten Pläne.",
+    "inspected_pdf_pages": [
+      1,
+      3,
+      12,
+      16
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L12",
+    "title": "Hunting CUDA Bugs at Scale with cuFuzz",
+    "authors": "Ibn Ziad und Kozyrakis",
+    "venue_status_at_cutoff": "OOPSLA1/PACMPL2026; DOI10.1145/3798231",
+    "primary_url": "https://doi.org/10.1145/3798231",
+    "local_reading_key": "cufuzz_gpu_native",
+    "question": "Wie vermeidet man falsche GPU-Fehler, wenn Hostbedingungen und Gerätekernel zusammengehören?",
+    "method": "Whole-program fuzzing, kombinierte Host-/Device-Coverage und getrennte Sanitizerläufe.",
+    "threat_model": "CUDA-Anwendungs-/Bibliotheksbugs unter vollständigen Host-Device-Invarianten, nicht primär OpenCL-ICD-Grenzen.",
+    "reported_result": "Berichtet43 Bugs in14 Programmen; Kernel-isolierte Testeingaben erzeugten zusätzliche falsche Positive.",
+    "limitations": "CUDA-Instrumentierung und Compute-Sanitizer sind keine gleichwertige OpenCL-Sicherheitsprüfung; Werkzeuge und Treiber verändern Beobachtung und Timing.",
+    "opencl2_inference": "Nur ganze zulässige API-Sequenzen reduzieren und replayen. Keine Orakel, die gültige Host-Präbedingungen nach Reduktion verloren haben. Nicht mit dem anderen „CuFuzz“-Preprint2601.01048 verwechseln.",
+    "inspected_pdf_pages": [
+      1,
+      2,
+      3,
+      14
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L13",
+    "title": "Behind Bars: A Side-Channel Attack on NVIDIA MIG Cache Partitioning Using Memory Barriers",
+    "authors": "Gu et al.",
+    "venue_status_at_cutoff": "USENIX Security 2026",
+    "primary_url": "https://www.usenix.org/conference/usenixsecurity26/presentation/gu-cheng",
+    "local_reading_key": "behind_bars",
+    "question": "Sind getrennte MIG-Instanzen gegen alle Formen gemeinsamen Cacheverhaltens isoliert?",
+    "method": "Analyse von Speicherbarrieren und Timingeffekten über L2-Partitionen; Workload-/Kernelmuster als Seitenkanal.",
+    "threat_model": "Unprivilegierte Clients in verschiedenen MIG-Instanzen auf passenden Rechenzentrums-GPUs.",
+    "reported_result": "Berichtet instanzübergreifende Interferenz und Vertraulichkeitswirkungen aus Kernel-Launch-Mustern.",
+    "limitations": "MIG ist auf RTX3090 nicht unterstützt; im C0 steht N/A. Zwei OpenCL-Kontexte oder zwei Queues sind keine MIG-Instanzen.",
+    "opencl2_inference": "Isolation immer an die tatsächlich konfigurierte Domäne binden. Die Methode dient als Abgrenzung, nicht als H2-Experiment oder Ersatz für einen Datenzugriffsbeleg.",
+    "inspected_pdf_pages": [
+      2,
+      4,
+      11,
+      12
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L14",
+    "title": "PAGE404: Breaking GPU Isolation Through Hardware-assisted Page Migration",
+    "authors": "Nazaraliyev, Zhang und Abu-Ghazaleh",
+    "venue_status_at_cutoff": "2026 Preprint v3(21.10.); laut Fassung S&P2027 angenommen",
+    "primary_url": "https://arxiv.org/abs/2610.20962v3",
+    "local_reading_key": "page404",
+    "question": "Welche Grenzen entstehen durch hardwaregesteuerte Migration und gemeinsam genutzte Zähler?",
+    "method": "GH200-spezifische Analyse von Access-Countern, UVM-Migrationspfaden und Timingkanälen.",
+    "threat_model": "Ko-residente Clients einschließlich verschiedener MIG-Instanzen auf Grace-Hopper.",
+    "reported_result": "Berichtet verdeckte Kanäle und Workloadinformationen über gemeinsam genutzte Migrationsressourcen.",
+    "limitations": "Weder GH200/C2C noch MIG existieren in unserem3090-Setup. 2026er Preprint und2027er Konferenzstatus müssen getrennt bleiben.",
+    "opencl2_inference": "Neuer als die vorgegebenen Ausgangsarbeiten, aber außerhalb der H2-Mechanik. Lehre: Heterogenitäts-/Migrationsversprechen nie aus gewöhnlichem coarse-grain SVM ableiten.",
+    "inspected_pdf_pages": [
+      1,
+      2,
+      4,
+      11
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L15",
+    "title": "Automated Test Generation for OpenCL Kernels using Fuzzing and Constraint Solving",
+    "authors": "Peng und Rajan",
+    "venue_status_at_cutoff": "GPGPU2020; DOI10.1145/3366428.3380768",
+    "primary_url": "https://chao-peng.github.io/publication/gpgpu20/gpgpu20.pdf",
+    "local_reading_key": "clfuzz",
+    "question": "Wie erreicht Inputgenerierung Zweige und problematische Interleavings von OpenCL-Kernels?",
+    "method": "Mutationsfuzzing, selektives Constraint-Solving und Schedule-Verstärkung auf Kernelseite.",
+    "threat_model": "Gegebene OpenCL-Anwendungskernel und deren Eingaben; Schwerpunkt Code-/Racefehler im Programm.",
+    "reported_result": "Zeigt, dass OpenCL-Kernelfuzzing und gezielte Schedulevariation ältere Grundlagen sind.",
+    "limitations": "Keine automatische Aussage über Host-Objekt-/ICD-/Prozessisolation. Ein beliebiger gefundener Kernelfehler ist nicht unser gesuchter Runtime-Defekt.",
+    "opencl2_inference": "Als ältere Basis für Budgetierung und Coveragebegriff aufnehmen; nicht als2024–26-Neuheit zählen. Scheduleverstärkung ist erst in gesondert genehmigten Laufkampagnen zulässig.",
+    "inspected_pdf_pages": [
+      1,
+      3,
+      5,
+      8
+    ],
+    "independently_reproduced": false
+  },
+  {
+    "id": "L16",
+    "title": "Guardian: Safe GPU Sharing in Multi-Tenant Environments",
+    "year": 2024,
+    "version": "arXiv 2401.09290v2, 2024-10-16",
+    "primary_url": "https://arxiv.org/abs/2401.09290v2",
+    "question": "Wie kann ein ausdrücklich geteilter GPU-Adressraum zwischen Mandanten geschützt werden?",
+    "method": "PTX-Boundsinstrumentierung, API-Interposition und Partitionierung",
+    "threat_model": "Mandanten in einer durch Guardian verwalteten gemeinsamen GPU-Adressraumumgebung",
+    "reported_result": "Autoren berichten etwa 9% mittlere Laufzeitmehrbelastung",
+    "limitations": "Instrumentierte Policy ist zusätzliche Voraussetzung; gewöhnliche OpenCL-Kontexte sind kein automatisch bewiesener OS-Schutzraum",
+    "opencl2_inference": "Trennt Kontext-API-Integrität von echter Prozess-/Mandantenisolation",
+    "inspected_pdf_sections": [
+      "abstract",
+      "architecture",
+      "threat model",
+      "evaluation"
+    ],
+    "independently_reproduced": false
+  }
+]

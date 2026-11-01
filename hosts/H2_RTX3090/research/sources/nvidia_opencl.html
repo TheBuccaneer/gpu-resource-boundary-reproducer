@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang='en' class='h-100'>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="kr0VIvWPhnDZ4n6zkjf2ER4vFg3-XHzyX4yonNdvLVorbwVab27c-2fF3VhJeuYYUqOJFJwOaQ5uG8nWgDZLIg" />
+  <meta name="csp-nonce" />
+  <title>Open Computing Language OpenCL | NVIDIA Developer</title>
+<meta name="keywords" content="opencl, opencl sdk, open computing language, gpu computing, nvidia">
+<link rel="canonical" href="https://developer.nvidia.com/opencl">
+<link rel="alternate" href="https://developer.nvidia.com/opencl" hreflang="x-default">
+<link rel="alternate" href="https://developer.nvidia.com/opencl" hreflang="en-us">
+<meta property="og:site_name" content="NVIDIA Developer">
+<meta property="og:title" content="Open Computing Language OpenCL">
+<meta property="og:description" content="API for heterogeneous computing that runs on CUDA-powered GPUs.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://d29g4g2dyqv443.cloudfront.net/sites/default/files/images/nvidia-analytics-2c50-p%402x.jpg">
+<meta property="og:url" content="https://developer.nvidia.com/opencl">
+<meta name="twitter:title" content="OpenCL (Open Computing Language)">
+<meta name="twitter:description" content="OpenCL is a low-level API for heterogeneous computing that runs on CUDA-powered GPUs.">
+<meta name="twitter:image" content="https://d29g4g2dyqv443.cloudfront.net/sites/default/files/images/nvidia-analytics-2c50-p%402x.jpg">
+<meta name="twitter:site" content="@NVIDIA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@NVIDIA">
+<meta name="nv-cre-date" content="2023-09-18T17:01:22.199Z">
+<meta name="nv-pub-date" content="2023-09-18T17:01:22.199Z">
+<meta property="interest" content="Content Creation / Rendering">
+
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/application-f765835b93b35d4280c69425b2a7e8849328125d0ed95b5a8aab648b1848dce7.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/shared/modal-b27162ea9a12461a0b0076440408cdd94ddf4273a6a89539e4b81f4641416436.css" media="all" />
+  
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/one-trust-bea625cf16a072ce5fdb0707a19f2645daf63c05eb1a016db72773eba008fc07.css" />
+  <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="3e2b62ff-7ae7-4ac5-87c8-d5949ecafff5"></script>
+
+<script src="https://images.nvidia.com/aem-dam/Solutions/ot-js/ot-custom.js"></script>
+
+<script>
+  function OptanonWrapper() {
+    let event = new Event('bannerLoaded');
+    window.dispatchEvent(event);
+
+      if (window.OnetrustActiveGroups && window.OnetrustActiveGroups.includes("C0002")) {
+        window.DD_RUM && window.DD_RUM.init({
+          clientToken: 'pub0430c74fae5d2b467bcb8d48b13e5b32',
+          applicationId: '9fc963c7-14e6-403d-bdec-ee671550bb7f',
+          site: 'datadoghq.com',
+          service: 'devzone',
+          env: 'prod',
+          version: 'v2.60.0',
+          sessionSampleRate: 10,
+          sessionReplaySampleRate: 5,
+          trackUserInteractions: true,
+          trackResources: true,
+          trackLongTasks: true,
+          defaultPrivacyLevel: 'mask-user-input',
+        });
+      }
+  }
+</script>
+
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NVIDIA Developer",
+    "url": "https://developer.nvidia.com",
+    "logo": "https://www.nvidia.com/en-us/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.630.png/1703060329095/nvidia-logo-horz.png",
+    "sameAs": [
+      "https://github.com/nvidia",
+      "https://www.linkedin.com/company/nvidia/",
+      "https://x.com/nvidiadeveloper"
+    ]
+  }
+</script>
+
+  
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/vars-cd3a0769a3c2f2d9ea6b83ac53ce86bceef4c719e4dbd22ed41d48d01f200901.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/fonts-910bdb814ac830981904d69eea803431bc3a5b00aac30ffc85d12983c6511741.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/ballistiq-twitterfeed-61a757e5494e5598582c3610822f4cc0d00c0f1c3d70d478b0004dcebebf2368.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/application-a780279f5932e2d3fe01da14ba98d5c320956ec365747dfca2719798ce778ae6.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/embedded/embedded-bde5659f6ab1dd4f9edcf851e8c12fb3c44ed2de1542a3bd9131d207afdb0d7d.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/overrides-cbc02aeca05448d7c77b2b63dc1faa3f5e58c17afd5afe4a5122591949c5d734.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/new-styles-858f40f346fa03922adaed5fa12e81a783dff52699f02bed72f561c6642b1987.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/feed-aggregator/feed-aggregator-9ace7521871242143cb35fa86d5be702c4dacb409600041fa6a5b14fa2a71dde.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/devzone3/old/bootstrap-glyphicons-fe132ea5867b21620f37b392a53d872fb240e34ad8b477db370b6f867ccd102f.css" media="all" />
+
+  <script src="https://developer.nvidia.com/assets/horizontal-chart/d3.v4.min-41cfecdf7c41476e805de7afacf4aacdd1a4be6947fbecf95217e947ebc2faf5.js"></script>
+  <script src="https://developer.nvidia.com/assets/horizontal-chart/visualize-d-16cf14d4b63d6031e6c18983e91ac6d2b1b1f8140d15e351a9c847f8610b7e5b.js"></script>
+  <script src="https://developer.nvidia.com/assets/devzone3/old/js.cookie.min-bd09df6e81cb21935c4e92d9631a162285611f17c6eaee720cafcc6ddef3f7dc.js"></script>
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/sf-validation/sf-validation-805362e079494cd052f713be5f91a44eb602f545c342f794abbd4a8050c0acb3.css" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/tablefilter/tablefilter-ad35ad42b6d4f1068765cf691a0dcb4214ba7925ea4e28b9a1ce48a0ddb3d489.css" media="all" />
+  <link rel="stylesheet" href="https://developer.nvidia.com/assets/tablefilter/filtered-table-891467932064f1f3e379852c0697e014d6c0f99a6d423b4468e55ae59d159adf.css" media="all" />
+
+  <script src="https://assets.adobedtm.com/5d4962a43b79/c1061d2c5e7b/launch-191c2462b890.min.js" data-ot-ignore="true"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://api-prod.nvidia.com/search/nvidia-gallery-widget.js"></script>
+
+<script src="https://developer.nvidia.com/assets/devzone3/modules/nvidia_editor/nod_widgets-8c38a7d04ed3c3acd9117aa126bf76d7902d3c57c72b76dbf3c281c96ed09975.js"></script>
+
+
+  <link rel="icon" type="image/x-icon" href="https://developer.nvidia.com/assets/favicon-81bff16cada05fcff11e5711f7e6212bdc2e0a32ee57cd640a8cf66c87a6cbe6.ico" />
+</head>
+
+<body class='d-flex flex-column h-100' data-theme='devzone3_old'>
+
+<div id='header'></div>
+
+
+
+
+
+
+
+
+  
+
+<div id="wrapper" class="page-opencl" data-id="197">
+  <div id="content-background" class="">
+    <div class="separator"></div>
+    <div id="content" class="container">
+      <div class="row">
+        <section class="dz3-main-section dz-old-theme node field-name-body">
+          <a id="main-content"></a>
+          <div class='page-header'><h1 class='title'>Open Computing Language OpenCL</h1></div> <p>OpenCL™ (Open Computing Language) is a low-level API for heterogeneous computing that runs on CUDA-powered GPUs. Using the OpenCL API, developers can launch compute kernels written using a limited subset of the C programming language on a GPU.</p>
+
+
+<p>NVIDIA is now OpenCL 3.0 conformant and is available on R465 and later drivers. This is supported on x86/x86_64 Linux and Windows only and available at <a href="https://www.nvidia.com/drivers">www.nvidia.com/drivers</a></p>
+<p>In addition to OpenCL, NVIDIA supports a variety of GPU-accelerated libraries and high-level programming solutions that enable developers to <a href="/getting-started-parallel-computing">get started quickly with GPU Computing.</a></p>
+<p>OpenCL is a trademark of Apple Inc., used under license by Khronos.</p>
+
+
+<h2>NVIDIA OpenCL SDK Code Samples</h2>
+
+
+
+<hr>
+<div class="row">
+	<h3 class="h--smallest"><b>OpenCL-Vulkan Interop Samples</b></h3>
+	<div class="col-md-8">
+		Sinewave and boxfilter simulations demonstrating use of external buffer and image sharing and synchronization through external semaphores between Vulkan and OpenCL.
+	</div>
+	<div class="col-md-4">
+		<p><a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/vk_ocl_interop_samples.zip" name="path">Download Samples</a></p>
+	</div>
+</div>
+
+
+
+<hr>
+<div class="row">
+ <h3 class="h--smallest"><b>OpenCL Multi Threads</b></h3>
+ <div class="col-md-8">
+                This sample shows the implementation of multi-threaded heterogeneous computing workloads with tight cooperation between CPU and GPU.  The new OpenCL 1.1 features user events, thread-safe API calls and event callbacks are utilized.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMultiThreads.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMultiThreads.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMultiThreads.tar.gz" name="path">Download - Linux/Mac</a>
+
+
+</div>
+</div>
+<hr> <div class="row">
+ <h3 class="h--smallest"><b>Using Inline PTX with OpenCL</b></h3>
+ <div class="col-md-8">
+                A simple test application that demonstrates a new CUDA 4.0 driver ability to embed PTX in a OpenCL kernel.
+</div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclInlinePTX.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclInlinePTX.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclInlinePTX.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Marching Cubes Isosurfaces</b></h3>
+ <div class="col-md-8">
+                This sample extracts a geometric isosurface from a volume dataset using the marching cubes algorithm. It uses the scan (prefix sum) function from the oclScan SDK sample to perform stream compaction. 
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMarchingCubes.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMarchingCubes.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMarchingCubes.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Tridiagonal</b></h3>
+ <div class="col-md-8">
+                Efficient matrix solvers for large number of small independent tridiagonal linear systems. OpenCL implementation of 3 different solvers: Parallel Cyclic Reduction, Cyclic Reduction, Sweep (Gauss elimination + reordering optimization for full coalescing).
+</div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclTridiagonal.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclTridiagonal.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclTridiagonal.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Device Query</b></h3>
+ <div class="col-md-8">
+                This sample enumerates the properties of the OpenCL devices present in the system.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDeviceQuery.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclDeviceQuery.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDeviceQuery.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Bandwidth Test</b></h3>
+ <div class="col-md-8">
+                This is a simple test program to measure the memcopy bandwidth of the GPU. It currently is capable of measuring device to device copy bandwidth, host to device and host to device copy bandwidth for pageable and page-locked memory, memory mapped and direct access.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBandwidthTest.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclBandwidthTest.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBandwidthTest.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Vector Addition</b></h3>
+ <div class="col-md-8">
+                Element by element addition of two 1-dimensional arrays.  Implemented in OpenCL for CUDA GPU's, with functional comparison against a simple C++ host CPU implementation.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclVectorAdd.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclVectorAdd.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclVectorAdd.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Dot Product</b></h3>
+ <div class="col-md-8">
+                Dot Product (scalar product) of set of input vector pairs.  Implemented in OpenCL for CUDA GPU's, with functional comparison against a simple C++ host CPU implementation.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDotProduct.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclDotProduct.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDotProduct.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Matrix Vector Multiplication</b></h3>
+ <div class="col-md-8">
+                Simple matrix-vector multiplication example showing increasingly optimized implementations.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMatVecMul.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMatVecMul.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMatVecMul.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Overlapped Copy/Compute Sample</b></h3>
+ <div class="col-md-8">
+                Element by element hypotenuse for two 1-dimensional arrays.  Implemented in OpenCL for CUDA GPU's, with functional comparison against a simple C++ host CPU implementation.  Demonstrates overlapped copy/compute in 2 command queues
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclCopyComputeOverlap.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclCopyComputeOverlap.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclCopyComputeOverlap.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Simple Multi-GPU</b></h3>
+ <div class="col-md-8">
+                This application demonstrates how to make use of multiple GPUs in OpenCL.
+
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleMultiGPU.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSimpleMultiGPU.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleMultiGPU.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Simple OpenGL Interop</b></h3>
+ <div class="col-md-8">
+                Simple program which demonstrates interoperability between OpenCL and OpenGL. The program modifies vertex positions with OpenCL and uses OpenGL to render the geometry.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleGL.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSimpleGL.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleGL.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>Simple OpenCL D3D10 Texture</b></h3>
+ <div class="col-md-8">
+                Simple program which demonstrates Direct3D10 texture interoperability with OpenCL.  The program creates a number of D3D10 textures (2D, 3D, and CubeMap) which are written to from OpenCL kernels. Direct3D then renders the results on the screen.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleD3D10Texture.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSimpleD3D10Texture.zip" name="path">Download - Windows (x64)</a>
+                  
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>Simple OpenCL D3D9 Texture</b></h3>
+ <div class="col-md-8">
+                Simple program which demonstrates Direct3D9 texture interoperability with OpenCL.  The program creates a number of D3D9 textures (2D, 3D, and CubeMap) which are written to from OpenCL kernels. Direct3D then renders the results on the screen.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleD3D9Texture.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSimpleD3D9Texture.zip" name="path">Download - Windows (x64)</a>
+                  
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Scan</b></h3>
+ <div class="col-md-8">
+                This example demonstrates an efficient OpenCL implementation of parallel prefix sum, also known as "scan". Given an array of numbers, scan computes a new array in which each element is the sum of all the elements before it in the input array.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclScan.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclScan.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclScan.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Parallel Reduction</b></h3>
+ <div class="col-md-8">
+                A parallel sum reduction that computes the sum of large arrays of values.  This sample demonstrates several important optimization strategies for parallel algorithms like reduction.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclReduction.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclReduction.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclReduction.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Matrix Transpose</b></h3>
+ <div class="col-md-8">
+                Efficient matrix transpose.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclTranspose.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclTranspose.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclTranspose.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Matrix Multiplication</b></h3>
+ <div class="col-md-8">
+                This sample implements matrix multiplication and is exactly the same as Chapter 6 of the programming guide.
+It has been written for clarity of exposition to illustrate various OpenCL programming principles, not with the goal of providing the most performant generic kernel for matrix multiplication.
+CUBLAS provides high-performance matrix multiplication.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMatrixMul.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMatrixMul.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMatrixMul.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL 3D FDTD</b></h3>
+ <div class="col-md-8">
+                This sample applies a finite differences time domain progression stencil on a 3D surface.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclFDTD3d.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclFDTD3d.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclFDTD3d.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL DCT 8x8</b></h3>
+ <div class="col-md-8">
+                This sample demonstrates how Discrete Cosine Transform (DCT) for 8x8 blocks can be implemented in OpenCL.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDCT8x8.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclDCT8x8.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDCT8x8.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL DirectX Texture Compressor (DXTC)</b></h3>
+ <div class="col-md-8">
+                High Quality DXT Compression using OpenCL.
+
+This example shows how to implement an existing computationally-intensive CPU compression algorithm in parallel on the GPU, and obtain an order of magnitude performance improvement.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDXTCompression.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclDXTCompression.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclDXTCompression.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Radix Sort</b></h3>
+ <div class="col-md-8">
+                This sample demonstrates a very fast and efficient parallel radix sort implemented in OpenCL for CUDA GPUs.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclRadixSort.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclRadixSort.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclRadixSort.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Sorting Networks</b></h3>
+ <div class="col-md-8">
+                This sample implements bitonic sort algorithm for batches of short arrays
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSortingNetworks.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSortingNetworks.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSortingNetworks.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Black-Scholes Option Pricing</b></h3>
+ <div class="col-md-8">
+                This sample evaluates fair call and put prices for a given set of European options by Black-Scholes formula.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBlackScholes.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclBlackScholes.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBlackScholes.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Hidden Markov Model</b></h3>
+ <div class="col-md-8">
+                This sample implements a Hidden Markov Model in OpenCL for the GPU.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclHiddenMarkovModel.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclHiddenMarkovModel.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclHiddenMarkovModel.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Quasirandom Generator</b></h3>
+ <div class="col-md-8">
+                This sample implements Niederreiter quasirandom number generator and Moro's Inverse Cumulative Normal Distribution generator.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclQuasirandomGenerator.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclQuasirandomGenerator.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclQuasirandomGenerator.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Mersenne Twister</b></h3>
+ <div class="col-md-8">
+                This sample implements Mersenne Twister random number generator and Cartesian Box-Muller transformation on the GPU.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMersenneTwister.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMersenneTwister.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMersenneTwister.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL 64-bin and 256-bin Histogram</b></h3>
+ <div class="col-md-8">
+                This sample demonstrates efficient implementation of 64-bin and 256-bin histograms.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclHistogram.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclHistogram.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclHistogram.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Post-Process OpenGL-Rendered Image</b></h3>
+ <div class="col-md-8">
+                This sample shows how to post-process an image rendered in OpenGL using OpenCL.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclPostprocessGL.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclPostprocessGL.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclPostprocessGL.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Simple Texture 3D</b></h3>
+ <div class="col-md-8">
+                Simple example that demonstrates use of 3D textures in OpenCL.
+              </div>
+
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleTexture3D.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSimpleTexture3D.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSimpleTexture3D.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Box Filter</b></h3>
+ <div class="col-md-8">
+                Linear 2-dimensional variable-width Box Filter of RGBA image.  Implemented in OpenCL for CUDA GPU's, with performance comparison against simple C++ on host CPU. Each of the R, G, B and A channels are treated independently with results computed concurrently for each.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBoxFilter.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclBoxFilter.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclBoxFilter.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Sobel Filter</b></h3>
+ <div class="col-md-8">
+                2-dimensional 3x3 Sobel Magnitude Filter of RGBA image.  Implemented in OpenCL for CUDA GPU's, with performance comparison against simple C++ on host CPU. Gradient magnitude for each of the R, G &amp; B channels is computed concurrently and independently, then combined into a single gradient intensity with linear weighting factors.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSobelFilter.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclSobelFilter.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclSobelFilter.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Median Filter</b></h3>
+ <div class="col-md-8">
+                Multi-GPU enabled, 2-dimensional 3x3 Median Filter of RGBA image.  Implemented in OpenCL for CUDA GPU's, with performance comparison against simple C++ on host CPU. Each of the R, G &amp; B channels are treated independently with results computed concurrently for each.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMedianFilter.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclMedianFilter.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclMedianFilter.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Separable Convolution</b></h3>
+ <div class="col-md-8">
+                This sample implements convolution filter of a 2D image with arbitrary separable kernel.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclConvolutionSeparable.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclConvolutionSeparable.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclConvolutionSeparable.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Recursive Gaussian Filter</b></h3>
+ <div class="col-md-8">
+                2-dimensional Gaussian Blur Filter of RGBA image using IRF method.  Implemented in OpenCL for CUDA GPU's, with performance comparison against simple C++ on host CPU. Each of the R, G, B and A channels are treated independently with results computed concurrently for each.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclRecursiveGaussian.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclRecursiveGaussian.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclRecursiveGaussian.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Volume rendering</b></h3>
+ <div class="col-md-8">
+                This sample demonstrates basic volume rendering using 3D textures.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclVolumeRender.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclVolumeRender.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclVolumeRender.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL Particle Collision Simulation</b></h3>
+ <div class="col-md-8">
+                Simulation of elastic collisions of a large # of bodies.  Implemented in OpenCL for CUDA GPU's.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclParticles.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclParticles.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclParticles.tar.gz" name="path">Download - Linux/Mac</a>
+
+</div>
+</div>
+
+			  <hr> <div class="row">
+ <h3 class="h--smallest"><b>OpenCL N-Body Physics Simulation</b></h3>
+ <div class="col-md-8">
+                Gravitational Simulation of a large # of bodies.  Implemented in OpenCL for CUDA GPU's.
+              </div>
+<div class="col-md-4">
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclNbody.zip" name="path">Download - Windows (x86)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/x64/oclNbody.zip" name="path">Download - Windows (x64)</a><br>
+                  <a href="https://developer.download.nvidia.com/compute/DevZone/OpenCL/Projects/oclNbody.tar.gz" name="path">Download - Linux/Mac</a>
+			  
+</div>
+</div>
+
+
+
+        </section>
+        <aside id="right" class="" role="complementary">
+        </aside>  <!-- /#sidebar-second -->
+      </div>
+    </div>
+    <div class="separator"></div>
+  </div>
+
+  <div class="white-background">
+    <div class="separator"></div>
+    <div class="container">
+      <div class="row">
+        <div id="pre_footer_left" class="col-xs-12 col-sm-12 col-lg-6">
+        </div>
+        <div id="pre_footer_right" class="col-xs-12 col-sm-12 col-lg-6">
+        </div>
+      </div>
+      <div class="separator"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div id='footer' class='mt-auto'></div>
+
+  <script src="https://developer.nvidia.com/assets/feed-aggregator/feed-aggregator-7f147443abc2d1300a239c29e4ba3ca0d0d2eb0dc66b608765e2b3be50e18e10.js"></script>
+
+    <script src="https://developer.nvidia.com/assets/devzone3/old/dist/dz3-old-bundle-ed61b6a81d7c675ba7c54a1fe5dcfb2a960f17c5509388a7300f48a98f8dc751.js"></script>
+
+  <script>
+  const template = document.createElement('template');
+  template.innerHTML = `
+<style>
+@import "https://developer.nvidia.com/assets/feed-aggregator/feed-aggregator-9ace7521871242143cb35fa86d5be702c4dacb409600041fa6a5b14fa2a71dde.css";
+.feed-aggregator-component .card {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3) !important;
+}
+.feed-aggregator-component .card:hover {
+  box-shadow: 0 0 8px 0 rgba(0,0,0,0.13), 0 14px 32px 5px rgba(0,0,0,0.13) !important;
+}
+</style>
+<div class="feed-aggregator-component"></div>
+`;
+  const hosts = {
+    'en': 'https://developer.nvidia.com/blog',
+    'cn': 'https://developer.nvidia.com/zh-cn/blog',
+  }
+
+  class FeedAggregatorElement extends HTMLElement {
+    constructor() {
+      super();
+      this._shadowRoot = this.attachShadow({ 'mode': 'open' });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
+    connectedCallback() {
+      const categories = this.getAttribute('categories');
+      const tags = this.getAttribute('tags');
+      const perPage = this.getAttribute('per-page');
+      const excludedTags = this.getAttribute('excluded-tags');
+
+      let locale = this.getAttribute('locale');
+      if (!locale) {
+        locale = 'en';
+      }
+      let targetElement = this._shadowRoot.querySelector(".feed-aggregator-component");
+      let feed = {
+        id: 'blog',
+        host: hosts[locale],
+        type: 'json',
+        minCount: 2,
+      };
+      if (categories && categories !== 'all') {
+        feed['category_ids'] = categories.split(',');
+      }
+      if (tags && tags !== 'all') {
+        feed['tag_ids'] = tags.split(',');
+      }
+      if(excludedTags && excludedTags !== 'null'){
+        feed['excluded_tag_ids'] = excludedTags.split(',');
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        new FeedAggregator({
+          target: targetElement,
+          props: {
+            count: perPage,
+            openInNewTab: true,
+            showExcerpts: true,
+            feeds: [feed]
+          }
+        });
+      })
+    }
+  }
+
+  window.customElements.define('feed-aggregator', FeedAggregatorElement);
+</script>
+
+
+<template id='application-button-template'>
+  <style>
+      @import "https://developer.nvidia.com/assets/application-button/application-button-68ca7e1e3aa49ec79169d49226e34ee0c341d27a15a38b28ce975cb2467e123e.css";
+  </style>
+  <a href='' class='nvidia-application-button'>Join now</a>
+</template>
+
+<script>
+  async function fetchMembershipState () {
+    const userInfo = await fetch('/api/user');
+    const {status} = userInfo;
+    if (status === 401) {
+      let error = new Error('Unauthorized');
+      error.statusCode = status;
+      throw error;
+    }
+
+    // TODO: Figure out how to get DZ4 program
+
+    // Fetch page info.
+    const {pathname} = location;
+    const pageInfo = await fetch(`${pathname}.json`);
+    const pageData = await pageInfo.json();
+
+    // Fetch membership info
+    return pageData;
+  }
+
+  const initApplicationButton = (element) => {
+    const linkElement = element.querySelector('a');
+    fetchMembershipState()
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        switch (error.statusCode) {
+          default:
+            linkElement.innerHTML = 'Login';
+            linkElement.href = '/login';
+        }
+      });
+  };
+
+  class NvidiaApplicationButton extends HTMLElement {
+    constructor() {
+      const template = document.getElementById('application-button-template');
+      super();
+      this._shadowRoot = this.attachShadow({ 'mode': 'open' });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+    connectedCallback() {
+      const element = this._shadowRoot;
+      document.addEventListener('DOMContentLoaded', () => {
+        initApplicationButton(element);
+      });
+    }
+  }
+  window.customElements.define('nv-application-button', NvidiaApplicationButton);
+</script>
+
+<template id='application-text-template'>
+  <p></p>
+</template>
+
+<script>
+  class NvidiaApplicationText extends HTMLElement {
+    constructor() {
+      const template = document.getElementById('application-text-template');
+      super();
+      this._shadowRoot = this.attachShadow({ 'mode': 'open' });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+    connectedCallback() {
+
+    }
+  }
+  window.customElements.define('nv-application-text', NvidiaApplicationText);
+</script>
+
+
+
+
+<template id='nv-sf-form-validator-template'>
+  <script src="https://developer.nvidia.com/assets/sf-validation/moment-620a5949fff0ad37198f07464b91d7b7c110ecdb6f94ca90ca7d2e1b471f1da8.js"></script>
+  <script src="https://developer.nvidia.com/assets/sf-validation/validate.min-2160a65c1b5d4a5966544ad25af8fe99f11c636a99c516fee6c7afd3b1f21409.js"></script>
+  <p></p>
+</template>
+
+<script>
+  class NvidiaSalesforceValidator extends HTMLElement {
+    constructor() {
+      const template = document.getElementById('nv-sf-form-validator-template');
+      super();
+      this._shadowRoot = this.attachShadow({'mode': 'open'});
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
+    initComponent() {
+      if (!window.sfv) {
+        return;
+      }
+      validate.extend(validate.validators.datetime, {
+        parse: function (value, options) {
+          if (moment(value, options.format, true).isValid()) {
+            return +moment.utc(value);
+          }
+        },
+        format: function (value, options) {
+          var format = options.dateOnly ? "MM/DD/YYYY" : "MM/DD/YYYY hh:mm";
+          return moment.utc(value).format(format);
+        }
+      });
+
+      function showErrors(errors) {
+        $.each(errors, function (index, element) {
+          $('input[name="' + errors[index]['attribute'] + '"]').each(function (i, e) {
+            var errorMessage = errors[index]['options']['message'];
+            $('<div class="js-validation-errors">' + errorMessage + '</div>').insertAfter(e);
+          }).focus();
+        });
+      }
+
+      function isValidForm(form, constraints) {
+        var errors = validate(form, constraints, {format: "detailed"});
+        if (errors) {
+          showErrors(errors);
+          return false;
+        }
+        return true;
+      }
+
+      $.each(window.sfv, function (index, element) {
+        $(element.target).on('click', function (event) {
+          $('.js-validation-errors').remove();
+          if (!isValidForm(element.form, element.constraints)) {
+            event.preventDefault();
+          }
+        });
+      });
+    }
+
+    connectedCallback() {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.initComponent();
+      });
+    }
+  }
+
+  window.customElements.define('nv-sf-form-validator', NvidiaSalesforceValidator);
+</script>
+
+
+<script src="https://developer.nvidia.com/assets/horizontal-chart/d3.v4.min-41cfecdf7c41476e805de7afacf4aacdd1a4be6947fbecf95217e947ebc2faf5.js"></script>
+<script src="https://developer.nvidia.com/assets/horizontal-chart/visualize-d-16cf14d4b63d6031e6c18983e91ac6d2b1b1f8140d15e351a9c847f8610b7e5b.js"></script>
+
+<template id="chart-template">
+  <style>
+      @import "https://developer.nvidia.com/assets/devzone3/modules/nvidia_tokens/nvidia-charts-6cd359a7ee3970fbfc15904a87ff96d214c208297870d8db7f6a5fa2c449bea7.css";
+  </style>
+  <div class="horizontal-chart-component">
+    <div class="chart-container">
+      <h4 class="chart-title"></h4>
+      <p class="chart-subtitle"></p>
+      <div class="legend"></div>
+      <svg data-nvidia-chart="true" data-chart-legend=""></svg>
+      <p class="chart-footnote"></p>
+    </div>
+  </div>
+</template>
+
+<script>
+  function chartInit(element) {
+    const chart = element.querySelector('svg[data-nvidia-chart]');
+    const isRendered = chart.getAttribute("data-rendered");
+    if (isRendered) {
+      return;
+    }
+
+    const svgChart = d3.select(chart);
+    const bars = JSON.parse(chart.dataset['chartBars']);
+    const ticks = JSON.parse(chart.dataset['chartTicks']);
+    const xAxisLabel = chart.dataset['xAxisLabel'];
+    const yAxisLabel = chart.dataset['yAxisLabel'];
+    const barPadding = chart.dataset['barPadding'];
+    const milestone = null;
+
+    const isGrouped = chart.dataset['isGrouped'] === 'true';
+    if (isGrouped) {
+      const legend = JSON.parse(chart.dataset['chartLegend']);
+      createGroupedHorizontalBarChart(svgChart, bars, barPadding, legend, ticks, milestone, xAxisLabel, yAxisLabel, false);
+    } else {
+      createHorizontalBarChart(svgChart, bars, barPadding, ticks, xAxisLabel, yAxisLabel, "", false);
+    }
+
+    chart.dataset['rendered'] = 'true';
+  }
+
+  $('a[data-toggle="tab"]').on("click", function (event) {
+    setTimeout(() => {
+      // Triggering 'resize' event to redraw charts.
+      window.dispatchEvent(new Event('resize'));
+
+      const target = jQuery(event.target).parents('.nav.nav-tabs').siblings('.tab-content').find('.tab-pane.active');
+      if (target.length > 0) {
+        const svg = jQuery(target).find('horizontal-chart');
+        if (svg.length) {
+          svg.each((idx, el) => {
+            setTimeout(function () {
+              const chartContainer = el._shadowRoot.querySelector('.chart-container');
+              chartInit(chartContainer);
+            }, 300);
+          });
+        }
+      }
+    }, 50);
+  });
+
+  async function loadFileSource(url) {
+    try{
+      const response = await fetch(url);
+      return response.json();
+    }catch (e) {
+      console.warn(`Failed to load chart data. URL: ${url}`);
+    }
+    return {};
+  }
+
+  class HorizontalChartElement extends HTMLElement {
+    constructor() {
+      const horizontalCharTemplate = document.getElementById('chart-template');
+      super();
+      this._shadowRoot = this.attachShadow({ 'mode': 'open' });
+      this._shadowRoot.appendChild(horizontalCharTemplate.content.cloneNode(true));
+    }
+    connectedCallback() {
+      const url = this.getAttribute('source');
+      const element = this._shadowRoot;
+      document.addEventListener("DOMContentLoaded", function () {
+        loadFileSource(url).then(data => {
+          const {
+            chartTitle: title,
+            chartSubtitle: subTitle,
+            chartFootnote: footNote,
+            chartId: id,
+            isGrouped: isGrouped,
+            legendData,
+            barPadding,
+            xAxisLabel,
+            yAxisLabel,
+            bars,
+            ticks
+          } = data;
+          element.querySelector('.chart-title').innerHTML = title;
+
+          // Subtitle
+          if (subTitle) {
+            element.querySelector('.chart-subtitle').innerHTML = subTitle;
+          } else {
+            element.querySelector('.chart-subtitle').remove();
+          }
+
+          // Chart
+          const svgElement = element.querySelector('.chart-container svg');
+          svgElement.id = id;
+
+          const dataAttributes = [
+            ['isGrouped', isGrouped ? 'true' : 'false', ''],
+            ['chartLegend', JSON.stringify(legendData), ''],
+            ['xAxisLabel', xAxisLabel, ''],
+            ['yAxisLabel', yAxisLabel, ''],
+            ['barPadding', barPadding, 5],
+            ['chartBars', bars, ''],
+            ['chartTicks', ticks, ''],
+          ];
+          dataAttributes.forEach(dataAttribute => {
+            if (dataAttribute[0] === 'chartBars' && dataAttribute[1]) {
+              dataAttribute[1] = JSON.stringify(dataAttribute[1]);
+            }
+            if (dataAttribute[0] === 'chartTicks' && dataAttribute[1]) {
+              dataAttribute[1] = JSON.stringify(dataAttribute[1]);
+            }
+
+            svgElement.dataset[dataAttribute[0]] = dataAttribute[1] ? dataAttribute[1] : dataAttribute[2];
+          });
+
+          // Caption
+          if (footNote) {
+            element.querySelector('.chart-footnote').innerHTML = footNote;
+          } else {
+            element.querySelector('.chart-footnote').remove();
+          }
+
+          // Init chart
+          const chartContainer = element.querySelector('.chart-container');
+          setTimeout(function () {
+            if (jQuery(chartContainer).is(':visible')) {
+              chartInit(chartContainer);
+            }
+          }, 300);
+        });
+      })
+    }
+  }
+
+  window.customElements.define('horizontal-chart', HorizontalChartElement);
+</script>
+
+
+
+  <script src="https://developer.nvidia.com/assets/tablefilter/tablefilter-e8295498b8f34d53fbb98264abcc88fb72c57915ee6a13b15361d5df0127ebbb.js"></script>
+
+
+<template id="nv-filtered-table-template">
+  <div class="nvidia-filtered-table-wrapper"></div>
+</template>
+
+<script>
+  const buildTableIdentity = (function (str) {
+    let counter = 0;
+    return function (str) {counter += 1; return `${str}-${counter}`}
+  })();
+
+  function slugify(str) {
+    return String(str)
+      .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+      .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+      .trim() // trim leading or trailing whitespace
+      .toLowerCase() // convert to lowercase
+      .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+      .replace(/\s+/g, '-') // replace spaces with hyphens
+      .replace(/-+/g, '-'); // remove consecutive hyphens
+  }
+
+  /**
+   * Returns URL params.
+   *
+   * @returns {any|{[p: string]: string}}
+   */
+  function getUrlParams() {
+    try {
+      return Object.fromEntries(new URLSearchParams(location.search));
+    } catch (e) {
+      // Fallback for IE11.
+      let search = location.search.substring(1)
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"');
+      return JSON.parse('{"' + search + '"}', function (key, value) {
+        return key === "" ? value : decodeURIComponent(value);
+      });
+    }
+  }
+
+  /**
+   * Query string extension for TableFilter.
+   *
+   * @see http://www.tablefilter.com/extension-run-time.html
+   *
+   * @param {Object} tf
+   *   TableFilter instance.
+   * @constructor
+   */
+  function QueryStringExtension(tf) {
+    this.tf = tf;
+  }
+  QueryStringExtension.prototype.init = function () {
+    let tf = this.tf;
+    tf.emitter.on(['after-filtering'], this.afterFiltering.bind(this));
+  };
+  QueryStringExtension.prototype.afterFiltering = function (tf, terms) {
+    const config = tf.cfg;
+    // Get query string.
+    let existingParams = getUrlParams();
+    // Remove values related to current table.
+    $.each(terms, function (index, element) {
+      let key = config.qs_filters[index];
+      delete existingParams[config.table_identity + "_" + key];
+    });
+    $.each(terms, function (index, element) {
+      if (element.length) {
+        existingParams[config.table_identity + "_" + config.qs_filters[index]] = element;
+      }
+    });
+    const paramsKeys = Object.keys(existingParams).sort();
+    let sortedParams = {};
+    $.each(paramsKeys, function (i, e) {
+      sortedParams[e] = existingParams[e];
+    });
+    const params = $.param(sortedParams);
+    const url = window.location.pathname + '?' + decodeURI(params);
+    window.history.replaceState({}, '', url);
+  };
+
+  function addQueryStringExtension(tf) {
+    let queryStringExtension = new QueryStringExtension(tf);
+    try {
+      tf.registerExtension(queryStringExtension, 'queryStringExtension');
+      queryStringExtension.init();
+    } catch (e) {
+      console.log('Failed to init URL params handler.');
+    }
+  }
+
+  /**
+   * Filtered table web component.
+   */
+  class NvFilteredTableWebComponent extends HTMLElement {
+    constructor() {
+      super();
+      const elementTemplate = document.getElementById('nv-filtered-table-template');
+      this._shadowRoot = this.attachShadow({'mode': 'open'});
+      this._shadowRoot.appendChild(elementTemplate.content.cloneNode(true));
+    }
+
+    async loadSourceFile(url) {
+      try {
+        const response = await fetch(url);
+        return response.json();
+      } catch (e) {
+        console.warn(`Failed to load table data. URL: ${url}`);
+      }
+      return {};
+    }
+
+    fetchComponentData = (url, el, hash) => this.loadSourceFile(url).then((data) => this.instantiateComponent(data, el, hash));
+
+    getColumnTypes(config) {
+      return Array.from(config).map((col) => {
+        const {columnType} = col;
+        return columnType ? columnType : 'string';
+      });
+    }
+
+    addFilterWidgets(config, headerData) {
+      headerData.forEach((col, idx) => {
+        const {filterWidget} = col;
+        if (filterWidget) {
+          config[`col_${idx}`] = filterWidget;
+        }
+      });
+      return config;
+    }
+
+    instantiateComponent(data, element, hash) {
+      const {tableIndex: headerData, tableItems: rowsData, tableIdentity} = data;
+
+      let filterConfig = {
+        base_path: '/',
+        sticky_headers: true,
+        alternate_rows: true,
+        mark_active_columns: {
+          highlight_column: true,
+        },
+        loader: true,
+        highlight_keywords: true,
+        no_results_message: true,
+        toolbar: false,
+        help_instructions: false,
+        paging: {
+          results_per_page: ['Records: ', [25, 50, 100]]
+        },
+        auto_filter: true,
+        responsive: true,
+        grid_layout: {
+          width: '100%',
+          tbl_cont_css_class: 'nvidia-filtered-table'
+        },
+        clear_filter_text: 'All',
+        col_types: this.getColumnTypes(headerData),
+        extensions: [
+          {name: ''}
+        ],
+        flt_css_class: 'filter-control',
+        on_filters_loaded: (e) => {
+          const {cfg} = e;
+          if (!cfg) {
+            return;
+          }
+          const {defaultValues} = cfg;
+          if(!Array.isArray(defaultValues)) {
+            return;
+          }
+          if (defaultValues.length === 0) {
+            return;
+          }
+
+          defaultValues.forEach((defaultValue) => {
+            const {index, value} = defaultValue;
+            let headerCell = document.querySelector('.header-row th[data-idx="' + index + '"]');
+            if (!headerCell) {
+              return;
+            }
+            const filterIndex = headerCell.dataset['fidx'];
+            e.setFilterValue(filterIndex, value);
+          });
+          e.filter();
+        },
+        qs_filters: headerData.map((item) => {
+          return slugify(item?.columnName);
+        }),
+      };
+
+      filterConfig = this.addFilterWidgets(filterConfig, headerData);
+
+      const id = tableIdentity ? tableIdentity : buildTableIdentity('t');
+      filterConfig.table_identity = id;
+
+      const defaultValues = headerData
+        .filter(item => item?.defaultValue !== undefined)
+        .map(item => {
+          return {index: item['column'], value: item['defaultValue']};
+        });
+
+      const filtersMap = headerData.map(item => {
+        const {columnName, column} = item;
+        return { index: column, key: `${id}_${slugify(columnName)}`}
+      });
+
+      const sp = new URLSearchParams(location.search);
+      filtersMap.forEach(filter => {
+        if (!sp.has(filter.key)) {
+          return;
+        }
+        defaultValues.push({index: filter.index, value: sp.get(filter.key)});
+      });
+
+      const detail = {
+        hash,
+        headerData,
+        rowsData,
+        defaultValues,
+        filterConfig: {
+          table_identity: id,
+          config: filterConfig,
+          predefined_selects: JSON.stringify([]),
+          labels_width: [],
+        },
+      };
+      const event = new CustomEvent('nv.filterTable.build', {detail});
+      document.dispatchEvent(event);
+    }
+
+    connectedCallback() {
+      const url = this.getAttribute('source');
+      const hash = this.getAttribute('data-hash');
+      const element = this._shadowRoot;
+      document.addEventListener('DOMContentLoaded', () => this.fetchComponentData(url, element, hash));
+    }
+  }
+
+  // Register web component.
+  window.customElements.define('nv-filtered-table', NvFilteredTableWebComponent);
+
+  /**
+   * Builds table header.
+   *
+   * @param {Array} data
+   * @param {HTMLElement} parentElement
+   */
+  const buildHeader = (data, parentElement) => {
+    data.forEach((item, idx) => {
+      const {column, columnName} = item;
+      const cell = document.createElement('th')
+      cell.dataset['idx'] = column;
+      cell.dataset['fidx'] = idx;
+      cell.innerHTML = columnName;
+
+      const {labelWidth, columnWidth} = item;
+      if (labelWidth) {
+        cell.dataset['label_width'] = labelWidth;
+      }
+
+      if (columnWidth && Number.isInteger(columnWidth) && columnWidth > 0) {
+        cell.width = columnWidth + '%';
+      } else if (columnWidth && (columnWidth.endsWith('em') || columnWidth.endsWith('px') || columnWidth.endsWith('%'))) {
+        cell.width = columnWidth;
+      }
+
+      parentElement.appendChild(cell);
+    });
+  }
+
+  /**
+   * Builds table rows.
+   *
+   * @param {Object} headerData
+   * @param {Array} data
+   * @param {HTMLElement} parentElement
+   */
+  const buildRows = (headerData, data, parentElement) => {
+    data.forEach(partner => {
+      const {name, logo, URL: partnerUrl, cameras} = partner;
+
+      const logoCellContent = `
+<a href="${partnerUrl}">
+  <img src="${logo}" alt="${name}" title="${name}" loading="lazy">
+</a>
+<span class="element-invisible">${name}</span>
+`;
+      cameras.forEach(camera => {
+        const row = document.createElement('tr');
+
+        const logoCell = document.createElement('td');
+        logoCell.innerHTML = logoCellContent;
+        row.appendChild(logoCell);
+
+        for (const [key, value] of Object.entries(headerData)) {
+          if (!camera[value.column]) {
+            continue;
+          }
+          const cell = document.createElement('td');
+          let cameraValue = camera[value.column];
+          let cellHTML = '';
+          if (typeof cameraValue === 'object') {
+            const {type, product_url, product_img, td_text} = cameraValue
+            let img = '';
+            if(product_img !== "—") {
+              img = `<img src="${product_img}" alt="${td_text}" title="${td_text}">`;
+            }
+            let html = `
+<div class="product-link">
+  <a href="${product_url}" target="_blank">
+${img}
+  <div class="product-title">${td_text}</div>
+  </a>
+</div>`
+            cellHTML = html.trim();
+          } else if (typeof cameraValue === 'string') {
+            cellHTML = cameraValue
+          }
+          cell.innerHTML = cellHTML;
+          row.appendChild(cell);
+        }
+
+        parentElement.appendChild(row);
+      })
+    });
+  }
+
+  const initTable = (table, filtersConfig, defaultValues) => {
+    filtersConfig.config.defaultValues = defaultValues;
+    const nvidiaFilteredTable = new TableFilter(table, filtersConfig.config);
+
+    nvidiaFilteredTable.emitter.on(['before-loading-extensions'], addQueryStringExtension);
+
+    nvidiaFilteredTable.init();
+  };
+
+  document.addEventListener('nv.filterTable.build', (event) => {
+    const {detail} = event;
+    const {headerData, rowsData, filterConfig, hash, defaultValues} = detail;
+
+    const component = document.querySelector('nv-filtered-table[data-hash="' + hash + '"]');
+    const element = document.createElement('div');
+    element.classList.add('nvidia-filtered-table-wrapper');
+    element.innerHTML = `<div class="table-responsive"><table class="table table-hover table-striped sticky-enabled"><thead></thead><tbody></tbody></table></div>`;
+    component.after(element);
+
+    const table = element.querySelector('table');
+    const tableHeader = element.querySelector('table thead');
+    const tableHeaderRow = document.createElement('tr');
+    tableHeaderRow.classList.add('header-row');
+    tableHeader.appendChild(tableHeaderRow);
+    buildHeader(headerData, tableHeaderRow);
+
+    const tableBody = element.querySelector('table tbody');
+    buildRows(headerData, rowsData, tableBody);
+
+    initTable(table, filterConfig, defaultValues);
+  });
+</script>
+
+
+
+  
+
+  
+
+<script src="https://developer.nvidia.com/assets/nv-developer-menu-8ae864e49d5d53c328146a66e7ad6d73242af7511f642a7d1aa1ffedd496f826.js"></script>
+  <div id='footer' class='mt-auto'></div>
+  <script src="https://www.nvidia.com/content/dam/en-zz/Solutions/librarian/bundle-search-prod-pub-v3.1.js"></script>
+  <div id="librarian-overlay"></div>
+  <script defer>
+    setTimeout(() => {
+      LIBRARIAN.Home.mount({
+        elementId: 'librarian-overlay',
+        searchPage: false,
+        placeholder: '',
+        site: 'https://developer.nvidia.com',
+        retainFilters: true,
+        overlay: true,
+        pillsOpen: true,
+        suggestedSearchPills: ["CUDA Toolkit","cuDNN Installation Guide","Computer Vision for Self-Driving Cars","DGX SuperPOD","NVIDIA Container Toolkit","Documentation for Triton Inference Server","NeMo Framework Fundamentals","TensorRT","Download SDK Manager","NVIDIA API Guides","Omniverse Renderer Microservice","CUDA Programming Guide","vGPU","Networking Solutions","Building a RAG Powered AI Chatbot"]
+      })
+    }, 1000)
+  </script>
+<script>
+  // The menu CDN publishes en-US and zh-CN only. Any other available locale
+  // (ja-JP reaches here via the login page and the /ja-jp/ path prefix) would
+  // 404 the header and footer fetches and report a menu error, so fall back
+  // rather than lose the nav.
+  const MENU_LOCALES = ['en-US', 'zh-CN'];
+
+  let menuLocale = 'en';
+
+  if (menuLocale == 'en') {
+    menuLocale = 'en-US';
+  }
+
+  if (!MENU_LOCALES.includes(menuLocale)) {
+    menuLocale = 'en-US';
+  }
+
+  function mountHeader(data = false) {
+    const headerTarget = document.getElementById('header');
+    if (!headerTarget) {
+      return;
+    }
+    let options = {
+      baseURL: window.location.origin,
+      signedIn: false,
+      locale: menuLocale
+    };
+
+    if (data) {
+      options.secondaryMenu = data;
+    }
+
+
+    options.showMembershipCardLink = true;
+
+    new NVDeveloperHeader({
+      target: headerTarget,
+      props: options
+    });
+  }
+
+  function mountFooter(data = false) {
+    const footerTarget = document.getElementById('footer');
+    if (!footerTarget) {
+      return;
+    }
+    let options = {
+      menu: data,
+      locale: menuLocale
+    };
+
+    new NVDeveloperFooter({
+      target: document.getElementById('footer'),
+      props: options
+    });
+  }
+
+  let url = 'd29g4g2dyqv443.cloudfront.net';
+  let headerMenuURL = "https://d29g4g2dyqv443.cloudfront.net/menu/en-US/accelerated-computing.json";
+
+  if (headerMenuURL) {
+    fetch(headerMenuURL)
+      .then(response => response.json())
+      .then(data => {
+        mountHeader(data);
+      })
+      .catch((error) => {
+        mountHeader();
+        window.nv.tracing.addError('menu', error);
+      });
+  } else {
+    mountHeader();
+  }
+
+  fetch(`https://${url}/menu/${menuLocale}/footer.json`)
+    .then(response => response.json())
+    .then(data => {
+      mountFooter(data);
+    })
+    .catch((error) => {
+      mountFooter();
+      window.nv.tracing.addError('menu', error);
+    });
+</script>
+
+  <script src="https://www.datadoghq-browser-agent.com/us1/v5/datadog-rum.js"></script>
+
+
+
+<script>
+  let silentAuthHost = 'www.nvidia.com';
+  let crossOriginPageUrl = `https://${silentAuthHost}/auth/hints/`;
+
+  function readHint() {
+    return new Promise((resolve) => {
+      const { origin: targetOrigin } = new URL(crossOriginPageUrl);
+
+      const iframe = document.createElement('iframe');
+      iframe.hidden = true;
+      iframe.src = crossOriginPageUrl;
+
+      function responseHandler(event) {
+        if (event.origin === targetOrigin) {
+          iframe.parentNode.removeChild(iframe);
+          return resolve(event.data);
+        }
+      }
+
+      window.addEventListener('message', responseHandler, { once: true });
+
+      iframe.onload = () => {
+        iframe.contentWindow.postMessage({ type: 'read' }, targetOrigin);
+      }
+
+      document.body.appendChild(iframe);
+    });
+  }
+
+  function writeHint(login_hint, idp_id, timestamp, sub) {
+    const { origin: targetOrigin } = new URL(crossOriginPageUrl);
+
+    const iframe = document.createElement('iframe');
+    iframe.hidden = true;
+    iframe.src = crossOriginPageUrl;
+
+    iframe.onload = () => {
+      const message = { type: 'write', login_hint, idp_id, timestamp, sub };
+      iframe.contentWindow.postMessage(message, targetOrigin);
+    }
+
+    document.body.appendChild(iframe);
+  }
+
+  function deleteHint() {
+    const { origin: targetOrigin } = new URL(crossOriginPageUrl);
+
+    const iframe = document.createElement('iframe');
+    iframe.hidden = true;
+    iframe.src = crossOriginPageUrl;
+
+    iframe.onload = () => {
+      iframe.contentWindow.postMessage({ type: 'delete' }, targetOrigin);
+    }
+
+    document.body.appendChild(iframe);
+  }
+
+
+</script>
+
+<script>_satellite.pageBottom();</script>
+<script src="https://developer.nvidia.com/assets/nv-alert/nv-alert-2fcf4faf418bd05dbbfc6d06c67713fd512ff67b25b6059be61edd35a7bcc0ed.js"></script>
+<script src="https://developer.nvidia.com/packs/js/runtime-131d2aba625c2462943c.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/4692-e2ed051c68e93113bb58.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/2681-6ac336ff34441936c0fb.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/2778-e8f3c5f27fbb1956fdb2.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/9878-baa65d618824b708a55b.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/8465-f321c9c28242e4383fa8.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/4622-1cd0dbd2a0f0b5243900.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/531-33cd478f5521b2e37d99.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/486-2975fec32bf8f25fd78c.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/8311-71b2da0387dad11f356f.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/1252-6d8bb3f37b33aca41843.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/8823-bac8f579788282b3f2cd.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/775-6049381e1e3bb91e1a86.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/6900-c03f6466ac1ba9ddf052.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/application-c8ec7c5a45b23818d655.js" defer="defer"></script>
+<script src="https://developer.nvidia.com/packs/js/ls_track-d4505a41101e752062c8.js" defer="defer"></script>
+</body>
+</html>

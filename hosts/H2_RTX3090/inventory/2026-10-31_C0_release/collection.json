@@ -1,0 +1,7 @@
+{
+  "started_by": "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/inventory.py",
+  "finished_utc": "2026-10-31T10:14:39.674585+00:00",
+  "script_sha256": "85ce923ee924678f362d6aec6f42e8247e60f9c8d07666a8c52319fb512aa389",
+  "query_sha256": "bcfaa0f6e1e169263f57f4a5d03c6a4cd109853ab295616af33a765f5b17aa93",
+  "scope": "enumeration/info only; no context/program/queue/device allocation/dispatch"
+}

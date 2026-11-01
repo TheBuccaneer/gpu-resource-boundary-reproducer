@@ -1,0 +1,12 @@
+{
+  "input_zip": "/home/rock/Desktop/OpenCL2_H2_S01_Ready_For_Daybreak_R2_2026-10-31.zip",
+  "input_zip_sha256": "29c82b70b60cd8f6443dc1ba7682486abec1cca3bfa08a50f4d6a272d9b478dc",
+  "unchanged_R2_files": {
+    "hosts/H2_RTX3090/s01/h2_s01.c": "8450eea4a26768fde3844c0e319e70bd03ec9f77379fcaa4a276caaf9915a873",
+    "hosts/H2_RTX3090/s01/TEST_CASES.json": "7e644016244271bc1e5c83b4779c74a61b11f0c4a19c17b345d873a9387806be",
+    "hosts/H2_RTX3090/s01/verify_log.py": "b41fc5d6786d321f5b65fee78e64fc68f386a8ccd916acb02c4aea77dbbdeef3",
+    "hosts/H2_RTX3090/c1/reproducers/h2_common.h": "93631c73bd42a6980ed9acd316c62772a8a5d28261e4c1638335f31230d52728",
+    "hosts/H2_RTX3090/s01/tests/test_s01_offline.py": "ca7b13cc3c07b81461c7f47781e11472cffd3893763c5dba35c946b067c1af9a",
+    "hosts/H2_RTX3090/s01/tests/protocol_fixture.py": "b16bc53ec51429b607835e1df6c31589c4754f6f1fdc43145bacf614ef0c3c77"
+  }
+}

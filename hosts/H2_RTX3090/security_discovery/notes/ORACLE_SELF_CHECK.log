@@ -1,0 +1,1 @@
+PASS: CPU-only oracle controls detect payload, boundary-guard, last-guard and length mutations.

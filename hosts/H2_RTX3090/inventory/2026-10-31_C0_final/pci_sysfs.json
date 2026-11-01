@@ -1,0 +1,28 @@
+[
+  {
+    "bdf": "0000:01:00.0",
+    "driver": "/sys/bus/pci/drivers/nvidia",
+    "vendor": "0x10de",
+    "device": "0x2204",
+    "class": "0x030000",
+    "numa_node": "-1",
+    "local_cpulist": "0-63",
+    "current_link_speed": "5.0 GT/s PCIe",
+    "current_link_width": "16",
+    "max_link_speed": "16.0 GT/s PCIe",
+    "max_link_width": "16"
+  },
+  {
+    "bdf": "0000:01:00.1",
+    "driver": "/sys/bus/pci/drivers/snd_hda_intel",
+    "vendor": "0x10de",
+    "device": "0x1aef",
+    "class": "0x040300",
+    "numa_node": "-1",
+    "local_cpulist": "0-63",
+    "current_link_speed": "5.0 GT/s PCIe",
+    "current_link_width": "16",
+    "max_link_speed": "16.0 GT/s PCIe",
+    "max_link_width": "16"
+  }
+]

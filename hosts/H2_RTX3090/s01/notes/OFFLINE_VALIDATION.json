@@ -1,0 +1,149 @@
+{
+  "verified_utc": "2026-10-31T13:57:50.397458+00:00",
+  "revision": "S01-R3",
+  "all_passed": true,
+  "checks": [
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wpedantic",
+        "-c",
+        "hosts/H2_RTX3090/s01/h2_s01.c",
+        "-o",
+        "/tmp/s01-static-rhwg8y6x/s01.o"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "GCC host object compilation only"
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wpedantic",
+        "hosts/H2_RTX3090/s01/h2_s01.c",
+        "-lOpenCL",
+        "-ldl",
+        "-o",
+        "/tmp/s01-static-rhwg8y6x/h2_s01"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "Host link only; executable never started"
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wpedantic",
+        "--analyze",
+        "-Xanalyzer",
+        "-analyzer-output=text",
+        "hosts/H2_RTX3090/s01/h2_s01.c"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "Clang static analysis only"
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wpedantic",
+        "-c",
+        "hosts/H2_RTX3090/c1/reproducers/h2_c1.c",
+        "-o",
+        "/tmp/s01-static-rhwg8y6x/h2_c1.c.o"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "Existing h2_c1.c host compilation"
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wpedantic",
+        "-c",
+        "hosts/H2_RTX3090/c1/reproducers/h2_b12_query.c",
+        "-o",
+        "/tmp/s01-static-rhwg8y6x/h2_b12_query.c.o"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "Existing h2_b12_query.c host compilation"
+    },
+    {
+      "argv": [
+        "python3",
+        "-W",
+        "error::ResourceWarning",
+        "hosts/H2_RTX3090/s01/tests/test_supervisor_e2e.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_approval_id_cannot_change_manifest_to_reuse_budget (__main__.SupervisorE2E.test_approval_id_cannot_change_manifest_to_reuse_budget) ... ok\ntest_corrupt_ledger_fails_closed (__main__.SupervisorE2E.test_corrupt_ledger_fails_closed) ... ok\ntest_distinct_approved_repetition_numbers (__main__.SupervisorE2E.test_distinct_approved_repetition_numbers) ... ok\ntest_failed_exec_remains_consumed (__main__.SupervisorE2E.test_failed_exec_remains_consumed) ... ok\ntest_failure_exit (__main__.SupervisorE2E.test_failure_exit) ... ok\ntest_inconclusive (__main__.SupervisorE2E.test_inconclusive) ... ok\ntest_invalid_schema_fails_closed (__main__.SupervisorE2E.test_invalid_schema_fails_closed) ... ok\ntest_missing_ledger_fails_closed (__main__.SupervisorE2E.test_missing_ledger_fails_closed) ... ok\ntest_parallel_same_trial_only_one_child (__main__.SupervisorE2E.test_parallel_same_trial_only_one_child) ... ok\ntest_pass (__main__.SupervisorE2E.test_pass) ... ok\ntest_replay_other_out_and_result_cleanup (__main__.SupervisorE2E.test_replay_other_out_and_result_cleanup) ... ok\ntest_reservation_persists_after_post_commit_sync_error (__main__.SupervisorE2E.test_reservation_persists_after_post_commit_sync_error) ... ok\ntest_s01_plan_binding (__main__.SupervisorE2E.test_s01_plan_binding) ... ok\ntest_signal (__main__.SupervisorE2E.test_signal) ... ok\ntest_skip (__main__.SupervisorE2E.test_skip) ... ok\ntest_start_failure_logged (__main__.SupervisorE2E.test_start_failure_logged) ... ok\ntest_supervisor_crash_remains_consumed (__main__.SupervisorE2E.test_supervisor_crash_remains_consumed) ... ok\ntest_timeout_kill_escalation (__main__.SupervisorE2E.test_timeout_kill_escalation) ... ok\ntest_timeout_remains_consumed (__main__.SupervisorE2E.test_timeout_remains_consumed) ... ok\ntest_unapproved_hash (__main__.SupervisorE2E.test_unapproved_hash) ... ok\ntest_unapproved_path (__main__.SupervisorE2E.test_unapproved_path) ... ok\ntest_unavailable_ledger_fails_closed (__main__.SupervisorE2E.test_unavailable_ledger_fails_closed) ... ok\ntest_unexpected_trigger_fails_closed (__main__.SupervisorE2E.test_unexpected_trigger_fails_closed) ... ok\ntest_wrong_ledger_identity_fails_closed (__main__.SupervisorE2E.test_wrong_ledger_identity_fails_closed) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 8.016s\n\nOK\n",
+      "scope": "CPU supervisor end-to-end"
+    },
+    {
+      "argv": [
+        "python3",
+        "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/s01/tests/test_s01_offline.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_case_mapping_and_execution_gate (__main__.S01Offline.test_case_mapping_and_execution_gate) ... ok\ntest_case_object_context_and_status_mutations (__main__.S01Offline.test_case_object_context_and_status_mutations) ... ok\ntest_clone_stale_noop_wrong_output_and_double_effect (__main__.S01Offline.test_clone_stale_noop_wrong_output_and_double_effect) ... ok\ntest_complete_protocols (__main__.S01Offline.test_complete_protocols) ... ok\ntest_daybreak_minimal_false_success_logs (__main__.S01Offline.test_daybreak_minimal_false_success_logs) ... ok\ntest_every_required_record_removed_duplicated_or_swapped (__main__.S01Offline.test_every_required_record_removed_duplicated_or_swapped) ... ok\ntest_payload_guards_length_and_false_expected_tags (__main__.S01Offline.test_payload_guards_length_and_false_expected_tags) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 17.819s\n\nOK\n",
+      "scope": "S01 full protocol and mutation tests"
+    },
+    {
+      "argv": [
+        "python3",
+        "/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/security_discovery/tests/test_security_audit.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_b12_pure_c_assertions (__main__.AuditTests.test_b12_pure_c_assertions) ... ok\ntest_exported_snapshot_does_not_invent_git_commit (__main__.AuditTests.test_exported_snapshot_does_not_invent_git_commit) ... ok\ntest_git_untracked_content_and_generated_output_provenance (__main__.AuditTests.test_git_untracked_content_and_generated_output_provenance) ... ok\ntest_missing_or_draft_approval (__main__.AuditTests.test_missing_or_draft_approval) ... ok\ntest_script_rejected (__main__.AuditTests.test_script_rejected) ... ok\ntest_tampered_binary_rejected_before_child (__main__.AuditTests.test_tampered_binary_rejected_before_child) ... ok\ntest_valid_binding_and_sealed_cpu_execution (__main__.AuditTests.test_valid_binding_and_sealed_cpu_execution) ... ok\ntest_wrong_path_case_repeat_plan_workspace_commit_environment (__main__.AuditTests.test_wrong_path_case_repeat_plan_workspace_commit_environment) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.338s\n\nOK\n",
+      "scope": "Existing CPU audit regressions"
+    },
+    {
+      "argv": [
+        "python3",
+        "hosts/H2_RTX3090/c1/reproducers/oracle.py",
+        "--self-check"
+      ],
+      "returncode": 0,
+      "stdout": "PASS: CPU-only oracle controls detect payload, boundary-guard, last-guard and length mutations.\n",
+      "stderr": "",
+      "scope": "Existing synthetic C1 oracle"
+    }
+  ],
+  "python_ast": "pass",
+  "supervisor_e2e_methods": 24,
+  "s01_offline_methods": 7,
+  "existing_audit_methods": 8,
+  "b12_host_assertions": 22,
+  "OpenCL_runtime_invocations": 0,
+  "GPU_kernel_enqueues": 0,
+  "compiled_linked_OpenCL_program_executed": false
+}

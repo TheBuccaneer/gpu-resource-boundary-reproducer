@@ -1,0 +1,16 @@
+0000:01:00.0 VGA compatible controller: NVIDIA Corporation GA102 [GeForce RTX 3090] (rev a1) (prog-if 00 [VGA controller])
+	Subsystem: Gigabyte Technology Co., Ltd Device 4044
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+	Latency: 0
+	Interrupt: pin A routed to IRQ 141
+	IOMMU group: 63
+	Region 0: Memory at ca000000 (32-bit, non-prefetchable) [size=16M]
+	Region 1: Memory at 201e0000000 (64-bit, prefetchable) [size=256M]
+	Region 3: Memory at 201f0000000 (64-bit, prefetchable) [size=32M]
+	Region 5: I/O ports at 3000 [size=128]
+	Expansion ROM at cb000000 [virtual] [disabled] [size=512K]
+	Capabilities: <access denied>
+	Kernel driver in use: nvidia
+	Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia
+

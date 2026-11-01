@@ -1,0 +1,2 @@
+index, name, pci.bus_id, driver_version, memory.total [MiB], compute_cap
+0, NVIDIA GeForce RTX 3090, 00000000:01:00.0, 580.178.04, 24576 MiB, 8.6

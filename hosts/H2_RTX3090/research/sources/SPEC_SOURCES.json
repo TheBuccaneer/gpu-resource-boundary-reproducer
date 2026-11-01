@@ -1,0 +1,14 @@
+[
+  {
+    "file": "cl_khr_semaphore.asciidoc",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Docs/0027b7f1a5e97b1bf5256888757479e012a5cb59/api/cl_khr_semaphore.asciidoc",
+    "sha256": "e5f4ff29e5b5b2ffbc206130dc600ae7f8239cffa18c312e4e9ef4eea89ee59c",
+    "retrieved_utc": "2026-10-31T10:14:18.402146+00:00"
+  },
+  {
+    "file": "cl_khr_external_semaphore.asciidoc",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-Docs/0027b7f1a5e97b1bf5256888757479e012a5cb59/api/cl_khr_external_semaphore.asciidoc",
+    "sha256": "d51a393f50e3ed4f9c68e8d26f1c94f5e41378c0f164b4d8f4753ad04aa1adae",
+    "retrieved_utc": "2026-10-31T10:14:18.703200+00:00"
+  }
+]

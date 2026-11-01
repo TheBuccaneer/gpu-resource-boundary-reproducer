@@ -1,0 +1,182 @@
+[
+  {
+    "file": "cts/test_conformance/api/negative_device.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/negative_device.cpp",
+    "sha256": "a87cb36252018486739217be6f1d067fe073a8625edca8352e33f331b8f57da6",
+    "retrieved_utc": "2026-10-31T10:37:39.713171+00:00"
+  },
+  {
+    "file": "cts/test_conformance/api/negative_enqueue_marker.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/negative_enqueue_marker.cpp",
+    "sha256": "b620a8873176c659c299c7b3a318b35a013be9be7e47e29ed7170063494fd05f",
+    "retrieved_utc": "2026-10-31T10:37:39.711188+00:00"
+  },
+  {
+    "file": "cts/test_conformance/api/negative_enqueue_ndrange.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/negative_enqueue_ndrange.cpp",
+    "sha256": "9653f824e21b6c670c3c88d9fdb4a956694564f6ccf363717dc9dca67467f2b5",
+    "retrieved_utc": "2026-10-31T10:37:39.712099+00:00"
+  },
+  {
+    "file": "cts/test_conformance/api/negative_platform.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/negative_platform.cpp",
+    "sha256": "a22da06cbdaa022ae06cf2b61227006e5138669853c68e22928535ec6617e1e2",
+    "retrieved_utc": "2026-10-31T10:37:39.711877+00:00"
+  },
+  {
+    "file": "cts/test_conformance/api/test_kernel_arg_changes.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/api/test_kernel_arg_changes.cpp",
+    "sha256": "4f31a0e349a5d3a44fda7070e9212e3f83e90a2b4cce8fbf32a0e0324459cdf1",
+    "retrieved_utc": "2026-10-31T10:37:39.711525+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/CMakeLists.txt",
+    "sha256": "eda872c6eb6399e1115dc9a4b1af0a8857404821a6563f6f6ec85e069a725631",
+    "retrieved_utc": "2026-10-31T10:37:39.712332+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/action_classes.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/action_classes.cpp",
+    "sha256": "3787876dca2f2497705468db15933def680dcd545f8c87f076e910a8a90f2755",
+    "retrieved_utc": "2026-10-31T10:37:39.713393+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/action_classes.h",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/action_classes.h",
+    "sha256": "d9dc14dcf5adc94e353f4298925ad971c3154b1cda7d352fc151c28f36836e32",
+    "retrieved_utc": "2026-10-31T10:37:39.712614+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/main.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/main.cpp",
+    "sha256": "d7c6f2325882671f733f3f2747153f4b75540a2c9bd5562444751c703a50729e",
+    "retrieved_utc": "2026-10-31T10:37:39.974502+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/testBase.h",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/testBase.h",
+    "sha256": "7ca5bc0d192e3149387748bb736eb6e655a043343bf0b0348f3794100061468f",
+    "retrieved_utc": "2026-10-31T10:37:39.972910+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_callbacks.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_callbacks.cpp",
+    "sha256": "5b7145887ec3fb58f8a4cd957db89801ea6f79970b233ec6ad9ee4e9141fae2e",
+    "retrieved_utc": "2026-10-31T10:37:39.965046+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_event_dependencies.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_event_dependencies.cpp",
+    "sha256": "9f63ab9793c5dbaf4af2617da8fd58ececadd7c1e226e4fcb26ddaac92cc5233",
+    "retrieved_utc": "2026-10-31T10:37:39.958927+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_events.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_events.cpp",
+    "sha256": "7cd706634f50b8395a0b3c6f21caa198a84a134bd358269704d2b0a2553b19f3",
+    "retrieved_utc": "2026-10-31T10:37:39.985071+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_userevents.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_userevents.cpp",
+    "sha256": "543e26fc1dfc7350188278e8eaf2e325834a183349b8c3166393a3d39aa3dbc8",
+    "retrieved_utc": "2026-10-31T10:37:39.965798+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_userevents_multithreaded.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_userevents_multithreaded.cpp",
+    "sha256": "2e9f5b910ff04196338445f4a1a29f1129bea830f8af37f9ed4b421be2696af7",
+    "retrieved_utc": "2026-10-31T10:37:39.974228+00:00"
+  },
+  {
+    "file": "cts/test_conformance/events/test_waitlists.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/events/test_waitlists.cpp",
+    "sha256": "1494c9aa46b6d8c9550fffc802ec9a61ff805f8cb53b2f33bf7305eca2a6aeb9",
+    "retrieved_utc": "2026-10-31T10:37:39.973975+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_external_semaphore/CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_external_semaphore/CMakeLists.txt",
+    "sha256": "2647256170abe970aea1a362cbf310d5a5810ff77e5ac81ceb1b9d8b34e768ef",
+    "retrieved_utc": "2026-10-31T10:37:40.255146+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_external_semaphore/main.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_external_semaphore/main.cpp",
+    "sha256": "05b93188c18cea956cd88c3147dfb671c04653b33002d9c0501e392d314dc678",
+    "retrieved_utc": "2026-10-31T10:37:40.255319+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_external_semaphore/test_external_semaphore.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_external_semaphore/test_external_semaphore.cpp",
+    "sha256": "37a4a2ce9570df6a242240dd8ded99ce6c1fabfaf9f8ac4470d0b56a17b68dd6",
+    "retrieved_utc": "2026-10-31T10:37:40.269990+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/CMakeLists.txt",
+    "sha256": "366504214762b5532364839baea82a9d94b025b84c10841afcb26b5144154d27",
+    "retrieved_utc": "2026-10-31T10:37:40.258134+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/main.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/main.cpp",
+    "sha256": "fee9d0d8270ae739c19c730a660af20de2d440c9898cce614820da567f77d48c",
+    "retrieved_utc": "2026-10-31T10:37:40.257914+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/semaphore_base.h",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/semaphore_base.h",
+    "sha256": "a140cc23a213842138d0110c379d3995978c0f181b4f13c77dbd45322af5f03b",
+    "retrieved_utc": "2026-10-31T10:37:40.258352+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores.cpp",
+    "sha256": "ed604d9160daf98f2c1644efa9d67f76144c44def3bb1054ed7592d53e7ea0e9",
+    "retrieved_utc": "2026-10-31T10:37:40.258835+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_cross_queue.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_cross_queue.cpp",
+    "sha256": "b467147ee1c25f8102967cb85c706cdce30d952b82d9b90e977e8ba10da0ffdb",
+    "retrieved_utc": "2026-10-31T10:37:40.267310+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_create.cpp",
+    "sha256": "55f8f86fade69c3771abb38a8298860ee79bda6a58335b0417872d3e85605761",
+    "retrieved_utc": "2026-10-31T10:37:40.498526+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_getinfo.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_getinfo.cpp",
+    "sha256": "2b888a15c8eeb917e6ad8140936bdd2f88ecdf1c63ee1f3051360532d03945cf",
+    "retrieved_utc": "2026-10-31T10:37:40.495708+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_release_retain.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_release_retain.cpp",
+    "sha256": "9fa92f383b46eae73446838e60dbcbdadb96580f1da2dcc269fe7ccd2983fbbf",
+    "retrieved_utc": "2026-10-31T10:37:40.507629+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_wait_signal.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_negative_wait_signal.cpp",
+    "sha256": "174532b7bbf9117f2159915e43ba3ea7c2ba0ea9a95a6920fda766484732a518",
+    "retrieved_utc": "2026-10-31T10:37:40.536740+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_payload.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_payload.cpp",
+    "sha256": "7c5dfb7b8364f726a617f780510aa4731d437953061588ac1b20ec36f9331c9d",
+    "retrieved_utc": "2026-10-31T10:37:40.529822+00:00"
+  },
+  {
+    "file": "cts/test_conformance/extensions/cl_khr_semaphore/test_semaphores_queries.cpp",
+    "url": "https://raw.githubusercontent.com/KhronosGroup/OpenCL-CTS/406533a0b437f49d2e542bd293789adc7900cbed/test_conformance/extensions/cl_khr_semaphore/test_semaphores_queries.cpp",
+    "sha256": "c4a50b4cad5a7ef3abfb97bfc0621fb855557c96a81d7e0dbd90ee5ba21e1056",
+    "retrieved_utc": "2026-10-31T10:37:40.507795+00:00"
+  }
+]

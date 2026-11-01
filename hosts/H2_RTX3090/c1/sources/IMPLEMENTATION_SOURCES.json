@@ -1,0 +1,38 @@
+[
+  {
+    "file": "clvk_tree.json",
+    "url": "https://api.github.com/repos/kpet/clvk/git/trees/87d6dd3c55db4299b6e364bb8d41ba00d6eda7d7?recursive=1",
+    "retrieved_utc": "2026-10-31T10:38:57.316920+00:00",
+    "sha256": "6b2d322a3a268804c38d057e8c3e51db468a199b760d8c917bc029fdf0e28d6b"
+  },
+  {
+    "file": "clvk_CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/kpet/clvk/87d6dd3c55db4299b6e364bb8d41ba00d6eda7d7/CMakeLists.txt",
+    "retrieved_utc": "2026-10-31T10:38:57.317759+00:00",
+    "sha256": "d84ca3339da19d3e6927ab1e754aca51f437cf380566c7debd508153828eabcf"
+  },
+  {
+    "file": "pocl_CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/pocl/pocl/4549718771fcdae72516599230587ad019ef7066/CMakeLists.txt",
+    "retrieved_utc": "2026-10-31T10:38:57.318304+00:00",
+    "sha256": "75c3b1bcc9ca377dbcc009b9a30ae6ecb9224b6eaa5d0a8730a4f51a4e55898e"
+  },
+  {
+    "file": "pocl_install.rst",
+    "url": "https://raw.githubusercontent.com/pocl/pocl/4549718771fcdae72516599230587ad019ef7066/doc/sphinx/source/install.rst",
+    "retrieved_utc": "2026-10-31T10:38:57.318782+00:00",
+    "sha256": "d8837fe01685cf6e7e9ee1865f718e0a7178a8b43c781e55c7d648b45cc78c0c"
+  },
+  {
+    "file": "clvk_gitmodules.txt",
+    "url": "https://raw.githubusercontent.com/kpet/clvk/87d6dd3c55db4299b6e364bb8d41ba00d6eda7d7/.gitmodules",
+    "retrieved_utc": "2026-10-31T10:38:57.319465+00:00",
+    "sha256": "8d89642b8b92292fbad007bcc73093badacc7f559fd54f1256a7de3ea78e87f9"
+  },
+  {
+    "file": "pocl_readme.md",
+    "url": "https://raw.githubusercontent.com/pocl/pocl/4549718771fcdae72516599230587ad019ef7066/README.md",
+    "retrieved_utc": "2026-10-31T10:38:57.320952+00:00",
+    "sha256": "672dc5e86599afbcbab3cbc9f4c5b97434b678843e6278afa09f866332925c9a"
+  }
+]

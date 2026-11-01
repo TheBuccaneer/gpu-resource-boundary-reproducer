@@ -1,0 +1,41 @@
+{
+  "cutoff": "2026-10-31",
+  "method": "targeted primary-source review, not exhaustive systematic review",
+  "queries": [
+    "StepStone GPU fuzzing IEEE S&P2026",
+    "WebGlitch ECOOP2025 state invalid ownership",
+    "CuSafe USENIX2026",
+    "LeftoverLocals2024 NVIDIA OpenCL",
+    "GPU Memory Exploitation for Fun and Profit2024",
+    "Not so Refreshing USENIX2025",
+    "GPUHammer GDDRHammer GeForge GPUBreach2025 2026",
+    "GPUThor2026 GDDR6X",
+    "GPU CUDA runtime fuzzing cuFuzz2026",
+    "NVIDIA MIG supported GPUs RTX3090",
+    "OpenCL CLFuzz constraint fuzzing",
+    "Guardian Safe GPU Sharing multi tenant GPU 2024"
+  ],
+  "included_ids": [
+    "L01",
+    "L02",
+    "L03",
+    "L04",
+    "L05",
+    "L06",
+    "L07",
+    "L08",
+    "L09",
+    "L10",
+    "L11",
+    "L12",
+    "L13",
+    "L14",
+    "L15",
+    "L16"
+  ],
+  "excluded_or_disambiguated": [
+    "2601.01048 CuFuzz is a distinct similarly named work; do not merge with OOPSLA cuFuzz",
+    "Press articles and automated paper reviews excluded as technical evidence",
+    "Future Nov2026 artifacts not treated as available at cutoff"
+  ]
+}

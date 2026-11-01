@@ -1,0 +1,13 @@
+# Spezifikationsgestützte Zustandsprüfung
+
+Die Testeinheit ist eine vollständige Host-/Device-Sequenz: gültiger Prefix, genau ein untersuchter Übergang und ein nur bei definiertem Zustand zulässiger Suffix. Der Zustandsgraph erfasst Plattform/ICD, Gerät, Kontext, Queue, Objekttyp, Generation, eigene Referenzen, Parent/Child, gebundene Kernelargumente, Command-/Eventabhängigkeiten und External-Memory-Ownership. Kanten tragen Normpin, Präbedingungen, erlaubte Codes und garantierte Nachbedingungen.
+
+Die Auswahl benutzt die Schnittmenge tatsächlich beworbener Features. Optionales Verhalten erhält eine eigene zulässige Ergebnisrelation; numerische Differenzen zwischen ICDs sind ohne gemeinsamen Vertrag kein Bug. Ein Invalid-Case verletzt genau eine validierbare API-Präbedingung. Ungültige rohe Handles, Use-after-free auf Hostseite, GPU-OOB und offene User-Event-Freigaben werden nicht als normale Testfälle generiert.
+
+Metamorphe Vergleiche: erlaubtes Retain/Release-Paar; Clone mit unabhängiger Neubindung; länger gehaltene Referenz versus legal früher Hostrelease; In-Order versus explizite Cross-Queue-Abhängigkeit; eigener Source-/Binary-Roundtrip. Vergleich von APIstatus, Erfolg/Fehlercompletion und vollständigen Daten erfolgt mit je eigenen Oracles. Nach abnormaler Kommandoterminierung kein garantierter normaler Datensuffix. Nach unerwartetem Ownership-Erfolg stoppt die Sequenz ohne Dispatch.
+
+Coverage auf H2 heißt zunächst semantische Coverage: welche Normkanten, Fehlernachzustände, Referenz-/Queuegraphen und Kontrollpaare wurden erreicht? Kein KCOV/KASAN- oder Kernelpfad-Coverageclaim ohne Instrumentierung. StepStone hat OpenCL-Library-Fuzzing bereits gezeigt; WebGlitch hat stateful und ungültige Ownership-Fälle bereits gezeigt. Unsere Methodenbeschreibung muss diesen Stand anerkennen.
+
+Reduktion entfernt nur Schritte, wenn gültiger Prefix, isolierte verletzte Präbedingung, Objektlebenszeiten und identisches Datenoracle erhalten bleiben. Jede Reduktion speichert neuen Plan-/Sourcehash und bewahrt die Originalevidenz. Reduzierte Laufversuche benötigen eigenen passenden Freigabeumfang; keine automatisch laufende Delta-Debug-Kampagne. cuFuzz motiviert, Hostbedingungen nicht beim Reduzieren zu verlieren.
+
+Daybreak Blue wurde für den beigefügten unabhängigen Textreview verwendet. Weitere LLM-Vorschläge werden als typisierte Hypothesen mit Quellenbeleg behandelt; keine LLM-Aussage erzeugt eine Laufgenehmigung oder ersetzt ein Oracle. clvk und PoCL bleiben konkrete getrennte Installationsentscheidungen nach C1-Vorlage; kein Install wurde ausgeführt. Erst nach Freigabe kann eine zweite Implementierung Differentialkontrollen liefern.

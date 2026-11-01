@@ -1,0 +1,4 @@
+/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/query_vulkan.c: In function ‘main’:
+/home/rock/projects/gpu-resource-boundary-reproducer/hosts/H2_RTX3090/scripts/query_vulkan.c:8:5: warning: the address of ‘vkEnumerateInstanceVersion’ will always evaluate as ‘true’ [-Waddress]
+    8 |  if(vkEnumerateInstanceVersion) vkEnumerateInstanceVersion(&loader);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~

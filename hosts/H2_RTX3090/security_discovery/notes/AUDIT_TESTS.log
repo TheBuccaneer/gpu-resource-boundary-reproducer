@@ -1,0 +1,13 @@
+test_b12_pure_c_assertions (__main__.AuditTests.test_b12_pure_c_assertions) ... ok
+test_exported_snapshot_does_not_invent_git_commit (__main__.AuditTests.test_exported_snapshot_does_not_invent_git_commit) ... ok
+test_git_untracked_content_and_generated_output_provenance (__main__.AuditTests.test_git_untracked_content_and_generated_output_provenance) ... ok
+test_missing_or_draft_approval (__main__.AuditTests.test_missing_or_draft_approval) ... ok
+test_script_rejected (__main__.AuditTests.test_script_rejected) ... ok
+test_tampered_binary_rejected_before_child (__main__.AuditTests.test_tampered_binary_rejected_before_child) ... ok
+test_valid_binding_and_sealed_cpu_execution (__main__.AuditTests.test_valid_binding_and_sealed_cpu_execution) ... ok
+test_wrong_path_case_repeat_plan_workspace_commit_environment (__main__.AuditTests.test_wrong_path_case_repeat_plan_workspace_commit_environment) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.343s
+
+OK

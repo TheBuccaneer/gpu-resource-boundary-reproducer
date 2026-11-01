@@ -1,50 +1,51 @@
-# OpenCL2 Project State
+Aktuell: **S01 API-only-Pilot vorbereitet**. [Fertiger Build, pending Scope und Einzelanleitung](hosts/H2_RTX3090/s01/H2_S01_API_PILOT_READY.md). Noch keine OpenCL-Ausführung oder tatsächliche Freigabe. Finaler lokaler Workspace wird an das Manifest gebunden; danach Änderungen erneut prüfen.
 
-Updated: **2026-10-30**. Scope: **H1 research consolidation**, not new experiments. Newer class closures take precedence over earlier plans and phase gates. Detailed evidence, version scope, oracle, counts, fix status, and limitations are in the [H1 evidence matrix](docs/H1_EVIDENCE_MATRIX_2026-10-30.md).
+Aktuell **S01 R3**: [Supervisor-Budgetkorrektur und Nachweise](hosts/H2_RTX3090/s01/H2_S01_R3_SUPERVISOR_FIX.md). Dauerhaftes atomares Ledger vor Kindstart; kein Replay durch anderen Ergebnisordner. S01-Fälle unverändert, keine OpenCL-Ausführung oder Laufgenehmigung.
 
-## Platform and interpretation
+Aktueller S01-Stand: **R2 nach Daybreak-Review**. [Korrekturen](hosts/H2_RTX3090/s01/REVIEW_R2_CORRECTIONS.md): frisches Clone-Kontrolloracle, striktes geordnetes Logschema und maschinenlesbares Ressourcen-Inconclusive. Weiterhin keine OpenCL-Ausführung.
 
-H1 is AMD Radeon 660M / Rembrandt / GFX10.3, Linux AMDGPU, Mesa Rusticl / RadeonSI / ACO, OpenCL 3.0. Historical campaigns used different kernels and Mesa builds; they must not be pooled into one runtime configuration. Original work used system Mesa 26.0.3 and isolated Mesa 26.2.0 builds; later B7/B8/B10/B12 work records system Mesa 26.0.8-1ubuntu0.3. B12 process maps and hashes identify the system ICD explicitly. Local B4/B7/B9 patch builds are distinct configurations.
+# Aktuell: H2-S01 Implementierungsvorbereitung
 
-An advertised extension is not a functional proof. A local proof of fix is not upstream acceptance. Same-process OpenCL context access is not evidence of cross-process or cross-user access. Failure levels describe observations; they do not by themselves establish a security vulnerability.
+[Daybreak-Übergabe und Offline-Nachweise](hosts/H2_RTX3090/s01/H2_S01_READY_FOR_DAYBREAK.md):11 Fälle implementiert; CPU-End-to-End-Test des Supervisors erfolgreich; keine NVIDIA-/OpenCL-Ausführung. Separater S01-Katalog ist in den Supervisor integriert. Frühere Phasen folgen als Historie.
 
-## B1–B12 status
+# Aktuelle Phase: H2 Security Discovery, 31.10.2026
 
-| Class | Current H1 disposition | Supported result |
-|---|---|---|
-| B1 Resource capacity | **CLOSED — finding** | A +1-byte dynamic-local-memory excess reaches dispatch and is followed by process failure and successful compute-ring recovery; source/instrumentation support a missing capacity recheck. Max observed class F5, also F2. |
-| B2 Workgroup/dispatch geometry | **CLOSED — positive validation control** | Tested kernel-specific geometry and dimension errors are rejected with specified API errors (F0); valid controls PASS. |
-| B3 Combined resources | **CLOSED H1 — finding** | Raw over-limit and alignment-hidden local-memory cases reach dispatch. Do not conflate the raw sum with aligned footprint. F2/F5 observed; same accounting family as B1, not automatically another independent root cause. |
-| B4 SVM/lifetime | **CLOSED H1 — finding and follow-ups** | Same-queue free before prior GPU completion permits cross-lifetime integrity corruption. Project classification F8, restricted to intra-context temporal integrity. Callback and NULL-callback baseline/fix arms each have 5/5 results. Later local lifetime follow-up is closed with a path-limited proof of fix; disclosure-sensitive details are held from this public upload. |
-| B5 Raw device-pointer authority | **CLOSED — characterization** | Foreign raw-address reads across two contexts in one process were observed on 26.0.3 and 26.2.0 (5/5 each). The dereference is outside the extension's defined usage; no formal protection-domain breach or conformance violation is established. |
-| B6 Mutable-state revalidation | **DEFERRED H1** | Required command-buffer/mutable-dispatch capability was absent in the recorded H1 configuration. No negative result about an implemented path. |
-| B7 Object/context ownership | **CLOSED H1 — finding; local fix confirmed** | Ordinary foreign-context `cl_mem` is accepted and modified through the other context in the same process/device. Matched local 26.2.0 patch rejects at `clSetKernelArg` while controls PASS. No cross-process claim. |
-| B8 Representation mismatch | **CLOSED — bounded negative result** | Tested valid Source/IL pairs agree on data and metadata. The 65537-byte case was stopped before enqueue. A compiler-path asymmetry is an audit observation, not a demonstrated bypass. |
-| B9 Integer/arithmetic backend | **Finding and root cause documented; local mitigation confirmed; upstream open** | Backend arithmetic finding, separate host OOM, and two observed compute-ring timeout/reset events must remain distinct. The arithmetic defect was not causally isolated as the reason for those timeouts; no cross-client impact proved. The 30 October local mitigation was checked without GPU dispatch and has limited driver/path scope. Detailed unpublished material is held for disclosure review. |
-| B10 Synchronization/state | **CLOSED H1 — F0 / bounded negative result** | In-Order, cross-queue, user-event, two named CTS marker tests, and a foreign-event FillBuffer case behaved as expected. Valid controls PASS; specified error cases F0. No general race-safety claim. |
-| B11 Multi-device/ICD identity | **DEFERRED H1** | Recorded configuration has one GPU/device, one ICD, and no subdevice partitioning; the required identity differential was unavailable. |
-| B12 External memory/semaphore/interop | **CLOSED H1 — F1** | Exportable Sync-FD binary semaphore returns `CL_SUCCESS` with an empty object export-type list in 2/2 runs on system Rusticl 26.0.8. Matching package source explains the metadata inconsistency. No GPU dispatch or demonstrated security-boundary violation. External memory and GL-sharing execution paths were not evaluated. |
+[Security-Discovery-Einstieg](hosts/H2_RTX3090/security_discovery/README.md):16 Literaturprofile,12 Hypothesen, drei konkrete Pläne; Daybreakreview integriert. Drei C1-Auditkorrekturen mit Offline-Nachweisen. Keine GPU-/Runtime-Experimente, keine neue Vulnerability nachgewiesen. Nächste Schritte und Ausführungsgrenzen stehen im neuen Einstieg. Die folgenden Abschnitte dokumentieren die vorherigen Phasen.
 
-B13 (error propagation) and B14 (version regression) remain cross-cutting axes. **Next regular platform: H2, NVIDIA RTX 3090**, with capability gates and selected differential controls; [roadmap](docs/H2_ROADMAP.md). No H2 experiments have started.
+# OpenCL2 — aktueller Gesamtstand
 
-## Important closure boundaries
+Aktualisiert: **31.10.2026**. Gemeinsame Basis: Commit `3cd984d3e7cd8b71a2670c8b599c31d65872a078` auf `main`; danach lokale H2-Vorbereitung und Verzeichnisneuordnung, ohne Commit oder Push.
 
-- **B1/B3 recovery:** compute-ring timeout and successful ring reset are engine-level observations. Do not describe every event as a full-device reset. No hardware zero-occupancy mechanism is claimed by the final B1 closure.
-- **B4:** the original SVM causal patch corrected the tested path. The later ordinary-object follow-up must not be confused with either the original SVM result or an upstream-complete fix. The discarded cross-queue run missing `clFlush(q2)` remains excluded.
-- **B7:** cite `results/b7/20261003_082740_mesa262_valid_baseline_vs_b7fix/`; the 08:25 library-mismatched run is discarded.
-- **B8:** source audit uses Mesa 26.2.0, runtime observations use 26.0.8. Durable paired stdout is not present in the local B8 evidence examined for this consolidation; source and IL inputs are present.
-- **B9:** the 17 October statement that no GPU recovery was evidenced is superseded by the 20 October addendum describing two 18 October compute-ring recoveries. The later mitigation checks were compile-only; do not turn that limited statement into a claim that no earlier B9 runtime dispatch occurred.
-- **B10:** one run per core mode and two selected CTS tests are not a complete CTS pass. The CTS logs do not independently record the loaded ICD path or kernel journal.
-- **B12:** the CTS query gap is scoped to commit `9feccbb8fcb8eefeebf86a48036173a8155f9d21` and the examined semaphore test directories. No statement about every current CTS version is supported.
+## H1 — abgeschlossen und getrennt abgelegt
 
-## Supplementary security/containment studies
+Alle 729 ursprünglichen Repositorydateien liegen jetzt unter **`hosts/H1_AMD660M/`**, einschließlich der ursprünglichen README, des bisherigen PROJECT_STATE, sämtlicher Rohdaten, Reproducer, Fixes, Inventare und Manifeste. Ihr Inhalt ist unverändert; SHA-256 und Pfadzuordnung sind [dokumentiert](notes/H1_RELOCATION_2026-10-31.json).
 
-| Study | H1 closure and limits |
+Für H1 gelten unverändert der [Abschlussstand](hosts/H1_AMD660M/PROJECT_STATE.md), die [Evidenzmatrix](hosts/H1_AMD660M/docs/H1_EVIDENCE_MATRIX_2026-10-30.md), der [Qualitätsreview](hosts/H1_AMD660M/docs/H1_QUALITY_REVIEW_2026-10-30.md) und die [Methodik](hosts/H1_AMD660M/docs/METHODOLOGY.md). Die dortigen Zukunftspläne und ursprünglichen Pfade sind historische Dokumentation. Der aktuelle H2-Stand folgt unten.
+
+## H2 — Vorbereitung abgeschlossen, Experimente offen
+
+| Bereich | Aktueller Stand |
 |---|---|
-| SEC-1 / O1 | **CLOSED, cross-client availability finding.** An independent victim can stall during successful ring recovery; failed ring recovery can escalate to MODE2 full-device recovery with heterogeneous victim outcomes. The N=10 campaign is descriptive, not a probability estimate. Canary V3 and GUI-less controls are retained. |
-| SEC-2 | **CLOSED, LDS-remanence mechanism characterization.** Observable patterns persist without cleanup; cleaner execution correlates strongly with pattern loss. The reader intentionally reads uninitialized local memory, so this is not an OpenCL conformance oracle or proof of an OS isolation breach. |
-| O2 | **CLOSED H1, sensitivity-limited/inconclusive.** No positive post-reset leakage evidence. The matched no-reset delay is also negative; reset-specific clearing cannot be inferred. |
+| Hardware | Threadripper 3970X, 32 Kerne/64 Threads; 134911287296 Byte RAM für Linux; eine RTX 3090, Ampere, 24 GiB VRAM |
+| OS/Treiber | Ubuntu 26.04.1, Kernel 7.0.0-42, NVIDIA Open Kernel Module und proprietärer OpenCL-Userspace 580.178.04 |
+| OpenCL | Eine Plattform/ein GPU-Gerät; 3.0, Local Memory 49152 Byte, max. Workgroup 1024, coarse-grain Buffer-SVM |
+| Ausschlüsse aktuell | Kein beworbenes Kernel-SPIR-V-IL, kein Mutable Dispatch, kein H1-Buffer-Device-Address-Pfad, keine Multi-GPU-/Multi-ICD-Konfiguration |
+| Offene Queryfrage | Semaphore-Typ-/Exportselektoren liefern -30; kein vorweggenommener Fehler-/Sicherheitsbefund |
+| Auswahl | NVIDIA primär; clvk als zusätzliche GPU-Laufzeit; PoCL CPU als Kontrolle; Rusticl/Zink optional |
+| Ausführung | Nur System-/Capabilityabfragen; keine GPU-Experimente und keine alternativen Runtimes installiert |
 
-## Canonical record and publication state
+Details: [H2-Plattformakte](hosts/H2_RTX3090/README.md), [B1–B12-Matrix](hosts/H2_RTX3090/opencl/H2_B1_B12_CAPABILITY_MATRIX.md), [Entscheidungsvorlage](hosts/H2_RTX3090/H2_IMPLEMENTATION_SELECTION.md), [Readiness](hosts/H2_RTX3090/H2_C0_READINESS.md).
 
-Use the class links in [the evidence matrix](docs/H1_EVIDENCE_MATRIX_2026-10-30.md). [Quality review](docs/H1_QUALITY_REVIEW_2026-10-30.md) records missing evidence and historical interpretation conflicts. New B4-follow-up/B9 detailed evidence remains local pending disclosure review; a complete local index is maintained outside the upload allowlist. No source evidence, worktree, build, archive, or dump was deleted. Public push requires explicit approval.
+## H3-Kandidat — RTX 5060 Ti
+
+Auf H2 ist keine 5060 Ti enumeriert. Ein eigenständiger Host ist noch nicht nachgewiesen. Blackwell wäre als Architekturdifferential zu Ampere sinnvoll; die erwarteten 16 GB und alle Laufzeitfähigkeiten müssen am tatsächlichen Gerät bestätigt werden. Bei anderem Rechner erhält sie eine eigene H3-Plattformakte; bei Einbau in denselben Rechner zunächst eine eigene Geräte-/Konfigurationsidentität innerhalb H2.
+
+## H2-C1 — Vertragsprüfung und Experimentvorbereitung
+
+Die [C1-Plattformakte](hosts/H2_RTX3090/c1/README.md) enthält den abgeschlossenen normativen Queryabgleich, die CTS-Zuordnung, 26 vorbereitete C1-Fälle und konkrete Einführungsvorlagen für clvk/PoCL CPU. Die C0-Inventarisierung wurde nicht wiederholt. Alle 729 H1-Dateien und die übergebenen C0-Rohdaten bleiben bytegleich.
+
+Die vier auffälligen Semaphore-Typ-/Exportlistenselektoren sind bei den gemeldeten Erweiterungen gültig. Nicht unterstützter Export wird durch success+leere Liste beschrieben; die protokollierten -30 passen dazu nicht. Unabhängige native Bestätigung und interne Ursache sind offen; keine neue GPU-/Sicherheitskampagne wurde ausgeführt.
+
+## Nächster Arbeitsschritt
+
+Die vorbereiteten Pakete separat freigeben: A gezielte B12-Queries, B B7-Setter ohne Enqueue, C kleine gültige Baselines, D B2, E B10-Grundfälle, F OOO/User-Event-Ergänzungen. Der ausführbare Hostcode und der Einzelfall-Supervisor sind vorbereitet und statisch geprüft, jedoch nicht mit OpenCL ausgeführt. Installation zusätzlicher Implementierungen, Objekterzeugung außerhalb reiner Abfragen, GPU-Ausführung und Sicherheitsexperimente bleiben eigene Freigabeschritte. Kein neuer NVIDIA-Fehler oder Sicherheitsbefund ist nachgewiesen.

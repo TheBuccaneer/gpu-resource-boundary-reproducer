@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vulkan driver &#8212; Portable Computing Language (PoCL) 7.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=9eaa8645"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Level Zero driver" href="level0.html" />
+    <link rel="prev" title="Proxy driver" href="proxy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="level0.html" title="Level Zero driver"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="proxy.html" title="Proxy driver"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Portable Computing Language (PoCL) 7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="features.html" >Supported OpenCL features, device drivers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="drivers.html" accesskey="U">Supported device drivers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Vulkan driver</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="vulkan-driver">
+<h1>Vulkan driver<a class="headerlink" href="#vulkan-driver" title="Link to this heading">¶</a></h1>
+<p>This driver uses libvulkan and clspv to run OpenCL code on GPU devices via Vulkan API.</p>
+<p>NOTE: THIS DRIVER IS INCOMPLETE, without an active maintainer. Pull Requests welcomed.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>Required:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>vulkan drivers (on Ubuntu, “mesa-vulkan-drivers” for opensource vulkan drivers)</p></li>
+<li><p>vulkan development files (on Ubuntu, “vulkan-headers” and “libvulkan-dev”)</p></li>
+<li><p>SPIR-V tools (for clspv; on Ubuntu, package “spirv-tools”)</p></li>
+</ul>
+</div></blockquote>
+<p>The Vulkan headers, devices and library must support at least Vulkan version 1.1;
+1.0 devices may work but are untested. With 1.0 headers, pocl-vulkan won’t compile.</p>
+<p>Optional:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“vulkan-validationlayers-dev” for vulkan validation layers</p></li>
+<li><p>“vulkan-tools” or “vulkan-utils” package for vulkaninfo</p></li>
+</ul>
+</div></blockquote>
+<p>Note that the Vulkan device MUST support the following extensions (clspv requirements):</p>
+<ul class="simple">
+<li><p>VK_KHR_variable_pointers</p></li>
+<li><p>VK_KHR_storage_buffer_storage_class</p></li>
+<li><p>VK_KHR_shader_non_semantic_info</p></li>
+</ul>
+<dl class="simple">
+<dt>Optional extensions:</dt><dd><ul class="simple">
+<li><p>VK_EXT_external_memory_host for CL_MEM_USE_HOST_PTR to be useful</p></li>
+<li><p>VK_KHR_16bit_storage, VK_KHR_8bit_storage, VK_KHR_shader_float16_int8
+to be able to use 8 bit and 16 bit integers</p></li>
+</ul>
+</dd>
+</dl>
+<p>Easiest to check is with vulkaninfo utility, they must be listed in ‘Device Extensions’ section.</p>
+<p>To build the full pocl-vulkan, first you must build the clspv compiler:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">clspv</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">clspv</span>
+<span class="n">python</span> <span class="n">utils</span><span class="o">/</span><span class="n">fetch_sources</span><span class="o">.</span><span class="n">py</span>
+<span class="n">mkdir</span> <span class="n">build</span> <span class="p">;</span> <span class="n">cd</span> <span class="n">build</span>
+<span class="n">cmake</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">clspv</span> <span class="o">-</span><span class="n">DCLSPV_BUILD_TESTS</span><span class="o">=</span><span class="n">OFF</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span>
+<span class="n">make</span> <span class="o">-</span><span class="n">jX</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>… this will take some time and space, because it compiles its own checkout of LLVM.</p>
+<p>After the build, copy “clspv” and “clspv-reflection” binaries to some place CLSPV_BIN_DIR</p>
+<p>Then build the vulkan driver:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cmake -DENABLE_HOST_CPU_DEVICES=0 -DENABLE_LLVM=0 -DENABLE_VULKAN=1 -DCLSPV_DIR=${CLSPV_BIN_DIR} &lt;path-to-pocl-source-dir&gt;
+</pre></div>
+</div>
+<p>You may set VULKAN_SDK env variable before running cmake, then it will look for libvulkan in VULKAN_SDK/lib directory.</p>
+<p>After build, libpocl can be tested with (run in the build directory):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>OCL_ICD_VENDORS=$PWD/ocl-vendors/pocl-tests.icd POCL_BUILDING=1 POCL_DEVICES=vulkan ./examples/example1/example1
+</pre></div>
+</div>
+<p>Adding <cite>POCL_VULKAN_VALIDATE=1 POCL_DEBUG=vulkan</cite> into the environment enables the use of validation layers,
+this will make output from PoCL much more verbose.</p>
+<p>It is possible to build &amp; use pocl-vulkan without clspv, but this limits the usability of the driver to clCreateProgramWithBinaries() with poclbinaries.</p>
+</section>
+<section id="what-works">
+<h2>What works<a class="headerlink" href="#what-works" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>both integrated and discrete GPUs are supported</p></li>
+<li><p>buffer (cl_mem) kernel arguments</p></li>
+<li><p>POD (plain old data) kernel arguments (int32 and float32; other int/float types
+are enabled only if indicated by device features; structs with these types)</p></li>
+<li><p>local memory, both as static (in-kernel) and as kernel argument</p></li>
+<li><p>constant memory, both at module-scope and as kernel argument</p></li>
+<li><p>most 1.2 API calls</p></li>
+<li><p>CL_MEM_USE_HOST_PTR with clCreateBuffer(), if the device
+supports VK_EXT_external_memory_host</p></li>
+<li><p>global offsets to clEnqueueNDRangeKernel</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="doesnt-work-missing">
+<h2>Doesnt work / missing<a class="headerlink" href="#doesnt-work-missing" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>image / sampler support</p></li>
+<li><p>clLinkProgram &amp; clCompileProgram</p></li>
+<li><p>clCreateBuffer(): CL_MEM_USE_HOST_PTR on dGPUs doesn’t work</p></li>
+<li><p>clCreateBuffer(): the CL_MEM_ALLOC_HOST_PTR flag is ignored</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="unfinished-non-optimal">
+<h2>Unfinished / non-optimal<a class="headerlink" href="#unfinished-non-optimal" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>missing sub-allocator for small allocations</p></li>
+<li><p>statically sized structs that create certain limits</p></li>
+<li><p>descriptor set should be cached (setup once per kernel, then just update)</p></li>
+<li><p>command buffers should be cached</p></li>
+<li><p>kernel library - check what clspv is missing</p></li>
+<li><p>push constants for POD arguments instead of POD UBO</p></li>
+<li><p>stop using deprecated clspv-reflection, instead extract the
+kernel metadata from the SPIR-V file itself</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="known-bugs">
+<h2>Known Bugs<a class="headerlink" href="#known-bugs" title="Link to this heading">¶</a></h2>
+<p>Validation layers can print this message:</p>
+<p>“After specialization was applied, VkShaderModule 0xXY0000XY[] does not contain valid spirv for stage VK_SHADER_STAGE_COMPUTE_BIT. The Vulkan spec states: module must be a valid VkShaderModule handle (<a class="reference external" href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkPipelineShaderStageCreateInfo-module-parameter">https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkPipelineShaderStageCreateInfo-module-parameter</a>)”</p>
+<p>This is (AFAIK) caused by Clspv reflection metadata present in SPIR-V, and is harmless.</p>
+<p>The pocl vulkan driver will wait indefinitely for a kernel to finish. However GPU drivers have their own “freeze detection” timeouts and could kill the kernel sooner. This would result in PoCL aborting with error -4 (device lost).</p>
+<p>Clspv can compile a lot of code, but is still unfinished and has bugs, so pocl-vulkan may fail to compile OpenCL code.</p>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
+<p>The tests that should work with Vulkan driver can be run with tools/scripts/run_vulkan_tests.</p>
+<p>This driver was tested with these devices:</p>
+<ul class="simple">
+<li><p>Intel HD 530 integrated GPU</p></li>
+<li><p>AMD Radeon Vega 8 iGPU</p></li>
+<li><p>Nvidia Quadro P600 discrete GPU</p></li>
+<li><p>Raspberry Pi 4 + Ubuntu 22.04</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Vulkan driver</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#what-works">What works</a></li>
+<li><a class="reference internal" href="#doesnt-work-missing">Doesnt work / missing</a></li>
+<li><a class="reference internal" href="#unfinished-non-optimal">Unfinished / non-optimal</a></li>
+<li><a class="reference internal" href="#known-bugs">Known Bugs</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="proxy.html"
+                          title="previous chapter">Proxy driver</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="level0.html"
+                          title="next chapter">Level Zero driver</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/vulkan.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="level0.html" title="Level Zero driver"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="proxy.html" title="Proxy driver"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Portable Computing Language (PoCL) 7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="features.html" >Supported OpenCL features, device drivers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="drivers.html" >Supported device drivers</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Vulkan driver</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2010-2025 PoCL developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>
